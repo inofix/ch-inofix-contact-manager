@@ -1,4 +1,4 @@
-Bundle-SymbolicName: contact.manager-api
+Bundle-SymbolicName: ch.inofix.contact.api
 Bundle-Version: 1.0.0
 Export-Package:\
 	ch.inofix.contact.exception,\
