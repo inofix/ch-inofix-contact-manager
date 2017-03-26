@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="ch.inofix.contact.model.Contact">
+		<field name="uuid" type="String" />
+		<field name="contactId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="status" type="int" />
+		<field name="parentContactId" type="long" />
+		<field name="card" type="String" />
+		<field name="uid" type="String" />
+	</model>
+</model-hints>
