@@ -1,50 +1,65 @@
 <?xml version="1.0"?>
-<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.0.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_0_0.dtd">
+<!DOCTYPE service-builder 
+    PUBLIC "-//Liferay//DTD Service Builder 7.0.0//EN" 
+    "http://www.liferay.com/dtd/liferay-service-builder_7_0_0.dtd">
+<!-- 
+    service.xml: Model and service description of Inofix' contact manager.
+    
+    Created:    2015-05-07 14:48 by Christian Berndt 
+    Modified:   2015-06-26 18:00 by Christian Berndt 
+    Version:    1.0.6
+-->
 
 <service-builder package-path="ch.inofix.contact">
-	<namespace>FOO</namespace>
-	<!--<entity data-source="sampleDataSource" local-service="true" name="Foo" remote-service="false" session-factory="sampleSessionFactory" table="foo" tx-manager="sampleTransactionManager uuid="true"">-->
-	<entity local-service="true" name="Foo" remote-service="true" uuid="true">
 
-		<!-- PK fields -->
+    <author>Christian Berndt</author>
 
-		<column name="fooId" primary="true" type="long" />
+    <namespace>Inofix</namespace>
+    
+    <entity name="Contact" uuid="true" local-service="true"
+        remote-service="true">
 
-		<!-- Group instance -->
+        <!-- PK fields -->
 
-		<column name="groupId" type="long" />
+        <column name="contactId" type="long" primary="true" />
 
-		<!-- Audit fields -->
+        <!-- Group instance -->
 
-		<column name="companyId" type="long" />
-		<column name="userId" type="long" />
-		<column name="userName" type="String" />
-		<column name="createDate" type="Date" />
-		<column name="modifiedDate" type="Date" />
+        <column name="groupId" type="long" />
 
-		<!-- Other fields -->
+        <!-- Audit fields -->
 
-		<column name="field1" type="String" />
-		<column name="field2" type="boolean" />
-		<column name="field3" type="int" />
-		<column name="field4" type="Date" />
-		<column name="field5" type="String" />
+        <column name="companyId" type="long" />
+        <column name="userId" type="long" />
+        <column name="userName" type="String" />
+        <column name="createDate" type="Date" />
+        <column name="modifiedDate" type="Date" />
+        <column name="status" type="int" />
 
-		<!-- Order -->
+        <!-- Other fields -->
 
-		<order by="asc">
-			<order-column name="field1" />
-		</order>
+        <column name="parentContactId" type="long" />
+        <column name="card" type="String" />
+        <column name="uid" type="String" />
 
-		<!-- Finder methods -->
+        <!-- Order -->
 
-		<finder name="Field2" return-type="Collection">
-			<finder-column name="field2" />
-		</finder>
+        <order>
+            <order-column name="contactId" order-by="desc" />
+        </order>
 
-		<!-- References -->
+        <!-- Finder methods -->
 
-		<reference entity="AssetEntry" package-path="com.liferay.portlet.asset" />
-		<reference entity="AssetTag" package-path="com.liferay.portlet.asset" />
-	</entity>
+        <finder return-type="Contact" name="G_U" unique="true">
+            <finder-column name="groupId" />
+            <finder-column name="uid" />
+        </finder>
+
+        <!-- References -->
+
+        <reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
+        <reference package-path="com.liferay.portlet.asset" entity="AssetLink" />
+        <reference package-path="com.liferay.portlet.social" entity="SocialActivity" />
+
+    </entity>
 </service-builder>
