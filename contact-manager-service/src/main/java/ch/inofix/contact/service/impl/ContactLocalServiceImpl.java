@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.permission.ModelPermissions;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
+import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.File;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -364,7 +365,7 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
 //                backgroundTask.getBackgroundTaskId(), taskName, file);
 //
 //        return backgroundTask.getBackgroundTaskId();
-
+        return 0;
     }
 
     @Indexable(type = IndexableType.REINDEX)
@@ -374,6 +375,7 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
             long[] assetLinkEntryIds, Double priority) throws PortalException {
 
         boolean visible = true;
+        boolean listable = true;
 
         Date publishDate = null; 
         
@@ -392,16 +394,15 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
         String layoutUuid = null;
         int height = 0;
         int width = 0;
-        boolean sync = false;
 
         AssetEntry assetEntry = assetEntryLocalService.updateEntry(userId,
                 contact.getGroupId(), contact.getCreateDate(),
                 contact.getModifiedDate(), Contact.class.getName(),
                 contact.getContactId(), contact.getUuid(), classTypeId,
-                assetCategoryIds, assetTagNames, visible, startDate, endDate,
+                assetCategoryIds, assetTagNames, listable, visible, startDate, endDate,
                 expirationDate, mimeType, title, description, summary, url,
-                layoutUuid, height, width, priority, sync);
-
+                layoutUuid, height, width, priority);
+        
         assetLinkLocalService.updateLinks(userId, assetEntry.getEntryId(),
                 assetLinkEntryIds, AssetLinkConstants.TYPE_RELATED);
     }
@@ -453,7 +454,7 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
 
         updateAsset(userId, contact, serviceContext.getAssetCategoryIds(),
                 serviceContext.getAssetTagNames(),
-                serviceContext.getAssetLinkEntryIds());
+                serviceContext.getAssetLinkEntryIds(), serviceContext.getAssetPriority()); //TODO 
 
         // Social
         
