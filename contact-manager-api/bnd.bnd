@@ -1,7 +1,8 @@
 Bundle-SymbolicName: ch.inofix.contact.api
 Bundle-Version: 1.0.0
-Export-Package:\
+Export-Package: \
 	ch.inofix.contact.exception,\
 	ch.inofix.contact.model,\
 	ch.inofix.contact.service,\
-	ch.inofix.contact.service.persistence
+	ch.inofix.contact.service.persistence,\
+	ch.inofix.contact.constants
