@@ -55,14 +55,14 @@
 
 <%--         </c:if> --%>
     </aui:nav>
-
+<%--
     <aui:nav-bar-search cssClass="pull-right">
 
         
         <portlet:renderURL var="clearURL" />
 
         <liferay-portlet:renderURL varImpl="searchURL">
-            <portlet:param name="mvcPath" value="/html/view.jsp" />
+            <portlet:param name="mvcPath" value="/view.jsp" />
         </liferay-portlet:renderURL>
 
         <div class="form-search">
@@ -81,6 +81,6 @@
             </aui:form>
         </div>
 
-    </aui:nav-bar-search>
+    </aui:nav-bar-search> --%>
 
 </aui:nav-bar>

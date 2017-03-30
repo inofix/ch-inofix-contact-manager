@@ -106,8 +106,8 @@
 
     <liferay-ui:header backURL="<%=backURL%>" title="contact-manager" />
     
-    <liferay-ui:error exception="<%= PrincipalException.class %>" 
-       message="you-dont-have-the-required-permissions"/>
+<%--     <liferay-ui:error exception="<%= PrincipalException.class %>"  
+       message="you-dont-have-the-required-permissions"/>     --%>
     
     <liferay-ui:tabs
         names="browse,import-export"
