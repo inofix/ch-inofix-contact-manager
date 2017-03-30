@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
-<!DOCTYPE resource-action-mapping PUBLIC "-//Liferay//DTD Resource Action Mapping 6.2.0//EN"
-    "http://www.liferay.com/dtd/liferay-resource-action- mapping_6_2_0.dtd">
+<!DOCTYPE 
+    resource-action-mapping PUBLIC "-//Liferay//DTD Resource Action Mapping 7.0.0//EN" 
+    "http://www.liferay.com/dtd/liferay-resource-action-mapping_7_0_0.dtd">
 <!--  
     default.xml: The contact-manager portlet's permission configuration.
     
-    Created:    2017-03-30 14:48 by Stefan Luebbers
-    Modified:   2017-03-30 15:34 by Stefan Luebbers
-    Version:    1.0.0
+    Created:    2015-05-19 18:32 by Christian Berndt
+    Modified:   2017-03-30 16:48 by Christian Berndt
+    Version:    1.0.3
 -->
 <resource-action-mapping>
 
