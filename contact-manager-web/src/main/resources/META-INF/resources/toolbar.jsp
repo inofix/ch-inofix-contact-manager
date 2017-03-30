@@ -39,10 +39,12 @@
             <portlet:param name="redirect" value="<%= currentURL %>" />
             <portlet:param name="windowId" value="editContact" />
         </portlet:actionURL>
-
-        <c:if test='<%=ContactPortletPermission.contains(
-                                permissionChecker, scopeGroupId,
-                                ActionKeys.ADD_CONTACT)%>'>
+<%
+            // TODO: reactivate permission checks
+%>
+<%--         <c:if test='<%=ContactPortletPermission.contains( --%>
+<!-- //                                 permissionChecker, scopeGroupId, -->
+<%--                                 ActionKeys.ADD_CONTACT)%>'> --%>
             <%
                 String taglibAddURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "editContact', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(pageContext, "edit-x", "new")) + "', uri:'" + HtmlUtil.escapeJS(addURL) + "'});";
             %>
@@ -51,14 +53,12 @@
                 <liferay-ui:message key="add-contact"/>
             </aui:a>
 
-        </c:if>
+<%--         </c:if> --%>
     </aui:nav>
 
     <aui:nav-bar-search cssClass="pull-right">
 
-        <%
-            // TODO: Move to search.jsp
-        %>
+        
         <portlet:renderURL var="clearURL" />
 
         <liferay-portlet:renderURL varImpl="searchURL">

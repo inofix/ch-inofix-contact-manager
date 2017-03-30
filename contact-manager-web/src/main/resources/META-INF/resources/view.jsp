@@ -40,7 +40,6 @@
  String orderByType = ParamUtil.getString(request, "orderByType", "asc"); 
     String tabs1 = ParamUtil.getString(request, "tabs1", "browse");
     
-    PortletURL portletURL = renderResponse.createRenderURL();
     portletURL.setParameter("tabs1", tabs1);
     portletURL.setParameter("mvcPath", "/html/view.jsp");
     portletURL.setParameter("backURL", backURL);  
@@ -134,7 +133,7 @@
             
             <portlet:actionURL name="editSet" var="editSetURL">
             </portlet:actionURL>
-
+<%--
             <aui:form action="<%= editSetURL %>" name="fm" 
                 onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "editSet();" %>'>
                 
@@ -355,7 +354,7 @@
                  
                      }
                  );
-             </aui:script>
+             </aui:script> --%>
             
             
         </c:otherwise>
