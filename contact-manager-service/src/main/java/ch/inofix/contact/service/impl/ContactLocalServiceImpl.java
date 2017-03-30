@@ -377,8 +377,6 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
         boolean visible = true;
         boolean listable = true;
 
-        Date publishDate = null; 
-        
         long classTypeId = 0;
         Date startDate = null;
         Date endDate = null;
