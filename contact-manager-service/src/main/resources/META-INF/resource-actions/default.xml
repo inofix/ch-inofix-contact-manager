@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!DOCTYPE resource-action-mapping PUBLIC "-//Liferay//DTD Resource Action Mapping 6.2.0//EN"
+    "http://www.liferay.com/dtd/liferay-resource-action- mapping_6_2_0.dtd">
+<!--  
+    default.xml: The contact-manager portlet's permission configuration.
+    
+    Created:    2017-03-30 14:48 by Stefan Luebbers
+    Modified:   2017-03-30 15:34 by Stefan Luebbers
+    Version:    1.0.0
+-->
+<resource-action-mapping>
+
+    <!-- Permission configuration for -->
+    <!-- a contact portlet instance.  -->
+    <model-resource>
+        <model-name>ch.inofix.contact</model-name>
+        <portlet-ref>
+            <portlet-name>ch_inofix_contact_web_internal_portlet_ContactManagerPortlet</portlet-name>
+        </portlet-ref>
+        <weight>3</weight>
+        <permissions>
+            <supports>
+                <action-key>ADD_CONTACT</action-key>
+                <action-key>DELETE_CONTACTS</action-key>
+<!--                 <action-key>EXPORT_IMPORT_CONTACTS</action-key> -->
+<!--                 <action-key>IMPORT_CONTACTS</action-key> -->
+<!--                 <action-key>PERMISSIONS</action-key> -->
+            </supports>
+            <site-member-defaults>
+                <action-key>ADD_CONTACT</action-key>
+            </site-member-defaults>
+            <guest-defaults/>
+            <guest-unsupported>
+                <action-key>ADD_CONTACT</action-key>
+<!--                 <action-key>PERMISSIONS</action-key> -->
+            </guest-unsupported>
+        </permissions>
+    </model-resource>
+
+    <!-- Permission configuration for -->
+    <!-- a single contact object.     -->
+    <model-resource>
+        <model-name>ch.inofix.contact.model.Contact</model-name>
+        <portlet-ref>
+            <portlet-name>ch_inofix_contact_web_internal_portlet_ContactManagerPortlet</portlet-name>
+        </portlet-ref>
+        <permissions>
+            <supports>
+                <action-key>DELETE</action-key>
+                <action-key>PERMISSIONS</action-key>
+                <action-key>UPDATE</action-key>
+                <action-key>VIEW</action-key>
+            </supports>
+            <site-member-defaults>
+                <action-key>VIEW</action-key> 
+            </site-member-defaults>
+            <guest-defaults/>
+            <guest-unsupported>
+                <action-key>DELETE</action-key>
+                <action-key>PERMISSIONS</action-key>
+                <action-key>UPDATE</action-key>
+            </guest-unsupported>
+        </permissions>
+    </model-resource>
+
+</resource-action-mapping>
