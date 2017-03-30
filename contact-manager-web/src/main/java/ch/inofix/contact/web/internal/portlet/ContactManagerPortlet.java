@@ -1,4 +1,4 @@
-package ch.inofix.contact.web.internal.portlet.portlet;
+package ch.inofix.contact.web.internal.portlet;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
