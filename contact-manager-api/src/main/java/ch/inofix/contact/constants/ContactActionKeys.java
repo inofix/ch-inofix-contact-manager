@@ -12,7 +12,8 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
  */
 public class ContactActionKeys extends ActionKeys {
 
-    //TODO: add keys adapting default.xml
+    //TODO: add keys adapting default.xml : eport/import
     public static final String ADD_CONTACT = "ADD_CONTACT";
+    public static final String DELETE_CONTACTS = "DELETE_CONTACTS";
 
 }

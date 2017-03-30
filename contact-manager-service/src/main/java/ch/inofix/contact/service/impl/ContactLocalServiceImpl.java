@@ -71,20 +71,20 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
      */
     @Override
     @Indexable(type = IndexableType.REINDEX)
-    public Contact addContact(long userId, String card,
-            String uid, ServiceContext serviceContext) throws PortalException{
+    public Contact addContact(long userId, String card, String uid, ServiceContext serviceContext)
+            throws PortalException {
 
         // Contact
-        
+
         User user = userPersistence.findByPrimaryKey(userId);
         long groupId = serviceContext.getScopeGroupId();
-        
+
         long contactId = counterLocalService.increment();
-        
-        Contact contact = contactPersistence.create(contactId); 
-        
+
+        Contact contact = contactPersistence.create(contactId);
+
         Date now = new Date();
-        
+
         contact.setUuid(serviceContext.getUuid());
         contact.setGroupId(groupId);
         contact.setCompanyId(user.getCompanyId());
@@ -111,22 +111,20 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
 
         // Asset
 
-        updateAsset(userId, contact, serviceContext.getAssetCategoryIds(),
-                serviceContext.getAssetTagNames(),
-                serviceContext.getAssetLinkEntryIds(),
-                serviceContext.getAssetPriority());
+        updateAsset(userId, contact, serviceContext.getAssetCategoryIds(), serviceContext.getAssetTagNames(),
+                serviceContext.getAssetLinkEntryIds(), serviceContext.getAssetPriority());
 
         // Social
 
-        //TODO reactivate socialActivity
-//        JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject();
-//
-//        extraDataJSONObject.put("title", contact.getFullName(true));
-//
-//        socialActivityLocalService.addActivity(userId, groupId,
-//                Contact.class.getName(), contact.getContactId(),
-//                ContactActivityKeys.ADD_CONTACT,
-//                extraDataJSONObject.toString(), 0);
+        // TODO reactivate socialActivity
+        // JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject();
+        //
+        // extraDataJSONObject.put("title", contact.getFullName(true));
+        //
+        // socialActivityLocalService.addActivity(userId, groupId,
+        // Contact.class.getName(), contact.getContactId(),
+        // ContactActivityKeys.ADD_CONTACT,
+        // extraDataJSONObject.toString(), 0);
 
         return contact;
     }
@@ -136,16 +134,14 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
             throws PortalException {
 
         resourceLocalService.addResources(contact.getCompanyId(), contact.getGroupId(), contact.getUserId(),
-                Contact.class.getName(), contact.getContactId(), false, addGroupPermissions,
-                addGuestPermissions);
+                Contact.class.getName(), contact.getContactId(), false, addGroupPermissions, addGuestPermissions);
     }
 
     @Override
-    public void addContactResources(Contact contact, ModelPermissions modelPermissions)
-            throws PortalException {
+    public void addContactResources(Contact contact, ModelPermissions modelPermissions) throws PortalException {
 
-        resourceLocalService.addModelResources(contact.getCompanyId(), contact.getGroupId(),
-                contact.getUserId(), Contact.class.getName(), contact.getContactId(), modelPermissions);
+        resourceLocalService.addModelResources(contact.getCompanyId(), contact.getGroupId(), contact.getUserId(),
+                Contact.class.getName(), contact.getContactId(), modelPermissions);
     }
 
     @Override
@@ -166,7 +162,7 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
     }
 
     @Override
-    public Contact deleteContact(long contactId) throws PortalException{
+    public Contact deleteContact(long contactId) throws PortalException {
 
         Contact contact = contactPersistence.findByPrimaryKey(contactId);
 
@@ -174,10 +170,29 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
 
     }
 
+    @Override
+    public List<Contact> deleteGroupContacts(long groupId) throws PortalException {
+
+        List<Contact> contactList = contactPersistence.findByGroupId(groupId);
+
+        for (Contact contact : contactList) {
+
+            // TODO differ exception types
+            try {
+                deleteContact(contact);
+            } catch (Exception e) {
+                _log.error(e);
+            }
+        }
+
+        return contactList;
+
+    }
+
     @Indexable(type = IndexableType.DELETE)
     @Override
     @SystemEvent(type = SystemEventConstants.TYPE_DELETE)
-    public Contact deleteContact(Contact contact) throws PortalException{
+    public Contact deleteContact(Contact contact) throws PortalException {
 
         // Contact
 
@@ -185,17 +200,16 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
 
         // Resource
 
-        resourceLocalService.deleteResource(contact.getCompanyId(),
-                Contact.class.getName(), ResourceConstants.SCOPE_INDIVIDUAL,
-                contact.getContactId());
+        resourceLocalService.deleteResource(contact.getCompanyId(), Contact.class.getName(),
+                ResourceConstants.SCOPE_INDIVIDUAL, contact.getContactId());
 
         // Asset
 
         assetEntryLocalService.deleteEntry(Contact.class.getName(), contact.getContactId());
 
-        //TODO remove from socialActivityService?
-    
-    return contact;
+        // TODO remove from socialActivityService?
+
+        return contact;
     }
 
     /**
@@ -205,7 +219,7 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
      */
     @Override
     @Deprecated
-    public Contact getContact(long groupId, String uid) throws PortalException{
+    public Contact getContact(long groupId, String uid) throws PortalException {
 
         return contactPersistence.findByG_U(groupId, uid);
 
@@ -246,38 +260,37 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
      * @see com.liferay.portal.lar.LayoutImporter
      */
     @Override
-    public void importContacts(long userId, long groupId,
-            boolean privateLayout, Map<String, String[]> parameterMap, File file)
-            throws PortalException {
-        
+    public void importContacts(long userId, long groupId, boolean privateLayout, Map<String, String[]> parameterMap,
+            File file) throws PortalException {
+
         // TODO Upgrade import
 
-//        try {
-//            ContactImporter contactImporter = new ContactImporter();
-//
-//            contactImporter.importContacts(userId, groupId, privateLayout,
-//                    parameterMap, file);
-//        } catch (PortalException pe) {
-//            Throwable cause = pe.getCause();
-//
-//            if (cause instanceof LocaleException) {
-//                throw (PortalException) cause;
-//            }
-//
-//            _log.error(pe);
-//
-//            throw pe;
-//        } catch (SystemException se) {
-//
-//            _log.error(se);
-//
-//            throw se;
-//        } catch (Exception e) {
-//
-//            _log.error(e);
-//
-//            throw new SystemException(e);
-//        }
+        // try {
+        // ContactImporter contactImporter = new ContactImporter();
+        //
+        // contactImporter.importContacts(userId, groupId, privateLayout,
+        // parameterMap, file);
+        // } catch (PortalException pe) {
+        // Throwable cause = pe.getCause();
+        //
+        // if (cause instanceof LocaleException) {
+        // throw (PortalException) cause;
+        // }
+        //
+        // _log.error(pe);
+        //
+        // throw pe;
+        // } catch (SystemException se) {
+        //
+        // _log.error(se);
+        //
+        // throw se;
+        // } catch (Exception e) {
+        //
+        // _log.error(e);
+        //
+        // throw new SystemException(e);
+        // }
     }
 
     /**
@@ -302,29 +315,28 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
      *             if a system exception occurred
      */
     @Override
-    public void importContacts(long userId, long groupId,
-            boolean privateLayout, Map<String, String[]> parameterMap,
+    public void importContacts(long userId, long groupId, boolean privateLayout, Map<String, String[]> parameterMap,
             InputStream is) throws PortalException {
 
-     // TODO Upgrade import
+        // TODO Upgrade import
 
-//        File file = null;
-//
-//        try {
-//            file = FileUtil.createTempFile("vcf");
-//
-//            FileUtil.write(file, is);
-//
-//            importContacts(userId, groupId, privateLayout, parameterMap, file);
-//
-//        } catch (IOException ioe) {
-//
-//            _log.error(ioe);
-//
-//            throw new SystemException(ioe);
-//        } finally {
-//            FileUtil.delete(file);
-//        }
+        // File file = null;
+        //
+        // try {
+        // file = FileUtil.createTempFile("vcf");
+        //
+        // FileUtil.write(file, is);
+        //
+        // importContacts(userId, groupId, privateLayout, parameterMap, file);
+        //
+        // } catch (IOException ioe) {
+        //
+        // _log.error(ioe);
+        //
+        // throw new SystemException(ioe);
+        // } finally {
+        // FileUtil.delete(file);
+        // }
     }
 
     /**
@@ -340,38 +352,37 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
      * @throws SystemException
      */
     @Override
-    public long importContactsInBackground(long userId, String taskName,
-            long groupId, boolean privateLayout,
-            Map<String, String[]> parameterMap, File file)
-            throws PortalException {
+    public long importContactsInBackground(long userId, String taskName, long groupId, boolean privateLayout,
+            Map<String, String[]> parameterMap, File file) throws PortalException {
 
         // TODO Upgrade import
-        
-//        Map<String, Serializable> taskContextMap = new HashMap<String, Serializable>();
-//        taskContextMap.put("userId", userId);
-//        taskContextMap.put("groupId", groupId);
-//        taskContextMap.put("parameterMap", (Serializable) parameterMap);
-//        taskContextMap.put("privateLayout", privateLayout);
-//
-//        String[] servletContextNames = parameterMap.get("servletContextNames");
-//
-//        BackgroundTask backgroundTask = BackgroundTaskLocalServiceUtil
-//                .addBackgroundTask(userId, groupId, taskName,
-//                        servletContextNames,
-//                        ContactImportBackgroundTaskExecutor.class,
-//                        taskContextMap, new ServiceContext());
-//
-//        BackgroundTaskLocalServiceUtil.addBackgroundTaskAttachment(userId,
-//                backgroundTask.getBackgroundTaskId(), taskName, file);
-//
-//        return backgroundTask.getBackgroundTaskId();
+
+        // Map<String, Serializable> taskContextMap = new HashMap<String,
+        // Serializable>();
+        // taskContextMap.put("userId", userId);
+        // taskContextMap.put("groupId", groupId);
+        // taskContextMap.put("parameterMap", (Serializable) parameterMap);
+        // taskContextMap.put("privateLayout", privateLayout);
+        //
+        // String[] servletContextNames =
+        // parameterMap.get("servletContextNames");
+        //
+        // BackgroundTask backgroundTask = BackgroundTaskLocalServiceUtil
+        // .addBackgroundTask(userId, groupId, taskName,
+        // servletContextNames,
+        // ContactImportBackgroundTaskExecutor.class,
+        // taskContextMap, new ServiceContext());
+        //
+        // BackgroundTaskLocalServiceUtil.addBackgroundTaskAttachment(userId,
+        // backgroundTask.getBackgroundTaskId(), taskName, file);
+        //
+        // return backgroundTask.getBackgroundTaskId();
         return 0;
     }
 
     @Indexable(type = IndexableType.REINDEX)
     @Override
-    public void updateAsset(long userId, Contact contact,
-            long[] assetCategoryIds, String[] assetTagNames,
+    public void updateAsset(long userId, Contact contact, long[] assetCategoryIds, String[] assetTagNames,
             long[] assetLinkEntryIds, Double priority) throws PortalException {
 
         boolean visible = true;
@@ -384,8 +395,7 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
         String mimeType = "text/x-vcard";
         String title = contact.getFullName(true);
         String description = contact.getFormattedName();
-        String summary = HtmlUtil.extractText(StringUtil.shorten(
-                contact.getFormattedName(), 500));
+        String summary = HtmlUtil.extractText(StringUtil.shorten(contact.getFormattedName(), 500));
         // TODO: What does url mean in this context?
         String url = null;
         // TODO: What does layoutUuid mean in this context?
@@ -393,16 +403,13 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
         int height = 0;
         int width = 0;
 
-        AssetEntry assetEntry = assetEntryLocalService.updateEntry(userId,
-                contact.getGroupId(), contact.getCreateDate(),
-                contact.getModifiedDate(), Contact.class.getName(),
-                contact.getContactId(), contact.getUuid(), classTypeId,
-                assetCategoryIds, assetTagNames, listable, visible, startDate, endDate,
-                expirationDate, mimeType, title, description, summary, url,
-                layoutUuid, height, width, priority);
-        
-        assetLinkLocalService.updateLinks(userId, assetEntry.getEntryId(),
-                assetLinkEntryIds, AssetLinkConstants.TYPE_RELATED);
+        AssetEntry assetEntry = assetEntryLocalService.updateEntry(userId, contact.getGroupId(),
+                contact.getCreateDate(), contact.getModifiedDate(), Contact.class.getName(), contact.getContactId(),
+                contact.getUuid(), classTypeId, assetCategoryIds, assetTagNames, listable, visible, startDate, endDate,
+                expirationDate, mimeType, title, description, summary, url, layoutUuid, height, width, priority);
+
+        assetLinkLocalService.updateLinks(userId, assetEntry.getEntryId(), assetLinkEntryIds,
+                AssetLinkConstants.TYPE_RELATED);
     }
 
     /**
@@ -410,20 +417,19 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
      */
     @Override
     @Indexable(type = IndexableType.REINDEX)
-    public Contact updateContact(long userId, long contactId,
-            String card, String uid, ServiceContext serviceContext)
+    public Contact updateContact(long userId, long contactId, String card, String uid, ServiceContext serviceContext)
             throws PortalException {
 
         // Contact
-        
+
         User user = userPersistence.findByPrimaryKey(userId);
 
         long groupId = serviceContext.getScopeGroupId();
 
-        Contact contact = contactPersistence.findByPrimaryKey(contactId); 
-        
+        Contact contact = contactPersistence.findByPrimaryKey(contactId);
+
         Date now = new Date();
-        
+
         contact.setUuid(serviceContext.getUuid());
         contact.setGroupId(groupId);
         contact.setCompanyId(user.getCompanyId());
@@ -437,55 +443,50 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
         contact.setUid(uid);
 
         contactPersistence.update(contact);
-        
+
         // Resources
-        // TODO  resourceLocalService.updateModel instead?
+        // TODO resourceLocalService.updateModel instead?
         resourceLocalService.addModelResources(contact, serviceContext);
         // TODO add resourceLocalService.updateRecources?
 
         // Asset
 
-        resourceLocalService.updateResources(serviceContext.getCompanyId(),
-                serviceContext.getScopeGroupId(), contact.getFullName(),
-                contactId, serviceContext.getGroupPermissions(),
+        resourceLocalService.updateResources(serviceContext.getCompanyId(), serviceContext.getScopeGroupId(),
+                contact.getFullName(), contactId, serviceContext.getGroupPermissions(),
                 serviceContext.getGuestPermissions());
 
-        updateAsset(userId, contact, serviceContext.getAssetCategoryIds(),
-                serviceContext.getAssetTagNames(),
-                serviceContext.getAssetLinkEntryIds(), serviceContext.getAssetPriority()); //TODO 
+        updateAsset(userId, contact, serviceContext.getAssetCategoryIds(), serviceContext.getAssetTagNames(),
+                serviceContext.getAssetLinkEntryIds(), serviceContext.getAssetPriority()); // TODO
 
         // Social
-        
-        
+
         // TODO activate social
-//        JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject();
-//
-//        extraDataJSONObject.put("title", contact.getFullName(true));
-//
-//        socialActivityLocalService.addActivity(userId, groupId,
-//                Contact.class.getName(), contact.getContactId(),
-//                ContactActivityKeys.UPDATE_CONTACT,
-//                extraDataJSONObject.toString(), 0);
+        // JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject();
+        //
+        // extraDataJSONObject.put("title", contact.getFullName(true));
+        //
+        // socialActivityLocalService.addActivity(userId, groupId,
+        // Contact.class.getName(), contact.getContactId(),
+        // ContactActivityKeys.UPDATE_CONTACT,
+        // extraDataJSONObject.toString(), 0);
 
         return contact;
     }
-    
-    @Override
-    public void updateContactResources(Contact contact, ModelPermissions modelPermissions)
-            throws PortalException {
 
-        resourceLocalService.updateResources(contact.getCompanyId(), contact.getGroupId(),
-                Contact.class.getName(), contact.getContactId(), modelPermissions);
+    @Override
+    public void updateContactResources(Contact contact, ModelPermissions modelPermissions) throws PortalException {
+
+        resourceLocalService.updateResources(contact.getCompanyId(), contact.getGroupId(), Contact.class.getName(),
+                contact.getContactId(), modelPermissions);
     }
 
     @Override
     public void updateContactResources(Contact contact, String[] groupPermissions, String[] guestPermissions)
             throws PortalException {
 
-        resourceLocalService.updateResources(contact.getCompanyId(), contact.getGroupId(),
-                Contact.class.getName(), contact.getContactId(), groupPermissions, guestPermissions);
+        resourceLocalService.updateResources(contact.getCompanyId(), contact.getGroupId(), Contact.class.getName(),
+                contact.getContactId(), groupPermissions, guestPermissions);
     }
 
-    private static Log _log = LogFactoryUtil
-            .getLog(ContactLocalServiceImpl.class.getName());
+    private static Log _log = LogFactoryUtil.getLog(ContactLocalServiceImpl.class.getName());
 }
