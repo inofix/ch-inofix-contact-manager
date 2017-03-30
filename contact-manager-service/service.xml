@@ -54,6 +54,10 @@
             <finder-column name="groupId" />
             <finder-column name="uid" />
         </finder>
+        
+        <finder return-type="Collection" name="GroupId">
+            <finder-column name="groupId" />
+        </finder>
 
         <!-- References -->
 
