@@ -1,5 +1,8 @@
 Bundle-Name: Inofix Contact Manager Service
 Bundle-SymbolicName: ch.inofix.contact.service
 Bundle-Version: 1.0.0
+Export-Package:\
+    ch.inofix.contact.model.impl,\
+    ch.inofix.contact.service.permission
 Liferay-Require-SchemaVersion: 1.0.0
 Liferay-Service: true
