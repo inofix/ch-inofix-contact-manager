@@ -6,5 +6,6 @@ Export-Package: \
 	ch.inofix.contact.model,\
 	ch.inofix.contact.service,\
 	ch.inofix.contact.service.persistence,\
-	ch.inofix.contact.constants
+	ch.inofix.contact.constants,\
+	ch.inofix.contact.search
 Include-Resource: @ez-vcard-0.10.2.jar,@jackson-core-2.6.1.jar,@jackson-databind-2.6.1.jar,@jackson-annotations-2.6.1.jar,@vinnie-2.0.0.jar,@jsoup-1.8.3.jar
