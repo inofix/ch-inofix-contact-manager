@@ -4,5 +4,7 @@ Bundle-Version: 1.0.0
 Export-Package:\
     ch.inofix.contact.model.impl,\
     ch.inofix.contact.service.permission
+Include-Resource: @ez-vcard-0.10.2.jar,@jackson-core-2.6.1.jar,@jackson-databind-2.6.1.jar,@jackson-annotations-2.6.1.jar,@vinnie-2.0.0.jar,@jsoup-1.8.3.jar
 Liferay-Require-SchemaVersion: 1.0.0
 Liferay-Service: true
+
