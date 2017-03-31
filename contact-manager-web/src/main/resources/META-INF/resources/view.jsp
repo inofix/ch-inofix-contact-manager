@@ -23,11 +23,7 @@
 <%@page import="com.liferay.portal.kernel.search.Sort"%>
 <%@page import="com.liferay.portal.kernel.util.PrefsParamUtil"%>
 <%@page import="com.liferay.portal.kernel.util.StringUtil"%>
-<%-- <%@page import="com.liferay.portal.security.auth.PrincipalException"%> --%>
 
-<%-- <%@page import="ch.inofix.portlet.contact.search.ContactChecker"%> --%>
-<%-- <%@page import="ch.inofix.portlet.contact.service.ContactLocalServiceUtil"%> --%>
-<%-- <%@page import="ch.inofix.portlet.contact.service.ContactServiceUtil"%> --%>
 
 <%
     String backURL = ParamUtil.getString(request, "backURL");
@@ -150,7 +146,7 @@
                             total="<%= hits.getLength() %>" />
         
                         <liferay-ui:search-container-row
-                            className="ch.inofix.portlet.contact.model.Contact"
+                            className="ch.inofix.contact.model.Contact"
                             modelVar="contact_" keyProperty="contactId">
         
                             <portlet:actionURL var="deleteURL" name="deleteContact">
