@@ -2,8 +2,8 @@
     view.jsp: Default view of the contact manager portlet.
     
     Created:     2017-03-30 16:44 by Stefan Luebbers
-    Modified:    2017-03-30 16:44 by Stefan Luebbers
-    Version:     1.0.0 
+    Modified:    2017-04-10 16:12 by Christian Berndt
+    Version:     1.0.1 
 --%>
 
 <%@ include file="init.jsp"%>
@@ -27,18 +27,18 @@
 
 <%
     String backURL = ParamUtil.getString(request, "backURL");
- int delta = ParamUtil.getInteger(request, "delta", 20); 
- String displayStyle = ParamUtil.getString(request, "displayStyle", "list");
-// String[] displayViews = StringUtil.split(PrefsParamUtil.getString(portletPreferences, liferayPortletRequest, "displayViews", "descriptive,icon,list"));
- int idx = ParamUtil.getInteger(request, "cur");
- String keywords = ParamUtil.getString(request, "keywords"); 
- String orderByCol = ParamUtil.getString(request, "orderByCol", "name"); 
- String orderByType = ParamUtil.getString(request, "orderByType", "asc"); 
+    int delta = ParamUtil.getInteger(request, "delta", 20);
+    String displayStyle = ParamUtil.getString(request, "displayStyle", "list");
+    // String[] displayViews = StringUtil.split(PrefsParamUtil.getString(portletPreferences, liferayPortletRequest, "displayViews", "descriptive,icon,list"));
+    int idx = ParamUtil.getInteger(request, "cur");
+    String keywords = ParamUtil.getString(request, "keywords");
+    String orderByCol = ParamUtil.getString(request, "orderByCol", "name");
+    String orderByType = ParamUtil.getString(request, "orderByType", "asc");
     String tabs1 = ParamUtil.getString(request, "tabs1", "browse");
-    
+
     portletURL.setParameter("tabs1", tabs1);
     portletURL.setParameter("mvcPath", "/html/view.jsp");
-    portletURL.setParameter("backURL", backURL);  
+    portletURL.setParameter("backURL", backURL);
 %>
 
 <%
@@ -119,13 +119,7 @@
 
         <c:otherwise>
             
-            <liferay-ui:app-view-toolbar 
-                includeDisplayStyle="<%=true%>"
-                includeSelectAll="<%=true%>">
-                
-                <liferay-util:include servletContext="<%= session.getServletContext() %>" page="/toolbar.jsp" />   
-                            
-            </liferay-ui:app-view-toolbar>
+            <liferay-util:include page="/toolbar.jsp" servletContext="<%= application %>" />
             
             <portlet:actionURL name="editSet" var="editSetURL">
             </portlet:actionURL>

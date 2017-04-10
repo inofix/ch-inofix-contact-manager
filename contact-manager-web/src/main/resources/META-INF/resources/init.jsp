@@ -2,8 +2,8 @@
     init.jsp: Common setup code for the contact manager portlet.
 
     Created:     2017-03-30 16:44 by Stefan Luebbers
-    Modified:    2017-03-30 16:44 by Stefan Luebbers
-    Version:     1.0.0 
+    Modified:    2017-04-10 16:30 by Christian Berndt
+    Version:     1.0.1
 --%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -14,6 +14,12 @@
 <%@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet"%>
 <%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme"%>
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui"%>
+<%@taglib uri="http://liferay.com/tld/util" prefix="liferay-util"%>
+
+<%@page import="ch.inofix.contact.constants.ContactActionKeys"%>
+<%@page import="ch.inofix.contact.model.Contact"%>
+<%@page import="ch.inofix.contact.service.permission.ContactPermission"%>
+<%@page import="ch.inofix.contact.web.internal.constants.ContactManagerWebKeys"%>
 
 <%@page import="com.liferay.portal.kernel.dao.search.SearchContainer"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>

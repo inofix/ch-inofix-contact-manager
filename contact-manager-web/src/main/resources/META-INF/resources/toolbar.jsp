@@ -33,12 +33,25 @@
         </aui:nav-item>
         
 
+        <%-- deprecated
         <portlet:actionURL var="addURL" name="editContact"
             windowState="<%= LiferayWindowState.POP_UP.toString() %>">
             <portlet:param name="mvcPath" value="/html/edit_contact.jsp" />
             <portlet:param name="redirect" value="<%= currentURL %>" />
             <portlet:param name="windowId" value="editContact" />
         </portlet:actionURL>
+        --%>
+
+        <%
+            // TODO: make window state behaviour configurable 
+            String windowState = LiferayWindowState.POP_UP.toString();
+        %>
+        <portlet:renderURL var="editURL"
+            windowState="<%= windowState %>">
+            <portlet:param name="redirect" value="<%= currentURL %>" />
+            <portlet:param name="mvcPath" value="/edit_contact.jsp" />
+            <portlet:param name="windowId" value="editContact" />
+        </portlet:renderURL>
 <%
             // TODO: reactivate permission checks
 %>
@@ -46,7 +59,7 @@
 <!-- //                                 permissionChecker, scopeGroupId, -->
 <%--                                 ActionKeys.ADD_CONTACT)%>'> --%>
             <%
-                String taglibAddURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "editContact', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(pageContext, "edit-x", "new")) + "', uri:'" + HtmlUtil.escapeJS(addURL) + "'});";
+                String taglibAddURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "editContact', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(request, "edit-x", "new")) + "', uri:'" + HtmlUtil.escapeJS(editURL) + "'});";
             %>
               
             <aui:a href="<%= taglibAddURL %>" cssClass="btn btn-primary pull-left add-contact">
