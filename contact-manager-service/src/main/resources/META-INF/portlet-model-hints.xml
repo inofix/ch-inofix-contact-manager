@@ -12,7 +12,9 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="status" type="int" />
 		<field name="parentContactId" type="long" />
-		<field name="card" type="String" />
+		<field name="card" type="String">
+			<hint name="max-length">5000</hint>
+		</field>
 		<field name="uid" type="String" />
 	</model>
 </model-hints>
