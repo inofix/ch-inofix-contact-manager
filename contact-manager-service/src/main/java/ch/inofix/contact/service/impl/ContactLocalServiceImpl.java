@@ -25,11 +25,19 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.SystemEventConstants;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
+import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.search.SearchContext;
+import com.liferay.portal.kernel.search.Sort;
+import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.permission.ModelPermissions;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
@@ -37,6 +45,7 @@ import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.File;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import aQute.bnd.annotation.ProviderType;
 import ch.inofix.contact.model.Contact;
@@ -379,6 +388,40 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
         // return backgroundTask.getBackgroundTaskId();
         return 0;
     }
+    
+    @Override
+    public Hits search(long userId, long groupId, String keywords, int start, int end, Sort sort)
+            throws PortalException {
+
+        if (sort == null) {
+            sort = new Sort(Field.MODIFIED_DATE, true);
+        }
+
+        Indexer<Contact> indexer = IndexerRegistryUtil.getIndexer(Contact.class.getName());
+
+        SearchContext searchContext = new SearchContext();
+
+        searchContext.setAttribute(Field.STATUS, WorkflowConstants.STATUS_ANY);
+
+        searchContext.setAttribute("paginationType", "more");
+
+        Group group = GroupLocalServiceUtil.getGroup(groupId);
+
+        searchContext.setCompanyId(group.getCompanyId());
+
+        searchContext.setEnd(end);
+        if (groupId > 0) {
+            searchContext.setGroupIds(new long[] { groupId });
+        }
+        searchContext.setSorts(sort);
+        searchContext.setStart(start);
+        searchContext.setUserId(userId);
+
+        searchContext.setKeywords(keywords);
+
+        return indexer.search(searchContext);
+
+    }
 
     @Indexable(type = IndexableType.REINDEX)
     @Override
@@ -447,7 +490,7 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
         // Resources
         // TODO resourceLocalService.updateModel instead?
         resourceLocalService.addModelResources(contact, serviceContext);
-        // TODO add resourceLocalService.updateRecources?
+        // TODO add resourceLocalService.updateResources?
 
         // Asset
 
