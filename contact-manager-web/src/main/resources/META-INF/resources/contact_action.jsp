@@ -103,12 +103,12 @@
 
     <c:if test="<%= hasPermissionsPermission %>">
 
-        <liferay-security:permissionsURL
-            modelResource="<%= Contact.class.getName() %>"
-            modelResourceDescription="<%= String.valueOf(contact_.getContactId()) %>"
-            resourcePrimKey="<%= String.valueOf(contact_.getContactId()) %>"
-            var="permissionsEntryURL"
-            windowState="<%= LiferayWindowState.POP_UP.toString() %>" />
+<%--         <liferay-security:permissionsURL --%>
+<%--             modelResource="<%= Contact.class.getName() %>" --%>
+<%--             modelResourceDescription="<%= String.valueOf(contact_.getContactId()) %>" --%>
+<%--             resourcePrimKey="<%= String.valueOf(contact_.getContactId()) %>" --%>
+<%--             var="permissionsEntryURL" --%>
+<%--             windowState="<%= LiferayWindowState.POP_UP.toString() %>" /> --%>
 
         <liferay-ui:icon iconCssClass="icon-cog" message="permissions"
             method="get" url="<%= permissionsEntryURL %>"

@@ -202,13 +202,6 @@
                             
 //                                 String modelResourceDescription = sb.toString(); 
 <%--                             %> --%>
-        
-<!--                             <liferay-security:permissionsURL -->
-<%--                                 modelResource="<%= Contact.class.getName() %>" --%>
-<%--                                 modelResourceDescription="<%= modelResourceDescription %>" --%>
-<%--                                 resourcePrimKey="<%= String.valueOf(contact.getContactId()) %>" --%>
-<!--                                 var="permissionsURL" /> -->
-        
 <%--                             <portlet:actionURL var="viewURL" name="viewContact" --%>
 <%--                                 windowState="<%= LiferayWindowState.POP_UP.toString() %>"> --%>
 <%--                                 <portlet:param name="redirect" value="<%= currentURL %>" /> --%>
@@ -231,9 +224,17 @@
         
                             <%
                             
-                                String taglibEditURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "editContact', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(pageContext, "edit-x", HtmlUtil.escape(contact_.getFullName(true)))) + "', uri:'" + HtmlUtil.escapeJS(editURL) + "'});";
-                                String taglibViewURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "viewContact', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(pageContext, "view-x", HtmlUtil.escape(contact_.getFullName(true)))) + "', uri:'" + HtmlUtil.escapeJS(viewURL) + "'});";
-                            
+                                //String taglibEditURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "editContact', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(pageContext, "edit-x", HtmlUtil.escape(contact_.getFullName(true)))) + "', uri:'" + HtmlUtil.escapeJS(editURL) + "'});";
+                                //String taglibViewURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "viewContact', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(pageContext, "view-x", HtmlUtil.escape(contact_.getFullName(true)))) + "', uri:'" + HtmlUtil.escapeJS(viewURL) + "'});";
+                                String taglibEditURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "editTaskRecord', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(request, "edit-x", contact_.getContactId())) + "', uri:'" + HtmlUtil.escapeJS(editURL) + "'});";            
+                                String taglibViewURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "viewTaskRecord', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(request, "view-x", contact_.getContactId())) + "', uri:'" + HtmlUtil.escapeJS(viewURL) + "'});";
+                                
+                            %>
+                            <%
+                                request.setAttribute("editURL", editURL.toString()); 
+                                request.setAttribute("viewURL", viewURL.toString()); 
+                            %>
+                            <%
                                 boolean hasDeletePermission = ContactPermission.contains(permissionChecker,
                                         contact.getContactId(), ContactActionKeys.DELETE);   
                                 boolean hasPermissionsPermission = ContactPermission.contains(permissionChecker,
@@ -242,7 +243,8 @@
                                         contact.getContactId(), ContactActionKeys.UPDATE);
                                 boolean hasViewPermission = ContactPermission.contains(permissionChecker,
                                         contact.getContactId(), ContactActionKeys.VIEW);
-        
+                            %>
+                            <%
                                 String detailURL = null;
         
                                 if (hasUpdatePermission) {
@@ -258,7 +260,7 @@
                                 }
                             %>
         
-                            <%@ include file="/search_columns.jspf"%>
+<%--                             <%@ include file="/search_columns.jspf"%> --%>
                             
                             <liferay-ui:search-container-column-jsp
                                 cssClass="entry-action"
