@@ -2,8 +2,8 @@
     task_record_action.jsp: The action menu of the timetrackers's default view.
     
     Created:    2017-04-11 16:00 by Stefan Luebbers
-    Modified:   2017-04-11 16:00 by Stefan Luebbers
-    Version:    1.0.0
+    Modified:   2017-04-12 10:47 by Christian Berndt
+    Version:    1.0.1
 --%>
 
 <%@ include file="init.jsp"%>
@@ -102,7 +102,7 @@
     </c:if>
 
     <c:if test="<%= hasPermissionsPermission %>">
-
+<% // TODO %>
 <%--         <liferay-security:permissionsURL --%>
 <%--             modelResource="<%= Contact.class.getName() %>" --%>
 <%--             modelResourceDescription="<%= String.valueOf(contact_.getContactId()) %>" --%>
@@ -110,9 +110,11 @@
 <%--             var="permissionsEntryURL" --%>
 <%--             windowState="<%= LiferayWindowState.POP_UP.toString() %>" /> --%>
 
+<%-- -
         <liferay-ui:icon iconCssClass="icon-cog" message="permissions"
             method="get" url="<%= permissionsEntryURL %>"
             useDialog="<%= true %>" />
+--%>
     </c:if>
 
 </liferay-ui:icon-menu>

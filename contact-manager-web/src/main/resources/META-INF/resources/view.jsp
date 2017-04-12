@@ -2,10 +2,11 @@
     view.jsp: Default view of the contact manager portlet.
     
     Created:     2017-03-30 16:44 by Stefan Luebbers
-    Modified:    2017-04-10 16:12 by Christian Berndt
-    Version:     1.0.1 
+    Modified:    2017-04-12 10:47 by Christian Berndt
+    Version:     1.0.2
 --%>
 
+<%@page import="ch.inofix.contact.service.ContactLocalServiceUtil"%>
 <%@ include file="init.jsp"%>
 
 <%-- Import required classes --%>
@@ -61,16 +62,21 @@
         
     List<Contact> contacts = new ArrayList<Contact>();
 
-    for (Document document : documents) {
-        try {
-            long contactId = GetterUtil.getLong(document.get("entryClassPK"));
+    // TODO: enable index search
+//     for (Document document : documents) {
+//         try {
+//             long contactId = GetterUtil.getLong(document.get("entryClassPK"));
 
-            Contact contact_curr = ContactServiceUtil.getContact(contactId);
-            contacts.add(contact_curr); 
-        } catch (Exception e) {
-            System.out.println("ERROR: timetracker/view.jsp Failed to getTaskRecord: " + e); 
-        }
-    }
+//             Contact contact_curr = ContactServiceUtil.getContact(contactId);
+//             contacts.add(contact_curr); 
+//         } catch (Exception e) {
+//             System.out.println("ERROR: timetracker/view.jsp Failed to getTaskRecord: " + e); 
+//         }
+//     }
+    
+    // Display the first 20 contacts - only for development
+    contacts = ContactLocalServiceUtil.getContacts(0, 20); 
+            
     contactSearch.setResults(contacts); 
     contactSearch.setTotal(hits.getLength());
 %>
@@ -173,6 +179,7 @@
                         searchContainer="<%= contactSearch %>"
                         var="contactSearchContainer" >
         
+                        <% // obsolete - see timetracker view.jsp %>
 <%--                         <liferay-ui:search-container-results results="<%= contacts %>" --%>
 <%--                             total="<%= hits.getLength() %>" /> --%>
         
@@ -193,15 +200,15 @@
                                     value="editContact" />
                             </portlet:renderURL>
         
-<%--                             <% --%>
-//                                 StringBuilder sb = new StringBuilder(); 
+                            <%--
+                                StringBuilder sb = new StringBuilder(); 
                             
-//                                 sb.append(LanguageUtil.get(pageContext, "permissions-of-contact")); 
-//                                 sb.append(" "); 
-//                                 sb.append(contact_.getFullName(true)); 
+                                sb.append(LanguageUtil.get(pageContext, "permissions-of-contact")); 
+                                sb.append(" "); 
+                                sb.append(contact_.getFullName(true)); 
                             
-//                                 String modelResourceDescription = sb.toString(); 
-<%--                             %> --%>
+                                String modelResourceDescription = sb.toString(); 
+                             --%> 
 <%--                             <portlet:actionURL var="viewURL" name="viewContact" --%>
 <%--                                 windowState="<%= LiferayWindowState.POP_UP.toString() %>"> --%>
 <%--                                 <portlet:param name="redirect" value="<%= currentURL %>" /> --%>
@@ -259,6 +266,8 @@
                                     detailURL = taglibViewURL;  
                                 }
                             %>
+                            
+                            <liferay-ui:search-container-column-text value="<%= contact_.getCard() %>"/>
         
 <%--                             <%@ include file="/search_columns.jspf"%> --%>
                             
@@ -405,6 +414,7 @@
 
     <hr>
     
-    <ifx-util:build-info/>
+    <% // TODO %>
+<!--     <ifx-util:build-info/> -->
     
 </div>
