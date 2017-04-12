@@ -33,7 +33,6 @@
             <guest-defaults/>
             <guest-unsupported>
                 <action-key>ADD_CONTACT</action-key>
-<!--                 <action-key>PERMISSIONS</action-key> -->
             </guest-unsupported>
         </permissions>
     </model-resource>
