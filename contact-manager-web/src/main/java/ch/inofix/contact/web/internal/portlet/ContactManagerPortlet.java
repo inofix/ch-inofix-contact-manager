@@ -1,6 +1,8 @@
 package ch.inofix.contact.web.internal.portlet;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
@@ -24,32 +26,38 @@ import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 
 import aQute.bnd.annotation.metatype.Configurable;
+import ch.inofix.contact.exception.ImageFileFormatException;
+import ch.inofix.contact.exception.KeyFileFormatException;
 import ch.inofix.contact.exception.NoSuchContactException;
+import ch.inofix.contact.exception.SoundFileFormatException;
 import ch.inofix.contact.model.Contact;
 import ch.inofix.contact.service.ContactService;
 import ch.inofix.contact.web.configuration.ContactManagerConfiguration;
 import ch.inofix.contact.web.internal.constants.ContactManagerWebKeys;
+import ch.inofix.contact.web.internal.portlet.util.PortletUtil;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
 import ezvcard.VCardVersion;
 import ezvcard.property.Uid;
 
 /**
- * View Controller of Inofix' timetracker.
+ * View Controller of Inofix' contact-manager.
  *
  * @author Stefan Luebbers
  * @author Christian Berndt
  * @created 2017-03-30 19:52
- * @modified 2017-04-10 15:42
- * @version 1.0.1
+ * @modified 2017-04-12 14:57
+ * @version 1.0.2
  */
 
 @Component(immediate = true, property = { "com.liferay.portlet.css-class-wrapper=portlet-contact-manager",
         "com.liferay.portlet.display-category=category.inofix", "com.liferay.portlet.instanceable=false",
-        "com.liferay.portlet.header-portlet-css=/css/main.css", "javax.portlet.display-name=ContactManager",
+        "com.liferay.portlet.header-portlet-css=/css/main.css", "javax.portlet.display-name=Contact Manager",
         "javax.portlet.init-param.template-path=/", "javax.portlet.init-param.view-template=/view.jsp",
         "javax.portlet.resource-bundle=content.Language",
         "javax.portlet.security-role-ref=power-user,user" }, service = Portlet.class)
@@ -83,36 +91,104 @@ public class ContactManagerPortlet extends MVCPortlet {
 
     public void updateContact(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 
-        _log.info("updateContact");
+        ServiceContext serviceContext = ServiceContextFactory.getInstance(Contact.class.getName(), actionRequest);
+
+        UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 
         long contactId = ParamUtil.getLong(actionRequest, "contactId");
 
-        ServiceContext serviceContext = ServiceContextFactory.getInstance(Contact.class.getName(), actionRequest);
-
         Contact contact = null;
 
-        VCard vCard = null;
+        String card = "";
         String uid = null;
 
         if (contactId > 0) {
 
             contact = _contactService.getContact(contactId);
             uid = contact.getUid();
-            vCard = contact.getVCard();
+            card = contact.getCard();
 
         } else {
 
-            vCard = new VCard();
+            VCard vCard = new VCard();
             vCard.setUid(Uid.random());
             uid = vCard.getUid().getValue();
+            card = Ezvcard.write(vCard).version(VCardVersion.V4_0).go();
 
         }
 
+        // Pass the required parameters to the render phase
+
+        actionResponse.setRenderParameter("contactId", String.valueOf(contactId));
+        // actionResponse.setRenderParameter("backURL", backURL);
+        // actionResponse.setRenderParameter("historyKey", historyKey);
+        // actionResponse.setRenderParameter("mvcPath", mvcPath);
+        // actionResponse.setRenderParameter("redirect", redirect);
+        // actionResponse.setRenderParameter("windowId", windowId);
+
+        // Retrieve associated file data
+        File[] keyFiles = uploadPortletRequest.getFiles("key.file");
+        File[] logoFiles = uploadPortletRequest.getFiles("logo.file");
+        File[] photoFiles = uploadPortletRequest.getFiles("photo.file");
+        File[] soundFiles = uploadPortletRequest.getFiles("sound.file");
+
+        Map<String, File[]> map = new HashMap<String, File[]>();
+
+        if (keyFiles != null) {
+            map.put("key.file", keyFiles);
+        }
+        if (logoFiles != null) {
+            map.put("logo.file", logoFiles);
+        }
+        if (photoFiles != null) {
+            map.put("photo.file", photoFiles);
+        }
+        if (soundFiles != null) {
+            map.put("sound.file", soundFiles);
+        }
+
+        // Update the vCard with the request parameters
+
+        try {
+
+            VCard vCard = Ezvcard.parse(card).first();
+            vCard = PortletUtil.getVCard(uploadPortletRequest, vCard, map);
+            card = Ezvcard.write(vCard).version(VCardVersion.V4_0).go();
+
+            _log.debug(card);
+
+        } catch (ImageFileFormatException iffe) {
+
+            SessionErrors.add(actionRequest, "the-image-file-format-is-not-supported");
+
+            // Store the unmodified contact as a request attribute
+
+            uploadPortletRequest.setAttribute(ContactManagerWebKeys.CONTACT, contact);
+
+            return;
+
+        } catch (KeyFileFormatException kffe) {
+
+            SessionErrors.add(actionRequest, "the-key-file-format-is-not-supported");
+
+            // Store the unmodified contact as a request attribute
+
+            uploadPortletRequest.setAttribute(ContactManagerWebKeys.CONTACT, contact);
+
+            return;
+
+        } catch (SoundFileFormatException sffe) {
+
+            SessionErrors.add(actionRequest, "the-sound-file-format-is-not-supported");
+
+            // Store the unmodified contact as a request attribute
+
+            uploadPortletRequest.setAttribute(ContactManagerWebKeys.CONTACT, contact);
+
+            return;
+        }
+
         // Store contact information in vCard format
-
-        String card = Ezvcard.write(vCard).version(VCardVersion.V4_0).go();
-
-        _log.info(card);
 
         if (contactId <= 0) {
 

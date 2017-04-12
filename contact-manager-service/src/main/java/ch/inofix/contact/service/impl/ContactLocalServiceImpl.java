@@ -22,7 +22,6 @@ import java.util.Map;
 import com.liferay.asset.kernel.model.AssetEntry;
 import com.liferay.asset.kernel.model.AssetLinkConstants;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
@@ -41,7 +40,6 @@ import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.permission.ModelPermissions;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
-import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.File;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -388,7 +386,7 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
         // return backgroundTask.getBackgroundTaskId();
         return 0;
     }
-    
+
     @Override
     public Hits search(long userId, long groupId, String keywords, int start, int end, Sort sort)
             throws PortalException {
@@ -489,14 +487,11 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
 
         // Resources
         // TODO resourceLocalService.updateModel instead?
+
         resourceLocalService.addModelResources(contact, serviceContext);
         // TODO add resourceLocalService.updateResources?
 
         // Asset
-
-        resourceLocalService.updateResources(serviceContext.getCompanyId(), serviceContext.getScopeGroupId(),
-                contact.getFullName(), contactId, serviceContext.getGroupPermissions(),
-                serviceContext.getGuestPermissions());
 
         updateAsset(userId, contact, serviceContext.getAssetCategoryIds(), serviceContext.getAssetTagNames(),
                 serviceContext.getAssetLinkEntryIds(), serviceContext.getAssetPriority()); // TODO
