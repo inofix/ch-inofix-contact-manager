@@ -2,19 +2,19 @@
     init.jsp: Common setup code for the contact manager portlet.
 
     Created:     2017-03-30 16:44 by Stefan Luebbers
-    Modified:    2017-04-11 17:05 by Stefan Luebbers
-    Version:     1.0.1
+    Modified:    2017-04-12 14:27 by Christian Berndt
+    Version:     1.0.2
 --%>
 
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet"%>
+<%@taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet"%>
 
-<%@ taglib uri="http://liferay.com/tld/aui" prefix="aui"%>
-<%@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet"%>
-<%@taglib uri="http://liferay.com/tld/security" prefix="liferay-security" %>
-<%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme"%>
-<%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui"%>
+<%@taglib uri="http://liferay.com/tld/aui" prefix="aui"%>
+<%@taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet"%>
+<%@taglib uri="http://liferay.com/tld/security" prefix="liferay-security"%>
+<%@taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme"%>
+<%@taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui"%>
 <%@taglib uri="http://liferay.com/tld/util" prefix="liferay-util"%>
 
 <%@page import="ch.inofix.contact.constants.ContactActionKeys"%>
