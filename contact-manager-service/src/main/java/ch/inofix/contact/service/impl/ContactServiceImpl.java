@@ -121,7 +121,7 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
     // taskName, groupId, privateLayout, parameterMap, file);
     //
     // }
-    
+
     @Override
     public Hits search(long userId, long groupId, String keywords, int start, int end, Sort sort)
             throws PortalException {
