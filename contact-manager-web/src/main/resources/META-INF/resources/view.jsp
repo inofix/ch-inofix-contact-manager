@@ -6,10 +6,10 @@
     Version:     1.0.2
 --%>
 
-<%@page import="ch.inofix.contact.service.ContactLocalServiceUtil"%>
-<%@ include file="init.jsp"%>
+<%@ include file="/init.jsp"%>
 
-<%-- Import required classes --%>
+<% // TODO: remove local service %>
+<%@page import="ch.inofix.contact.service.ContactLocalServiceUtil"%>
 
 <%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
 <%@page import="com.liferay.portal.kernel.exception.SystemException"%>
@@ -44,7 +44,7 @@
     portletURL.setParameter("mvcPath", "/html/view.jsp");
     portletURL.setParameter("backURL", backURL);
     
-    ContactSearch contactSearch = new ContactSearch(renderRequest, "cur", portletURL);
+    SearchContainer<Contact> contactSearch = new ContactSearch(renderRequest, "cur", portletURL);
     
     boolean reverse = false; 
     if (contactSearch.getOrderByType().equals("desc")) {
@@ -243,13 +243,13 @@
                             %>
                             <%
                                 boolean hasDeletePermission = ContactPermission.contains(permissionChecker,
-                                        contact.getContactId(), ContactActionKeys.DELETE);   
+                                        contact_.getContactId(), ContactActionKeys.DELETE);   
                                 boolean hasPermissionsPermission = ContactPermission.contains(permissionChecker,
-                                        contact.getContactId(), ContactActionKeys.PERMISSIONS);  
+                                        contact_.getContactId(), ContactActionKeys.PERMISSIONS);  
                                 boolean hasUpdatePermission = ContactPermission.contains(permissionChecker,
-                                        contact.getContactId(), ContactActionKeys.UPDATE);
+                                        contact_.getContactId(), ContactActionKeys.UPDATE);
                                 boolean hasViewPermission = ContactPermission.contains(permissionChecker,
-                                        contact.getContactId(), ContactActionKeys.VIEW);
+                                        contact_.getContactId(), ContactActionKeys.VIEW);
                             %>
                             <%
                                 String detailURL = null;
@@ -271,11 +271,13 @@
         
 <%--                             <%@ include file="/search_columns.jspf"%> --%>
                             
+                            <%-- 
+                            --%>
                             <liferay-ui:search-container-column-jsp
                                 cssClass="entry-action"
                                 path="/contact_action.jsp"
                                 valign="top" />
-
+                            
                         </liferay-ui:search-container-row>
         
                         <liferay-ui:search-iterator />
