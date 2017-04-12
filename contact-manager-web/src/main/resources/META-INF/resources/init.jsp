@@ -2,7 +2,7 @@
     init.jsp: Common setup code for the contact manager portlet.
 
     Created:     2017-03-30 16:44 by Stefan Luebbers
-    Modified:    2017-04-10 16:30 by Christian Berndt
+    Modified:    2017-04-11 17:05 by Stefan Luebbers
     Version:     1.0.1
 --%>
 
@@ -12,6 +12,7 @@
 
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui"%>
 <%@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet"%>
+<%@taglib uri="http://liferay.com/tld/security" prefix="liferay-security" %>
 <%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme"%>
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui"%>
 <%@taglib uri="http://liferay.com/tld/util" prefix="liferay-util"%>
@@ -19,7 +20,11 @@
 <%@page import="ch.inofix.contact.constants.ContactActionKeys"%>
 <%@page import="ch.inofix.contact.model.Contact"%>
 <%@page import="ch.inofix.contact.service.permission.ContactPermission"%>
+<%@page import="ch.inofix.contact.service.ContactServiceUtil"%>
 <%@page import="ch.inofix.contact.web.internal.constants.ContactManagerWebKeys"%>
+<%@page import="ch.inofix.contact.web.internal.search.ContactDisplayTerms"%>
+<%@page import="ch.inofix.contact.web.internal.search.ContactSearch"%>
+<%@page import="ch.inofix.contact.web.internal.search.ContactSearchTerms"%>
 
 <%@page import="com.liferay.portal.kernel.dao.search.SearchContainer"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
@@ -48,6 +53,10 @@
 <%@page import="com.liferay.portal.kernel.util.Validator"%>
 <%@page import="com.liferay.portal.kernel.util.WebKeys"%>
 <%@page import="com.liferay.portal.kernel.workflow.WorkflowConstants"%>
+
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Arrays"%>
+<%@page import="java.util.List"%>
 
 <%@page import="javax.portlet.PortletPreferences"%>
 <%@page import="javax.portlet.PortletURL"%>

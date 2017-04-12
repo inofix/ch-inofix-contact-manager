@@ -19,6 +19,8 @@ import java.util.List;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.search.Hits;
+import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.service.ServiceContext;
 
 import aQute.bnd.annotation.ProviderType;
@@ -119,6 +121,13 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
     // taskName, groupId, privateLayout, parameterMap, file);
     //
     // }
+    
+    @Override
+    public Hits search(long userId, long groupId, String keywords, int start, int end, Sort sort)
+            throws PortalException {
+
+        return contactLocalService.search(userId, groupId, keywords, start, end, sort);
+    }
 
     @Override
     public Contact updateContact(long contactId, String card, String uid, ServiceContext serviceContext)
