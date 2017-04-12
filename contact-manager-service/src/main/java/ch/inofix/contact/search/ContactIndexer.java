@@ -1,7 +1,5 @@
 package ch.inofix.contact.search;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Locale;
 
 import javax.portlet.PortletRequest;
@@ -9,10 +7,6 @@ import javax.portlet.PortletResponse;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-
-import ch.inofix.contact.model.Contact;
-import ch.inofix.contact.service.ContactLocalService;
-import ch.inofix.contact.service.ContactLocalServiceUtil;
 
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -32,13 +26,17 @@ import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
+import ch.inofix.contact.model.Contact;
+import ch.inofix.contact.service.ContactLocalService;
+import ch.inofix.contact.service.ContactLocalServiceUtil;
+
 /**
  *
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-20 13:28
- * @modified 2017-04-11 19:36
- * @version 1.0.6
+ * @modified 2017-04-12 10:44
+ * @version 1.0.7
  *
  */
 @Component(immediate = true, service = Indexer.class)
@@ -84,14 +82,16 @@ public class ContactIndexer extends BaseIndexer<Contact> {
         document.addKeyword("company", contact.getCompany());
         document.addKeyword("contactId", contact.getContactId());
         document.addText(Field.CONTENT, contact.getCard());
-        document.addKeyword("email", contact.getEmail().getAddress());
+        // TODO
+//        document.addKeyword("email", contact.getEmail().getAddress());
         // TODO: add default fax
         document.addKeyword("fullName", contact.getFullName(false));
         document.addKeyword(Field.GROUP_ID, getSiteGroupId(contact.getGroupId()));
         // TODO add default impp
         document.addDate(Field.MODIFIED_DATE, contact.getModifiedDate());
         document.addKeyword(Field.NAME, contact.getName());
-        document.addKeyword("phone", contact.getPhone().getNumber());
+        // TODO
+//        document.addKeyword("phone", contact.getPhone().getNumber());
         document.addKeyword(Field.SCOPE_GROUP_ID, contact.getGroupId());
         document.addText(Field.TITLE, contact.getFullName(true));
         document.addKeyword("vCardUID", contact.getUid());
@@ -102,7 +102,7 @@ public class ContactIndexer extends BaseIndexer<Contact> {
 
     @Override
     protected Summary doGetSummary(Document document, Locale locale,
-            String snippet, PortletRequest portletRequest, 
+            String snippet, PortletRequest portletRequest,
             PortletResponse portletResponse) throws Exception {
 
         Summary summary = createSummary(document, Field.TITLE, Field.CONTENT);
@@ -178,7 +178,7 @@ public class ContactIndexer extends BaseIndexer<Contact> {
 
         indexableActionableDynamicQuery.performActions();
     }
-    
+
     @Reference(unbind = "-")
     protected void setContactLocalService(ContactLocalService contactLocalService) {
 

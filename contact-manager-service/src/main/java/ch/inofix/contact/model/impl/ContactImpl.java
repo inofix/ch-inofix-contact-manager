@@ -18,13 +18,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import ch.inofix.contact.dto.*;
-
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import aQute.bnd.annotation.ProviderType;
-
+import ch.inofix.contact.dto.EmailDTO;
+import ch.inofix.contact.dto.PhoneDTO;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
 import ezvcard.parameter.EmailType;
@@ -49,6 +48,9 @@ import ezvcard.property.Telephone;
  *
  * @author Christian Berndt
  * @author Stefan Luebbers
+ * @created 2015-05-07 22:17
+ * @modified 2017-04-12 10:43
+ * @version 1.2.0
  */
 @ProviderType
 public class ContactImpl extends ContactBaseImpl {
@@ -61,7 +63,8 @@ public class ContactImpl extends ContactBaseImpl {
      */
     public ContactImpl() {
     }
-    
+
+    @Override
     public String getCompany() {
 
         String str = "";
@@ -78,30 +81,31 @@ public class ContactImpl extends ContactBaseImpl {
         return str;
 
     }
-    
-    
-    public EmailDTO getEmail() {
 
-        List<Email> emails = getVCard().getEmails();
+    // TODO
+    //
+    // public EmailDTO getEmail() {
+    //
+    // List<Email> emails = getVCard().getEmails();
+    //
+    // if (emails != null) {
+    //
+    // for (Email email : emails) {
+    // Integer pref = email.getPref();
+    // if (pref != null) {
+    // if (pref == 1) {
+    // return getEmail(email);
+    // }
+    // }
+    // }
+    // }
+    //
+    // Email email = getVCard().getProperty(Email.class);
+    //
+    // return getEmail(email);
+    //
+    // }
 
-        if (emails != null) {
-
-            for (Email email : emails) {
-                Integer pref = email.getPref();
-                if (pref != null) {
-                    if (pref == 1) {
-                        return getEmail(email);
-                    }
-                }
-            }
-        }
-
-        Email email = getVCard().getProperty(Email.class);
-
-        return getEmail(email);
-
-    }
-    
     private EmailDTO getEmail(Email email) {
 
         EmailDTO emailDTO = new EmailDTO();
@@ -128,6 +132,7 @@ public class ContactImpl extends ContactBaseImpl {
         return emailDTO;
     }
 
+    @Override
     public String getFormattedName() {
 
         String formattedName = "";
@@ -141,7 +146,8 @@ public class ContactImpl extends ContactBaseImpl {
         return formattedName;
 
     }
-    
+
+    @Override
     public String getName() {
 
         String firstLast = getFullName(true);
@@ -179,29 +185,31 @@ public class ContactImpl extends ContactBaseImpl {
         return name;
 
     }
-    
-    public PhoneDTO getPhone() {
 
-        List<Telephone> phones = getVCard().getTelephoneNumbers();
+    // TODO
+    // @Override
+    // public PhoneDTO getPhone() {
+    //
+    // List<Telephone> phones = getVCard().getTelephoneNumbers();
+    //
+    // if (phones != null) {
+    //
+    // for (Telephone phone : phones) {
+    // Integer pref = phone.getPref();
+    // if (pref != null) {
+    // if (pref == 1) {
+    // return getPhone(phone);
+    // }
+    // }
+    // }
+    // }
+    //
+    // Telephone phone = getVCard().getProperty(Telephone.class);
+    //
+    // return getPhone(phone);
+    //
+    // }
 
-        if (phones != null) {
-
-            for (Telephone phone : phones) {
-                Integer pref = phone.getPref();
-                if (pref != null) {
-                    if (pref == 1) {
-                        return getPhone(phone);
-                    }
-                }
-            }
-        }
-
-        Telephone phone = getVCard().getProperty(Telephone.class);
-
-        return getPhone(phone);
-
-    }
-    
     private PhoneDTO getPhone(Telephone phone) {
 
         PhoneDTO phoneDTO = new PhoneDTO();
@@ -228,7 +236,8 @@ public class ContactImpl extends ContactBaseImpl {
 
         return phoneDTO;
     }
-    
+
+    @Override
     public String getSalutation() {
 
         String salutation = "";
@@ -245,6 +254,7 @@ public class ContactImpl extends ContactBaseImpl {
 
     }
 
+    @Override
     public VCard getVCard() {
 
         String str = getCard();
@@ -260,10 +270,12 @@ public class ContactImpl extends ContactBaseImpl {
 
     }
 
+    @Override
     public String getFullName() {
         return getFullName(false);
     }
 
+    @Override
     public String getFullName(boolean firstLast) {
 
         StringBuilder sb = new StringBuilder();
