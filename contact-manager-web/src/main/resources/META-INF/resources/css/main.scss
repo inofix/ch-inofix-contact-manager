@@ -1,0 +1,35 @@
+/**
+ * main.css: The contact-manager portlet's css configuration
+ *
+ * Created:     2015-05-08 15:51 by Christian Berndt
+ * Modified:    2017-04-12 15:50 by Christian Berndt
+ * Version:     1.2.0
+ *
+ */
+@import "bourbon";
+@import "mixins";
+
+.item-remove {
+    
+    .taglib-text-icon {   
+     
+        &:before {
+            content: "\f00d"; 
+            font-family: 'fontawesome-alloy';
+            -webkit-font-smoothing: antialiased;
+            font-style: normal;
+            font-variant: normal;
+            font-weight: normal;
+            line-height: 1;
+            *margin-right: .3em;
+            margin-right: .4em;
+            speak: none;
+            text-decoration: inherit;
+            text-transform: none;
+        }
+    }
+}
+ 
+.portlet-contact-manager {
+}
+

@@ -2,8 +2,8 @@
     view.jsp: Default view of the contact manager portlet.
     
     Created:     2017-03-30 16:44 by Stefan Luebbers
-    Modified:    2017-04-12 10:47 by Christian Berndt
-    Version:     1.0.2
+    Modified:    2017-04-12 16:01 by Christian Berndt
+    Version:     1.0.3
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -24,7 +24,6 @@
 <%@page import="com.liferay.portal.kernel.search.Sort"%>
 <%@page import="com.liferay.portal.kernel.util.PrefsParamUtil"%>
 <%@page import="com.liferay.portal.kernel.util.StringUtil"%>
-
 
 <%
     boolean viewByDefault = false;
@@ -142,11 +141,6 @@
 
     <liferay-ui:error exception="<%= PrincipalException.class %>"
         message="you-dont-have-the-required-permissions" />
-
-    <liferay-ui:header backURL="<%=backURL%>" title="contact-manager" />
-    
-<%--     <liferay-ui:error exception="<%= PrincipalException.class %>"  
-       message="you-dont-have-the-required-permissions"/>     --%>
     
     <liferay-ui:tabs
         names="browse,import-export"
@@ -209,26 +203,18 @@
                             
                                 String modelResourceDescription = sb.toString(); 
                              --%> 
-<%--                             <portlet:actionURL var="viewURL" name="viewContact" --%>
-<%--                                 windowState="<%= LiferayWindowState.POP_UP.toString() %>"> --%>
-<%--                                 <portlet:param name="redirect" value="<%= currentURL %>" /> --%>
-<%--                                 <portlet:param name="contactId" --%>
-<%--                                     value="<%= String.valueOf(contact_.getContactId()) %>" /> --%>
-<%--                                 <portlet:param name="mvcPath" value="/html/view_contact.jsp" /> --%>
-<%--                                 <portlet:param name="windowId" value="viewContact" /> --%>
-<%--                             </portlet:actionURL> --%>
                             <portlet:renderURL var="viewURL"
                                 windowState="<%=LiferayWindowState.POP_UP.toString()%>">
                                 <portlet:param name="redirect"
                                     value="<%=currentURL%>" />
-                                <portlet:param name="taskRecordId"
-                                    value="<%=String.valueOf(contact.getContactId())%>" />
+                                <portlet:param name="contactId"
+                                    value="<%=String.valueOf(contact_.getContactId())%>" />
                                 <portlet:param name="mvcPath"
                                     value="/view_contact.jsp" />
                                 <portlet:param name="windowId"
                                     value="viewContact" />
                             </portlet:renderURL>
-        
+
                             <%
                             
                                 //String taglibEditURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "editContact', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(pageContext, "edit-x", HtmlUtil.escape(contact_.getFullName(true)))) + "', uri:'" + HtmlUtil.escapeJS(editURL) + "'});";
@@ -240,8 +226,7 @@
                             <%
                                 request.setAttribute("editURL", editURL.toString()); 
                                 request.setAttribute("viewURL", viewURL.toString()); 
-                            %>
-                            <%
+
                                 boolean hasDeletePermission = ContactPermission.contains(permissionChecker,
                                         contact_.getContactId(), ContactActionKeys.DELETE);   
                                 boolean hasPermissionsPermission = ContactPermission.contains(permissionChecker,
@@ -250,8 +235,7 @@
                                         contact_.getContactId(), ContactActionKeys.UPDATE);
                                 boolean hasViewPermission = ContactPermission.contains(permissionChecker,
                                         contact_.getContactId(), ContactActionKeys.VIEW);
-                            %>
-                            <%
+
                                 String detailURL = null;
         
                                 if (hasUpdatePermission) {
@@ -271,8 +255,6 @@
         
 <%--                             <%@ include file="/search_columns.jspf"%> --%>
                             
-                            <%-- 
-                            --%>
                             <liferay-ui:search-container-column-jsp
                                 cssClass="entry-action"
                                 path="/contact_action.jsp"
@@ -295,25 +277,6 @@
                 // Copy render parameters to resourceRequest
                 resourceURL.setParameters(renderRequest.getParameterMap());
             %>
-            
-            <aui:script use="aui-io-request">
-        
-                AUI().ready('aui-io-request',
-                    function (A) {
-                        A.io.request(
-                            '<%= resourceURL.toString() %>',
-                            {
-                                on: {
-                                    success: function() {
-                                        var data = this.get('responseData');
-                                        A.one('#sum').setHTML(data); 
-                                    }
-                                }
-                            }
-                        );
-                     }
-                 );
-            </aui:script>
             
 <%--        <aui:script>
                 Liferay.provide(
