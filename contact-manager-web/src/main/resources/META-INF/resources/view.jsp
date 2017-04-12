@@ -7,7 +7,7 @@
 --%>
 
 <%@page import="ch.inofix.contact.service.ContactLocalServiceUtil"%>
-<%@ include file="init.jsp"%>
+<%@ include file="/init.jsp"%>
 
 <%-- Import required classes --%>
 

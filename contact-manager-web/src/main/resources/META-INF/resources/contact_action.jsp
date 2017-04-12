@@ -29,14 +29,15 @@
 %>
 
 <%
-    boolean hasDeletePermission = ContactPermission.contains(permissionChecker,
-            contact_.getContactId(), ContactActionKeys.DELETE);   
-    boolean hasPermissionsPermission = ContactPermission.contains(permissionChecker,
-            contact_.getContactId(), ContactActionKeys.PERMISSIONS);  
-    boolean hasUpdatePermission = ContactPermission.contains(permissionChecker,
-            contact_.getContactId(), ContactActionKeys.UPDATE);
-    boolean hasViewPermission = ContactPermission.contains(permissionChecker,
-            contact_.getContactId(), ContactActionKeys.VIEW);;
+    //TODO reenable permission checks
+    boolean hasDeletePermission = true; //ContactPermission.contains(permissionChecker,
+            //contact_.getContactId(), ContactActionKeys.DELETE);   
+    boolean hasPermissionsPermission = true; //ContactPermission.contains(permissionChecker,
+            //contact_.getContactId(), ContactActionKeys.PERMISSIONS);  
+    boolean hasUpdatePermission = true; //ContactPermission.contains(permissionChecker,
+            //contact_.getContactId(), ContactActionKeys.UPDATE);
+    boolean hasViewPermission = true; //ContactPermission.contains(permissionChecker,
+            //contact_.getContactId(), ContactActionKeys.VIEW);;
 %>
 <%--                             <liferay-ui:search-container-column-text align="right"> --%>
         
