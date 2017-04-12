@@ -66,4 +66,11 @@
         <reference package-path="com.liferay.portlet.social" entity="SocialActivity" />
 
     </entity>
+
+    <exceptions>
+        <exception>ImageFileFormat</exception>
+        <exception>KeyFileFormat</exception>
+        <exception>SoundFileFormat</exception>
+    </exceptions>
+    
 </service-builder>
