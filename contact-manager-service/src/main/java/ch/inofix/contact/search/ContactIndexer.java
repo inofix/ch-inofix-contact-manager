@@ -35,8 +35,8 @@ import ch.inofix.contact.service.ContactLocalServiceUtil;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-20 13:28
- * @modified 2017-04-12 10:44
- * @version 1.0.7
+ * @modified 2017-04-13 23:43
+ * @version 1.0.8
  *
  */
 @Component(immediate = true, service = Indexer.class)
@@ -58,12 +58,12 @@ public class ContactIndexer extends BaseIndexer<Contact> {
     }
 
     @Override
-    public boolean hasPermission(PermissionChecker permissionChecker,
-            String entryClassName, long entryClassPK, String actionId)
-            throws Exception {
-        //TODO reactivate permission check
-        return true; //ContactPermission.contains(permissionChecker, entryClassPK,
-                    // ActionKeys.VIEW);
+    public boolean hasPermission(PermissionChecker permissionChecker, String entryClassName, long entryClassPK,
+            String actionId) throws Exception {
+        // TODO reactivate permission check
+        return true; // ContactPermission.contains(permissionChecker,
+                     // entryClassPK,
+                     // ActionKeys.VIEW);
     }
 
     @Override
@@ -82,16 +82,14 @@ public class ContactIndexer extends BaseIndexer<Contact> {
         document.addKeyword("company", contact.getCompany());
         document.addKeyword("contactId", contact.getContactId());
         document.addText(Field.CONTENT, contact.getCard());
-        // TODO
-//        document.addKeyword("email", contact.getEmail().getAddress());
+        document.addKeyword("email", contact.getEmail().getAddress());
         // TODO: add default fax
-        document.addKeyword("fullName", contact.getFullName(false));
+        document.addText("fullName", contact.getFullName(false));
         document.addKeyword(Field.GROUP_ID, getSiteGroupId(contact.getGroupId()));
         // TODO add default impp
         document.addDate(Field.MODIFIED_DATE, contact.getModifiedDate());
         document.addKeyword(Field.NAME, contact.getName());
-        // TODO
-//        document.addKeyword("phone", contact.getPhone().getNumber());
+        document.addKeyword("phone", contact.getPhone().getNumber());
         document.addKeyword(Field.SCOPE_GROUP_ID, contact.getGroupId());
         document.addText(Field.TITLE, contact.getFullName(true));
         document.addKeyword("vCardUID", contact.getUid());
@@ -101,8 +99,7 @@ public class ContactIndexer extends BaseIndexer<Contact> {
     }
 
     @Override
-    protected Summary doGetSummary(Document document, Locale locale,
-            String snippet, PortletRequest portletRequest,
+    protected Summary doGetSummary(Document document, Locale locale, String snippet, PortletRequest portletRequest,
             PortletResponse portletResponse) throws Exception {
 
         Summary summary = createSummary(document, Field.TITLE, Field.CONTENT);
@@ -135,8 +132,7 @@ public class ContactIndexer extends BaseIndexer<Contact> {
         doReindex(contact);
     }
 
-
-    protected void reindexContacts(long companyId) throws PortalException{
+    protected void reindexContacts(long companyId) throws PortalException {
 
         final IndexableActionableDynamicQuery indexableActionableDynamicQuery = _contactLocalService
                 .getIndexableActionableDynamicQuery();
@@ -184,6 +180,7 @@ public class ContactIndexer extends BaseIndexer<Contact> {
 
         _contactLocalService = contactLocalService;
     }
+
     private static final Log _log = LogFactoryUtil.getLog(ContactIndexer.class);
 
     private ContactLocalService _contactLocalService;

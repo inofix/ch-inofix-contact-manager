@@ -2,14 +2,11 @@
     view.jsp: Default view of the contact manager portlet.
     
     Created:     2017-03-30 16:44 by Stefan Luebbers
-    Modified:    2017-04-12 16:01 by Christian Berndt
-    Version:     1.0.3
+    Modified:    2017-04-13 23:52 by Christian Berndt
+    Version:     1.0.4
 --%>
 
 <%@ include file="/init.jsp"%>
-
-<% // TODO: remove local service %>
-<%@page import="ch.inofix.contact.service.ContactLocalServiceUtil"%>
 
 <%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
 <%@page import="com.liferay.portal.kernel.exception.SystemException"%>
@@ -26,6 +23,7 @@
 <%@page import="com.liferay.portal.kernel.util.StringUtil"%>
 
 <%
+    // TODO: read from preferences
     boolean viewByDefault = false;
     
     int delta = ParamUtil.getInteger(request, "delta", 20);
@@ -43,7 +41,7 @@
     portletURL.setParameter("mvcPath", "/html/view.jsp");
     portletURL.setParameter("backURL", backURL);
     
-    SearchContainer<Contact> contactSearch = new ContactSearch(renderRequest, "cur", portletURL);
+    ContactSearch contactSearch = new ContactSearch(renderRequest, "cur", portletURL);
     
     boolean reverse = false; 
     if (contactSearch.getOrderByType().equals("desc")) {
@@ -60,78 +58,22 @@
     List<Document> documents = ListUtil.toList(hits.getDocs());
         
     List<Contact> contacts = new ArrayList<Contact>();
-
-    // TODO: enable index search
-//     for (Document document : documents) {
-//         try {
-//             long contactId = GetterUtil.getLong(document.get("entryClassPK"));
-
-//             Contact contact_curr = ContactServiceUtil.getContact(contactId);
-//             contacts.add(contact_curr); 
-//         } catch (Exception e) {
-//             System.out.println("ERROR: contactManager/view.jsp Failed to getContact: " + e); 
-//         }
-//     }
     
-    // Display the first 20 contacts - only for development
-    contacts = ContactLocalServiceUtil.getContacts(0, 20); 
-            
+    for (Document document : documents) {
+        try {
+            long contactId = GetterUtil.getLong(document.get("entryClassPK"));
+
+            Contact contact_ = ContactServiceUtil.getContact(contactId);
+            contacts.add(contact_); 
+        } catch (Exception e) {
+            // TODO: use log
+            System.out.println("ERROR: contactmanager/view.jsp Failed to getContact: " + e); 
+        }
+    }
     contactSearch.setResults(contacts); 
     contactSearch.setTotal(hits.getLength());
-%>
 
-<%
-//     Log log = LogFactoryUtil.getLog("docroot.html.view.jsp");
-
-//     if (idx > 0) {
-//         idx = idx - 1;
-//     }
-//     int start = delta * idx;
-//     int end = delta * idx + delta;
-
-//     SearchContext searchContext =
-//         SearchContextFactory.getInstance(request);
-
-//     boolean reverse = "desc".equals(orderByType);
-
-//     Sort sort = new Sort(orderByCol, reverse);
-
-//     searchContext.setKeywords(keywords);
-//     searchContext.setAttribute("paginationType", "more");
-//     searchContext.setStart(start);
-//     searchContext.setEnd(end);
-//     searchContext.setSorts(sort);
-
-//     Indexer indexer = IndexerRegistryUtil.getIndexer(Contact.class);
-
-//     Hits hits = indexer.search(searchContext);
-
-//     List<Contact> contacts = new ArrayList<Contact>();
-
-//     for (int i = 0; i < hits.getDocs().length; i++) {
-//         Document doc = hits.doc(i);
-
-//         long contactId =
-//             GetterUtil.getLong(doc.get(Field.ENTRY_CLASS_PK));
-
-//         Contact contact_ = null;
-
-//         try {
-//             contact_ = ContactLocalServiceUtil.getContact(contactId);
-//         }
-//         catch (PortalException pe) {
-//             log.error(pe.getLocalizedMessage());
-//         }
-//         catch (SystemException se) {
-//             log.error(se.getLocalizedMessage());
-//         }
-
-//         if (contact_ != null) {
-//             contacts.add(contact_);
-//         }
-
-//     }
-
+    // TODO: enable rowChecker
 //     ContactChecker rowChecker =
 //         new ContactChecker(liferayPortletResponse);
 //     rowChecker.setCssClass("entry-selector");
@@ -172,11 +114,7 @@
                         id="contacts"
                         searchContainer="<%= contactSearch %>"
                         var="contactSearchContainer" >
-        
-                        <% // obsolete - see timetracker view.jsp %>
-<%--                         <liferay-ui:search-container-results results="<%= contacts %>" --%>
-<%--                             total="<%= hits.getLength() %>" /> --%>
-        
+               
                         <liferay-ui:search-container-row
                             className="ch.inofix.contact.model.Contact"
                             modelVar="contact_" keyProperty="contactId">
@@ -216,14 +154,9 @@
                             </portlet:renderURL>
 
                             <%
-                            
-                                //String taglibEditURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "editContact', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(pageContext, "edit-x", HtmlUtil.escape(contact_.getFullName(true)))) + "', uri:'" + HtmlUtil.escapeJS(editURL) + "'});";
-                                //String taglibViewURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "viewContact', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(pageContext, "view-x", HtmlUtil.escape(contact_.getFullName(true)))) + "', uri:'" + HtmlUtil.escapeJS(viewURL) + "'});";
-                                String taglibEditURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "editContact', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(request, "edit-x", contact_.getContactId())) + "', uri:'" + HtmlUtil.escapeJS(editURL) + "'});";            
-                                String taglibViewURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "viewContact', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(request, "view-x", contact_.getContactId())) + "', uri:'" + HtmlUtil.escapeJS(viewURL) + "'});";
+                                String taglibEditURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "editContact', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(request, "edit-x", contact_.getFullName(true))) + "', uri:'" + HtmlUtil.escapeJS(editURL) + "'});";            
+                                String taglibViewURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "viewContact', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(request, "view-x", contact_.getFullName(true))) + "', uri:'" + HtmlUtil.escapeJS(viewURL) + "'});";
                                 
-                            %>
-                            <%
                                 request.setAttribute("editURL", editURL.toString()); 
                                 request.setAttribute("viewURL", viewURL.toString()); 
 
