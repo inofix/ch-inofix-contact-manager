@@ -55,12 +55,13 @@ import ezvcard.property.Uid;
  * @version 1.0.2
  */
 
-@Component(immediate = true, property = { "com.liferay.portlet.css-class-wrapper=portlet-contact-manager",
-        "com.liferay.portlet.display-category=category.inofix", "com.liferay.portlet.instanceable=false",
-        "com.liferay.portlet.header-portlet-css=/css/main.css", "javax.portlet.display-name=Contact Manager",
-        "javax.portlet.init-param.template-path=/", "javax.portlet.init-param.view-template=/view.jsp",
-        "javax.portlet.resource-bundle=content.Language",
-        "javax.portlet.security-role-ref=power-user,user" }, service = Portlet.class)
+@Component(immediate = true,
+        property = { "com.liferay.portlet.css-class-wrapper=portlet-contact-manager",
+                "com.liferay.portlet.display-category=category.inofix", "com.liferay.portlet.instanceable=false",
+                "com.liferay.portlet.header-portlet-css=/css/main.css", "javax.portlet.display-name=Contact Manager",
+                "javax.portlet.init-param.template-path=/", "javax.portlet.init-param.view-template=/view.jsp",
+                "javax.portlet.resource-bundle=content.Language", "javax.portlet.security-role-ref=power-user,user" },
+        service = Portlet.class)
 public class ContactManagerPortlet extends MVCPortlet {
 
     @Override

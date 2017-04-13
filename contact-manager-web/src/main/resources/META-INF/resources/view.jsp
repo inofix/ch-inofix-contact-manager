@@ -69,7 +69,7 @@
 //             Contact contact_curr = ContactServiceUtil.getContact(contactId);
 //             contacts.add(contact_curr); 
 //         } catch (Exception e) {
-//             System.out.println("ERROR: timetracker/view.jsp Failed to getTaskRecord: " + e); 
+//             System.out.println("ERROR: contactManager/view.jsp Failed to getContact: " + e); 
 //         }
 //     }
     
@@ -219,8 +219,8 @@
                             
                                 //String taglibEditURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "editContact', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(pageContext, "edit-x", HtmlUtil.escape(contact_.getFullName(true)))) + "', uri:'" + HtmlUtil.escapeJS(editURL) + "'});";
                                 //String taglibViewURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "viewContact', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(pageContext, "view-x", HtmlUtil.escape(contact_.getFullName(true)))) + "', uri:'" + HtmlUtil.escapeJS(viewURL) + "'});";
-                                String taglibEditURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "editTaskRecord', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(request, "edit-x", contact_.getContactId())) + "', uri:'" + HtmlUtil.escapeJS(editURL) + "'});";            
-                                String taglibViewURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "viewTaskRecord', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(request, "view-x", contact_.getContactId())) + "', uri:'" + HtmlUtil.escapeJS(viewURL) + "'});";
+                                String taglibEditURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "editContact', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(request, "edit-x", contact_.getContactId())) + "', uri:'" + HtmlUtil.escapeJS(editURL) + "'});";            
+                                String taglibViewURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "viewContact', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(request, "view-x", contact_.getContactId())) + "', uri:'" + HtmlUtil.escapeJS(viewURL) + "'});";
                                 
                             %>
                             <%

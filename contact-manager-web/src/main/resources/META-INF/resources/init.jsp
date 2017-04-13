@@ -21,6 +21,7 @@
 <%@page import="ch.inofix.contact.model.Contact"%>
 <%@page import="ch.inofix.contact.service.permission.ContactPermission"%>
 <%@page import="ch.inofix.contact.service.ContactServiceUtil"%>
+<%@page import="ch.inofix.contact.web.configuration.ContactManagerConfiguration"%>
 <%@page import="ch.inofix.contact.web.internal.constants.ContactManagerWebKeys"%>
 <%@page import="ch.inofix.contact.web.internal.search.ContactDisplayTerms"%>
 <%@page import="ch.inofix.contact.web.internal.search.ContactSearch"%>
@@ -57,6 +58,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Arrays"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.Set"%>
 
 <%@page import="javax.portlet.PortletPreferences"%>
 <%@page import="javax.portlet.PortletURL"%>
@@ -70,4 +72,7 @@
     PortletURL portletURL = renderResponse.createRenderURL();
 
     String currentURL = portletURL.toString();
+    
+    ContactManagerConfiguration contactManagerConfiguration = (ContactManagerConfiguration) renderRequest
+            .getAttribute(ContactManagerConfiguration.class.getName());
 %>

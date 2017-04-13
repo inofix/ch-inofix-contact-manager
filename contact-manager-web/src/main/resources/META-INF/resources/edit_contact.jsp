@@ -6,7 +6,7 @@
     Version:    1.1.8
 --%>
 
-<%@ include file="/init.jsp"%>
+<%@ include file="init.jsp"%>
 
 <%@page import="ch.inofix.contact.web.servlet.taglib.ui.FormNavigatorConstants"%>
 
