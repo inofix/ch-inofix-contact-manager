@@ -2,8 +2,8 @@
     toolbar.jsp: The toolbar of the contact-manager portlet
     
     Created:    2015-07-03 19:00 by Christian Berndt
-    Modified:   2016-07-24 16:57 by Christian Berndt
-    Version:    1.0.1
+    Modified:   2017-04-13 23:25 by Christian Berndt
+    Version:    1.0.2
  --%>
 
 <%@ include file="init.jsp"%>
@@ -68,10 +68,9 @@
 
 <%--         </c:if> --%>
     </aui:nav>
-<%--
+    
     <aui:nav-bar-search cssClass="pull-right">
 
-        
         <portlet:renderURL var="clearURL" />
 
         <liferay-portlet:renderURL varImpl="searchURL">
@@ -84,16 +83,20 @@
                 <liferay-portlet:renderURLParams varImpl="searchURL" />
 
                 <div class="search-form contact-search">
-                    <span class="aui-search-bar"> <aui:input
-                            inlineField="<%=true%>" label="" name="keywords" size="30"
-                            title="search-contacts" type="text" /> <aui:button type="submit"
-                            value="search" /> <aui:button value="clear"
+                    <span class="aui-search-bar">
+                     
+                        <aui:input inlineField="<%=true%>" label="" 
+                            name="keywords" size="30"
+                            title="search-contacts" type="text" /> 
+                        <aui:button type="submit"
+                            value="search" /> 
+                        <aui:button value="clear"
                             href="<%=clearURL%>" />
                     </span>
                 </div>
             </aui:form>
         </div>
 
-    </aui:nav-bar-search> --%>
+    </aui:nav-bar-search> 
 
 </aui:nav-bar>
