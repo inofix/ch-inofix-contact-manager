@@ -23,16 +23,17 @@ import ch.inofix.contact.web.configuration.ContactManagerConfiguration;
 
 /**
  * Configuration of Inofix' contact manager.
- * 
+ *
  * @author Stefan Luebbers
+ * @author Christian Berndt
  * @created 2017-04-12 17:35
- * @modified 2017-04-13 14:45
+ * @modified 2017-04-14 00:17
  * @version 1.0.0
  */
 
 @Component(configurationPid = "ch.inofix.contact.web.configuration.ContactManagerConfiguration",
         configurationPolicy = ConfigurationPolicy.OPTIONAL, immediate = true,
-        property = { "javax.portlet.name=" + PortletKeys.CONTACTMANAGER }, service = ConfigurationAction.class)
+        property = { "javax.portlet.name=" + PortletKeys.CONTACT_MANAGER }, service = ConfigurationAction.class)
 public class ContactManagerConfigurationAction extends DefaultConfigurationAction {
 
     @Override
