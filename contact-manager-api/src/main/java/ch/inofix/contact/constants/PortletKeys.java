@@ -10,6 +10,6 @@ package ch.inofix.contact.constants;
  */
 public class PortletKeys {
 
-    public static final String CONTACTMANAGER = "ch_inofix_timetracker_web_internal_portlet_ContactManagerPortlet";
+    public static final String CONTACTMANAGER = "ch_inofix_contact_web_internal_portlet_ContactManagerPortlet";
 
 }

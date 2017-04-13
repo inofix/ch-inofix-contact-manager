@@ -2,3 +2,4 @@ Bundle-Name: Inofix Contact Manager Web
 Bundle-SymbolicName: ch.inofix.contact.web
 Bundle-Version: 1.0.0
 Include-Resource: @ez-vcard-0.10.2.jar,@jackson-core-2.6.1.jar,@jackson-databind-2.6.1.jar,@jackson-annotations-2.6.1.jar,@vinnie-2.0.0.jar,@jsoup-1.8.3.jar
+-metatype: *
