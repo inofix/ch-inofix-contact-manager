@@ -9,9 +9,10 @@ import ch.inofix.contact.constants.PortletKeys;
 /**
  *
  * @author Stefan Luebbers
+ * @author Christian Berndt
  * @created 2017-03-30 14:10
- * @modified 2017-03-30 14:10
- * @version 1.0.0
+ * @modified 2017-04-14 00:15
+ * @version 1.0.1
  *
  */
 public class ContactManagerPermission extends BaseResourcePermissionChecker {
@@ -28,7 +29,7 @@ public class ContactManagerPermission extends BaseResourcePermissionChecker {
 
     public static boolean contains(PermissionChecker permissionChecker, long groupId, String actionId) {
 
-        return contains(permissionChecker, RESOURCE_NAME, PortletKeys.CONTACTMANAGER, groupId, actionId);
+        return contains(permissionChecker, RESOURCE_NAME, PortletKeys.CONTACT_MANAGER, groupId, actionId);
     }
 
     @Override
