@@ -10,9 +10,9 @@
 
 <%
     String[] columns = new String[0];
-    String maxHeight = "";
-    String viewByDefault = "";
-    String portraitDisplay = "";
+    String maxHeight = "70";
+    String viewByDefault = "false";
+    String portraitDisplay = "circle";
     
     if (Validator.isNotNull(contactManagerConfiguration)) {
         columns = portletPreferences.getValues("columns", contactManagerConfiguration.columns());
@@ -37,7 +37,7 @@
     <liferay-ui:panel id="contactManagerColumnsPanel" title="columns"
         extended="true">
 
-<%--        <aui:input name="<%=Constants.CMD%>" type="hidden"
+        <aui:input name="<%=Constants.CMD%>" type="hidden"
             value="<%=Constants.UPDATE%>" />
 
         <aui:input name="redirect" type="hidden"
@@ -68,7 +68,7 @@
             leftReorder="<%=Boolean.TRUE.toString()%>"
             leftTitle="current" rightBoxName="availableColumns"
             rightList="<%=rightList%>" rightTitle="available" />
---%>            
+            
     </liferay-ui:panel> 
 
     <liferay-ui:panel id="contactManagerAppearancePanel"
@@ -93,7 +93,7 @@
         
         <aui:fieldset label="portait-style" helpMessage="portrait-style-help" inlineField="false">
             <% //TODO add editable portrait values %>
-	        <aui:input name="max-height" value="<%=maxHeight%>" inlineField="true"/>
+            <aui:input name="max-height" value="<%=maxHeight%>" inlineField="true"/>
         </aui:fieldset>
 <%--
         <aui:select name="portrait-display" lable="portrait-display" 

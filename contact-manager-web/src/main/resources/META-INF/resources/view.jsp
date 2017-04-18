@@ -2,7 +2,7 @@
     view.jsp: Default view of the contact manager portlet.
     
     Created:     2017-03-30 16:44 by Stefan Luebbers
-    Modified:    2017-04-13 23:52 by Christian Berndt
+    Modified:    2017-04-18 13:15 by Stefan Luebbers
     Version:     1.0.4
 --%>
 
@@ -23,8 +23,17 @@
 <%@page import="com.liferay.portal.kernel.util.StringUtil"%>
 
 <%
-    // TODO: read from preferences
+    String [] columns = new String[] {"full-name", "create-date", "modified-date", "contact-id"};
+    int maxHeight = 70;
     boolean viewByDefault = false;
+    String portraitDisplay = "circle";
+    
+    if (Validator.isNotNull(contactManagerConfiguration)) {
+        columns = portletPreferences.getValues("columns", contactManagerConfiguration.columns());
+        maxHeight = Integer.parseInt(portletPreferences.getValue("max-height", contactManagerConfiguration.maxHeight()));
+        viewByDefault = Boolean.parseBoolean(portletPreferences.getValue("view-by-default", contactManagerConfiguration.viewByDefault()));
+        portraitDisplay = portletPreferences.getValue("portrait-display", contactManagerConfiguration.portraitDisplay());
+    }
     
     int delta = ParamUtil.getInteger(request, "delta", 20);
     String displayStyle = ParamUtil.getString(request, "displayStyle", "list");
@@ -38,7 +47,7 @@
     String tabs1 = ParamUtil.getString(request, "tabs1", "browse");
 
     portletURL.setParameter("tabs1", tabs1);
-    portletURL.setParameter("mvcPath", "/html/view.jsp");
+    portletURL.setParameter("mvcPath", "/view.jsp");
     portletURL.setParameter("backURL", backURL);
     
     ContactSearch contactSearch = new ContactSearch(renderRequest, "cur", portletURL);

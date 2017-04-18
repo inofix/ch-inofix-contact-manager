@@ -82,6 +82,7 @@ public class ContactIndexer extends BaseIndexer<Contact> {
         document.addKeyword("company", contact.getCompany());
         document.addKeyword("contactId", contact.getContactId());
         document.addText(Field.CONTENT, contact.getCard());
+        document.addDate(Field.CREATE_DATE, contact.getCreateDate());
         document.addKeyword("email", contact.getEmail().getAddress());
         // TODO: add default fax
         document.addText("fullName", contact.getFullName(false));
