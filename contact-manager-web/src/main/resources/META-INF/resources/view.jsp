@@ -23,7 +23,7 @@
 <%@page import="com.liferay.portal.kernel.util.StringUtil"%>
 
 <%
-    String [] columns = new String[] {"full-name", "create-date", "modified-date", "contact-id"};
+    String [] columns = new String[] {"full-name", "create-date", "modified-date"};
     int maxHeight = 70;
     boolean viewByDefault = false;
     String portraitDisplay = "circle";
@@ -195,7 +195,7 @@
                             
                             <liferay-ui:search-container-column-text value="<%= contact_.getCard() %>"/>
         
-<%--                             <%@ include file="/search_columns.jspf"%> --%>
+                             <%@ include file="/search_columns.jspf"%> 
                             
                             <liferay-ui:search-container-column-jsp
                                 cssClass="entry-action"

@@ -7,6 +7,10 @@
     Version:     1.1.7
 --%>
 
+<%
+    String company = String.valueOf(contact_.getCompany()))
+    String contactId = String.valueOf(contact_.contactId)
+%>
 
 <%
     for (String column : columns) {
@@ -17,11 +21,6 @@
     <liferay-ui:search-container-column-text value="<%= company %>"
         name="company" orderable="true" href="<%=detailURL%>"
         orderableProperty="company_Number_sortable" />
-</c:if>
-<c:if test='<%="contact-id".equals(column)%>'>
-    <liferay-ui:search-container-column-text value="<%= contactId %>"
-        name="contact-id" orderable="true" href="<%=detailURL%>"
-        orderableProperty="contactId_Number_sortable" />
 </c:if>
 <c:if test='<%="contact-id".equals(column)%>'>
     <liferay-ui:search-container-column-text value="<%= contactId %>"
