@@ -16,6 +16,8 @@ public class FormNavigatorConstants {
 
     public static final String CATEGORY_KEY_MISCELLANEOUS = "miscellaneous";
 
+    public static final String CATEGORY_KEY_PERSONAL = "personal";
+
     public static final String FORM_NAVIGATOR_ID_CONTACT = "contact.form";
 
 }

@@ -195,7 +195,7 @@
                             
                             <liferay-ui:search-container-column-text value="<%= contact_.getCard() %>"/>
         
-                             <%@ include file="/search_columns.jspf"%> 
+<%--                              <%@ include file="/search_columns.jspf"%>  --%>
                             
                             <liferay-ui:search-container-column-jsp
                                 cssClass="entry-action"

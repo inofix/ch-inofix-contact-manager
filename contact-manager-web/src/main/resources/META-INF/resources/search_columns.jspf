@@ -3,13 +3,13 @@
     for the main view of the contact manager portlet.
 
     Created:     2013-10-07 14:41 by Christian Berndt
-    Modified:    2017-04-18 11:35 by Stefan Luebbers
+    Modified:    2017-04-21 15:38 by Stefan Luebbers
     Version:     1.1.7
 --%>
 
 <%
-    String company = String.valueOf(contact_.getCompany()))
-    String contactId = String.valueOf(contact_.contactId)
+    String company = String.valueOf(contact_.getCompany()));
+    String contactId = String.valueOf(contact_.contactId);
 %>
 
 <%
