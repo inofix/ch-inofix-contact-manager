@@ -31,6 +31,7 @@ import ch.inofix.contact.dto.ImppDTO;
 import ch.inofix.contact.dto.InterestDTO;
 import ch.inofix.contact.dto.LanguageDTO;
 import ch.inofix.contact.dto.PhoneDTO;
+import ch.inofix.contact.dto.UrlDTO;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
 import ezvcard.parameter.EmailType;
@@ -54,6 +55,7 @@ import ezvcard.property.RawProperty;
 import ezvcard.property.StructuredName;
 import ezvcard.property.Telephone;
 import ezvcard.property.Timezone;
+import ezvcard.property.Url;
 
 /**
  * The extended model implementation for the Contact service. Represents a row
@@ -173,7 +175,7 @@ public class ContactImpl extends ContactBaseImpl {
         if (email != null) {
             emailDTO.setAddress(email.getValue());
 
-            emailDTO.setAddress(email.getValue());
+            //emailDTO.setAddress(email.getValue());
 
             // TODO: Add multi-type support
             StringBuilder sb = new StringBuilder();
@@ -660,6 +662,42 @@ public class ContactImpl extends ContactBaseImpl {
         }
 
         return str;
+    }
+
+    public List<UrlDTO> getUrls() {
+        List<UrlDTO> urlDTOs = new ArrayList<UrlDTO> ();
+
+        List<Url> urls = getVCard().getUrls();
+
+        for (Url url : urls) {
+
+            UrlDTO urlDTO = getUrl(url);
+
+            urlDTOs.add(urlDTO);
+        }
+
+        // an empty default email
+        if (urlDTOs.size() == 0) {
+            urlDTOs.add(new UrlDTO());
+        }
+
+        return urlDTOs;
+
+        
+    }
+    
+    private UrlDTO getUrl(Url url) {
+
+        UrlDTO urlDTO = new UrlDTO();
+
+        if (url != null) {
+            urlDTO.setAddress(url.getValue());
+
+            urlDTO.setType(url.getType());
+
+        }
+
+        return urlDTO;
     }
 
 }

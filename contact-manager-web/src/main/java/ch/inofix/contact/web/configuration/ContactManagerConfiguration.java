@@ -15,7 +15,7 @@ import aQute.bnd.annotation.metatype.Meta;
 
 public interface ContactManagerConfiguration {
 
-    @Meta.AD(deflt = "name|email|phone|modified", required = false)
+    @Meta.AD(deflt = "full-name|email|phone|modified-date", required = false)
     public String[] columns();
 
     @Meta.AD(deflt = "70", required = false)

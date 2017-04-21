@@ -1,0 +1,71 @@
+<%--
+    search_columns.jspf: Configurable search columns
+    for the main view of the contact manager portlet.
+
+    Created:     2013-10-07 14:41 by Christian Berndt
+    Modified:    2017-04-21 15:38 by Stefan Luebbers
+    Version:     1.1.7
+--%>
+
+<%
+    String company = String.valueOf(contact_.getCompany()));
+    String contactId = String.valueOf(contact_.contactId);
+%>
+
+<%
+    for (String column : columns) {
+%>
+
+
+<c:if test='<%="company".equals(column)%>'>
+    <liferay-ui:search-container-column-text value="<%= company %>"
+        name="company" orderable="true" href="<%=detailURL%>"
+        orderableProperty="company_Number_sortable" />
+</c:if>
+<c:if test='<%="contact-id".equals(column)%>'>
+    <liferay-ui:search-container-column-text value="<%= contactId %>"
+        name="contact-id" orderable="true" href="<%=detailURL%>"
+        orderableProperty="contactId_Number_sortable" />
+</c:if>
+<c:if test='<%="create-date".equals(column)%>'>
+    <liferay-ui:search-container-column-date property="createDate"
+        name="create-date" orderable="true" href="<%=detailURL%>"
+        orderableProperty="createDate_Number_sortable" />
+</c:if>
+<c:if test='<%="email".equals(column)%>'>
+    <liferay-ui:search-container-column-text property="email"
+        name="email" orderable="true" href="<%=detailURL%>"
+        orderableProperty="email_sortable" />
+</c:if>
+<c:if test='<%="full-name".equals(column)%>'>
+    <liferay-ui:search-container-column-text property="fullName"
+        name="full-name" orderable="true" href="<%=detailURL%>"
+        orderableProperty="fullName_sortable" />
+</c:if>
+<c:if test='<%="modified-date".equals(column)%>'>
+    <liferay-ui:search-container-column-date property="modifiedDate"
+        name="modified-date" orderable="true" href="<%=detailURL%>"
+        orderableProperty="modifiedDate_Number_sortable"  />
+</c:if>
+<c:if test='<%="name".equals(column)%>'>
+    <liferay-ui:search-container-column-text property="name"
+        name="name" orderable="true" href="<%=detailURL%>"
+        orderableProperty="name_sortable" />
+</c:if>
+<c:if test='<%="phone".equals(column)%>'>
+    <liferay-ui:search-container-column-text property="phone"
+        name="phone" orderable="true" href="<%=detailURL%>"
+        orderableProperty="phone_sortable" />
+</c:if>
+<c:if test='<%="status".equals(column)%>'>
+    <liferay-ui:search-container-column-status property="status"
+        orderable="true" orderableProperty="status_Number_sortable" />
+</c:if>
+<c:if test='<%="user-name".equals(column)%>'>
+    <liferay-ui:search-container-column-text property="userName"
+        name="user-name" orderable="true" href="<%=detailURL%>"
+        orderableProperty="userName_sortable" />
+</c:if>
+<%
+    }
+%>
