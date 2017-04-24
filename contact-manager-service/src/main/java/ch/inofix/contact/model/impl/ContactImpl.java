@@ -31,6 +31,7 @@ import ch.inofix.contact.dto.ImppDTO;
 import ch.inofix.contact.dto.InterestDTO;
 import ch.inofix.contact.dto.LanguageDTO;
 import ch.inofix.contact.dto.PhoneDTO;
+import ch.inofix.contact.dto.UriDTO;
 import ch.inofix.contact.dto.UrlDTO;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
@@ -40,10 +41,13 @@ import ezvcard.parameter.HobbyLevel;
 import ezvcard.parameter.ImppType;
 import ezvcard.parameter.InterestLevel;
 import ezvcard.parameter.TelephoneType;
+import ezvcard.property.CalendarRequestUri;
+import ezvcard.property.CalendarUri;
 import ezvcard.property.Categories;
 import ezvcard.property.Email;
 import ezvcard.property.Expertise;
 import ezvcard.property.FormattedName;
+import ezvcard.property.FreeBusyUrl;
 import ezvcard.property.Gender;
 import ezvcard.property.Hobby;
 import ezvcard.property.Impp;
@@ -103,6 +107,58 @@ public class ContactImpl extends ContactBaseImpl {
         return str;
 
     }
+
+    public List<UriDTO> getCalendarRequestUris() {
+
+        List<UriDTO> uriDTOs = new ArrayList<UriDTO>();
+
+        List<CalendarRequestUri> calendarRequestUris = getVCard()
+                .getCalendarRequestUris();
+
+        for (CalendarRequestUri calendarRequestUri : calendarRequestUris) {
+
+            UriDTO uriDTO = new UriDTO();
+
+            uriDTO.setUri(calendarRequestUri.getValue());
+            uriDTO.setType(calendarRequestUri.getType());
+
+            uriDTOs.add(uriDTO);
+        }
+
+        // an empty default calendarRequestUri
+        if (uriDTOs.size() == 0) {
+            uriDTOs.add(new UriDTO());
+        }
+
+        return uriDTOs;
+
+    }
+
+    public List<UriDTO> getCalendarUris() {
+
+        List<UriDTO> uriDTOs = new ArrayList<UriDTO>();
+
+        List<CalendarUri> calendarUris = getVCard().getCalendarUris();
+
+        for (CalendarUri calendarUri : calendarUris) {
+
+            UriDTO uriDTO = new UriDTO();
+
+            uriDTO.setUri(calendarUri.getValue());
+            uriDTO.setType(calendarUri.getType());
+
+            uriDTOs.add(uriDTO);
+        }
+
+        // an empty default calendarUri
+        if (uriDTOs.size() == 0) {
+            uriDTOs.add(new UriDTO());
+        }
+
+        return uriDTOs;
+
+    }
+
 
     /**
      *
@@ -591,6 +647,31 @@ public class ContactImpl extends ContactBaseImpl {
         }
 
         return vCard;
+
+    }
+
+    public List<UrlDTO> getFreeBusyUrls() {
+
+        List<UrlDTO> urlDTOs = new ArrayList<UrlDTO>();
+
+        List<FreeBusyUrl> urls = getVCard().getFbUrls();
+
+        for (FreeBusyUrl url : urls) {
+
+            UrlDTO urlDTO = new UrlDTO();
+
+            urlDTO.setAddress(url.getValue());
+            urlDTO.setType(url.getType());
+
+            urlDTOs.add(urlDTO);
+        }
+
+        // an empty default freeBusyURL
+        if (urlDTOs.size() == 0) {
+            urlDTOs.add(new UrlDTO());
+        }
+
+        return urlDTOs;
 
     }
 

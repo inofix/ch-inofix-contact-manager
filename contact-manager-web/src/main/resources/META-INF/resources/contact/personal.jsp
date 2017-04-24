@@ -9,6 +9,7 @@
 <%@ include file="/init.jsp"%>
 
 <%@ page import="ch.inofix.contact.dto.UrlDTO" %>
+<%@ page import="ch.inofix.contact.dto.UriDTO" %>
 
 <%
     Contact contact_ = (Contact) request.getAttribute(ContactManagerWebKeys.CONTACT);
@@ -122,11 +123,91 @@
     </aui:container>
 </aui:fieldset>
 
+<aui:fieldset label="calendar-requests" id="calendarRequests">
+    <aui:container>
+        <%
+            List<UriDTO> calendarRequests = contact_.getCalendarRequestUris();
+
+            for (UriDTO calendar : calendarRequests) {
+        %>
+        <aui:row>
+            <aui:col span="12">
+                <div class="lfr-form-row">
+                    <div class="row-fields">
+	                    <div class="sort-handle"></div>
+	                
+	                        <aui:input name="calendar.uri" inlineField="true"
+	                            value="<%=calendar.getUri()%>" label="calendar-request-uri"
+	                            disabled="<%=!hasUpdatePermission%>" />
+	
+	                    <liferay-ui:icon-help message="calendar.uri-help" />
+	                </div>
+                </div>
+            </aui:col>
+        </aui:row>
+        <%
+            }
+        %>
+    </aui:container>
+</aui:fieldset>
+
+<aui:fieldset label="free-busy" id="freeBusy">
+    <aui:container>
+        <%
+        List<UrlDTO> freeBusyUrls = contact_.getFreeBusyUrls();
+
+            for (UrlDTO freeBusyUrl : freeBusyUrls) {
+        %>
+        <aui:row>
+            <aui:col span="12">
+                <div class="lfr-form-row">
+                    <div class="row-fields">
+                        <div class="sort-handle"></div>
+                    
+                            <aui:input name="freeBusyUrl.url" inlineField="true"
+                                value="<%=freeBusyUrl.getAddress()%>" label="free-busy-url"
+                                disabled="<%=!hasUpdatePermission%>" />
+    
+                        <liferay-ui:icon-help message="calendar.uri-help" />
+                    </div>
+                </div>
+            </aui:col>
+        </aui:row>
+        <%
+            }
+        %>
+    </aui:container>
+</aui:fieldset>
+
 <%-- Configure auto-fields --%>
 <aui:script use="liferay-auto-fields">
 
     var urlAutoFields = new Liferay.AutoFields({
         contentBox : 'fieldset#<portlet:namespace />webAdresses',
+        namespace : '<portlet:namespace />',
+        sortable : true,
+        sortableHandle: '.sort-handle',
+        on : {
+            'clone' : function(event) {
+                restoreOriginalNames(event);
+            }
+        }
+    }).render();
+    
+    var urlAutoFields = new Liferay.AutoFields({
+        contentBox : 'fieldset#<portlet:namespace />calendarRequests',
+        namespace : '<portlet:namespace />',
+        sortable : true,
+        sortableHandle: '.sort-handle',
+        on : {
+            'clone' : function(event) {
+                restoreOriginalNames(event);
+            }
+        }
+    }).render();
+
+    var urlAutoFields = new Liferay.AutoFields({
+        contentBox : 'fieldset#<portlet:namespace />freeBusy',
         namespace : '<portlet:namespace />',
         sortable : true,
         sortableHandle: '.sort-handle',
