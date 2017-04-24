@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import aQute.bnd.annotation.ProviderType;
+import ch.inofix.contact.dto.AddressDTO;
 import ch.inofix.contact.dto.CategoriesDTO;
 import ch.inofix.contact.dto.EmailDTO;
 import ch.inofix.contact.dto.ExpertiseDTO;
@@ -35,12 +36,14 @@ import ch.inofix.contact.dto.UriDTO;
 import ch.inofix.contact.dto.UrlDTO;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
+import ezvcard.parameter.AddressType;
 import ezvcard.parameter.EmailType;
 import ezvcard.parameter.ExpertiseLevel;
 import ezvcard.parameter.HobbyLevel;
 import ezvcard.parameter.ImppType;
 import ezvcard.parameter.InterestLevel;
 import ezvcard.parameter.TelephoneType;
+import ezvcard.property.Address;
 import ezvcard.property.CalendarRequestUri;
 import ezvcard.property.CalendarUri;
 import ezvcard.property.Categories;
@@ -88,6 +91,100 @@ public class ContactImpl extends ContactBaseImpl {
      * interface instead.
      */
     public ContactImpl() {
+    }
+
+    /**
+     * 
+     * @param address
+     * @return
+     * @since 1.0.8
+     */
+    private AddressDTO getAddress(Address address) {
+
+        AddressDTO addressDTO = new AddressDTO();
+
+        if (address != null) {
+
+            addressDTO.setCountry(address.getCountry());
+            addressDTO.setLabel(address.getLabel());
+            addressDTO.setLanguage(address.getLanguage());
+            addressDTO.setLocality(address.getLocality());
+            addressDTO.setPoBox(address.getPoBox());
+            addressDTO.setPostalCode(address.getPostalCode());
+            addressDTO.setRegion(address.getRegion());
+            addressDTO.setStreetAddress(address.getStreetAddress());
+            addressDTO.setTimezone(address.getTimezone());
+
+            // TODO: Add multi-type support
+            StringBuilder sb = new StringBuilder();
+            List<AddressType> types = address.getTypes();
+            if (types.size() > 0) {
+                for (AddressType type : types) {
+                    sb.append(type.getValue());
+                }
+            } else {
+                sb.append("other");
+            }
+
+            addressDTO.setType(sb.toString());
+        }
+
+        return addressDTO;
+    }
+
+    /**
+     * 
+     * @return the preferred address.
+     * @since 1.0.8
+     */
+    public AddressDTO getAddress() {
+
+        List<Address> addresses = getVCard().getAddresses();
+
+        if (addresses != null) {
+
+            for (Address address : addresses) {
+                Integer pref = address.getPref();
+                if (pref != null) {
+                    if (pref == 1) {
+                        return getAddress(address);
+                    }
+                }
+            }
+        }
+
+        Address address = getVCard().getProperty(Address.class);
+
+        return getAddress(address);
+
+    }
+
+    /**
+     * 
+     * @return
+     * @since 1.0.0
+     */
+    public List<AddressDTO> getAddresses() {
+
+        List<AddressDTO> addressDTOs = new ArrayList<AddressDTO>();
+
+        List<Address> addresses = getVCard().getAddresses();
+
+        for (Address address : addresses) {
+
+            AddressDTO addressDTO = getAddress(address);
+
+            addressDTOs.add(addressDTO);
+
+        }
+
+        // an empty default address
+        if (addressDTOs.size() == 0) {
+            addressDTOs.add(new AddressDTO());
+        }
+
+        return addressDTOs;
+
     }
 
     @Override

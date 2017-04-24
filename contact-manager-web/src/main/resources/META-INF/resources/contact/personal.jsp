@@ -241,7 +241,7 @@
         }
     }).render();
     
-    var urlAutoFields = new Liferay.AutoFields({
+    var calendarRequestAutoFields = new Liferay.AutoFields({
         contentBox : 'fieldset#<portlet:namespace />calendarRequests',
         namespace : '<portlet:namespace />',
         sortable : true,
@@ -253,7 +253,7 @@
         }
     }).render();
 
-    var urlAutoFields = new Liferay.AutoFields({
+    var freeBusyAutoFields = new Liferay.AutoFields({
         contentBox : 'fieldset#<portlet:namespace />freeBusy',
         namespace : '<portlet:namespace />',
         sortable : true,
@@ -265,7 +265,7 @@
         }
     }).render();
     
-    var urlAutoFields = new Liferay.AutoFields({
+    var calendarAutoFields = new Liferay.AutoFields({
         contentBox : 'fieldset#<portlet:namespace />calendars',
         namespace : '<portlet:namespace />',
         sortable : true,

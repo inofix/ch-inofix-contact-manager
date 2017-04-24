@@ -20,4 +20,6 @@ public class FormNavigatorConstants {
 
     public static final String FORM_NAVIGATOR_ID_CONTACT = "contact.form";
 
+    public static final String CATEGORY_KEY_MAILING = "mailing";
+
 }
