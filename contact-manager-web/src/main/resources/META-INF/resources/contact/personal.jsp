@@ -74,10 +74,6 @@
                     inlineField="true" helpMessage="office-help" 
                     disabled="<%= !hasUpdatePermission %>" required="false"/>
             </aui:col>
-            <aui:col width="50">
-                <aui:input name="role" bean="<%=contact_%>"
-                    helpMessage="role-help" disabled="<%= !hasUpdatePermission %>" />
-            </aui:col>
         </aui:row>
     </aui:container>
 </aui:fieldset>
@@ -140,7 +136,7 @@
 	                            value="<%=calendar.getUri()%>" label="calendar-request-uri"
 	                            disabled="<%=!hasUpdatePermission%>" />
 	
-	                    <liferay-ui:icon-help message="calendar.uri-help" />
+	                    <liferay-ui:icon-help message="calendar-request.uri-help" />
 	                </div>
                 </div>
             </aui:col>
@@ -168,6 +164,34 @@
                                 value="<%=freeBusyUrl.getAddress()%>" label="free-busy-url"
                                 disabled="<%=!hasUpdatePermission%>" />
     
+                        <liferay-ui:icon-help message="free-busy.url-help" />
+                    </div>
+                </div>
+            </aui:col>
+        </aui:row>
+        <%
+            }
+        %>
+    </aui:container>
+</aui:fieldset>
+
+<aui:fieldset label="calendars" id="calendars">
+    <aui:container>
+        <%
+        List<UriDTO> calendarUris = contact_.getCalendarUris();
+
+            for (UriDTO calendarUri : calendarUris) {
+        %>
+        <aui:row>
+            <aui:col span="12">
+                <div class="lfr-form-row">
+                    <div class="row-fields">
+                        <div class="sort-handle"></div>
+                    
+                            <aui:input name="calendar.uri" inlineField="true"
+                                value="<%=calendarUri.getUri()%>" label="calendar-uri"
+                                disabled="<%=!hasUpdatePermission%>" />
+    
                         <liferay-ui:icon-help message="calendar.uri-help" />
                     </div>
                 </div>
@@ -176,6 +200,29 @@
         <%
             }
         %>
+    </aui:container>
+</aui:fieldset>
+
+<aui:fieldset label="miscellaneous">
+    <aui:container>
+        <aui:row>
+            <aui:col width="50">
+                <aui:input name="birthday" bean="<%=contact_%>"
+                    inlineField="true" helpMessage="birthday-help" 
+                    disabled="<%= !hasUpdatePermission %>" required="false"/>
+            </aui:col>
+            <aui:col width="50">
+                <aui:input name="anniversary" bean="<%=contact_%>"
+                    helpMessage="anniversary-help" disabled="<%= !hasUpdatePermission %>" />
+            </aui:col>
+        </aui:row>
+        <aui:row>
+            <aui:col width="50">
+                <aui:input name="birthplace" bean="<%=contact_%>"
+                    inlineField="true" helpMessage="birthplace-help" 
+                    disabled="<%= !hasUpdatePermission %>" required="false"/>
+            </aui:col>
+        </aui:row>
     </aui:container>
 </aui:fieldset>
 
@@ -208,6 +255,18 @@
 
     var urlAutoFields = new Liferay.AutoFields({
         contentBox : 'fieldset#<portlet:namespace />freeBusy',
+        namespace : '<portlet:namespace />',
+        sortable : true,
+        sortableHandle: '.sort-handle',
+        on : {
+            'clone' : function(event) {
+                restoreOriginalNames(event);
+            }
+        }
+    }).render();
+    
+    var urlAutoFields = new Liferay.AutoFields({
+        contentBox : 'fieldset#<portlet:namespace />calendars',
         namespace : '<portlet:namespace />',
         sortable : true,
         sortableHandle: '.sort-handle',
