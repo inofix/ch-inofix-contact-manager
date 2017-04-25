@@ -27,10 +27,12 @@ import ch.inofix.contact.dto.AddressDTO;
 import ch.inofix.contact.dto.CategoriesDTO;
 import ch.inofix.contact.dto.EmailDTO;
 import ch.inofix.contact.dto.ExpertiseDTO;
+import ch.inofix.contact.dto.FileDTO;
 import ch.inofix.contact.dto.HobbyDTO;
 import ch.inofix.contact.dto.ImppDTO;
 import ch.inofix.contact.dto.InterestDTO;
 import ch.inofix.contact.dto.LanguageDTO;
+import ch.inofix.contact.dto.NoteDTO;
 import ch.inofix.contact.dto.PhoneDTO;
 import ch.inofix.contact.dto.UriDTO;
 import ch.inofix.contact.dto.UrlDTO;
@@ -40,8 +42,11 @@ import ezvcard.parameter.AddressType;
 import ezvcard.parameter.EmailType;
 import ezvcard.parameter.ExpertiseLevel;
 import ezvcard.parameter.HobbyLevel;
+import ezvcard.parameter.ImageType;
 import ezvcard.parameter.ImppType;
 import ezvcard.parameter.InterestLevel;
+import ezvcard.parameter.KeyType;
+import ezvcard.parameter.SoundType;
 import ezvcard.parameter.TelephoneType;
 import ezvcard.property.Address;
 import ezvcard.property.CalendarRequestUri;
@@ -55,14 +60,20 @@ import ezvcard.property.Gender;
 import ezvcard.property.Hobby;
 import ezvcard.property.Impp;
 import ezvcard.property.Interest;
+import ezvcard.property.Key;
 import ezvcard.property.Kind;
 import ezvcard.property.Language;
+import ezvcard.property.Logo;
+import ezvcard.property.Note;
 import ezvcard.property.Organization;
+import ezvcard.property.Photo;
 import ezvcard.property.RawProperty;
+import ezvcard.property.Sound;
 import ezvcard.property.StructuredName;
 import ezvcard.property.Telephone;
 import ezvcard.property.Timezone;
 import ezvcard.property.Url;
+import ezvcard.util.DataUri;
 
 /**
  * The extended model implementation for the Contact service. Represents a row
@@ -551,6 +562,37 @@ public class ContactImpl extends ContactBaseImpl {
         return interestDTOs;
     }
 
+    public List<FileDTO> getKeys() {
+
+        List<FileDTO> fileDTOs = new ArrayList<FileDTO>();
+
+        List<Key> keys = getVCard().getKeys();
+
+        for (Key key : keys) {
+
+            FileDTO fileDTO = new FileDTO();
+            fileDTO.setUrl(key.getUrl());
+
+            KeyType contentType = key.getContentType();
+
+            if (Validator.isNotNull(contentType)) {
+                DataUri dataUri = new DataUri(contentType.getMediaType(),
+                        key.getData());
+                fileDTO.setData(dataUri.toString());
+            }
+
+            fileDTOs.add(fileDTO);
+        }
+
+        // an empty default key
+        if (fileDTOs.size() == 0) {
+            fileDTOs.add(new FileDTO());
+        }
+
+        return fileDTOs;
+
+    }
+
     /**
      *
      * @return
@@ -592,6 +634,42 @@ public class ContactImpl extends ContactBaseImpl {
 
         return languageDTOs;
     }
+    
+    /**
+     * 
+     * @return
+     * @since 1.1.3
+     */
+    public List<FileDTO> getLogos() {
+
+        List<FileDTO> fileDTOs = new ArrayList<FileDTO>();
+
+        List<Logo> logos = getVCard().getLogos();
+
+        for (Logo logo : logos) {
+
+            FileDTO fileDTO = new FileDTO();
+            fileDTO.setUrl(logo.getUrl());
+
+            ImageType contentType = logo.getContentType();
+
+            if (Validator.isNotNull(contentType)) {
+                DataUri dataUri = new DataUri(contentType.getMediaType(),
+                        logo.getData());
+                fileDTO.setData(dataUri.toString());
+            }
+
+            fileDTOs.add(fileDTO);
+        }
+
+        // an empty default logo
+        if (fileDTOs.size() == 0) {
+            fileDTOs.add(new FileDTO());
+        }
+
+        return fileDTOs;
+
+    }
 
     @Override
     public String getName() {
@@ -630,6 +708,25 @@ public class ContactImpl extends ContactBaseImpl {
 
         return name;
 
+    }
+    
+    public List<NoteDTO> getNotes() {
+
+        List<Note> notes = getVCard().getNotes();
+        List<NoteDTO> noteDTOs = new ArrayList<NoteDTO>();
+
+        for (Note note : notes) {
+            NoteDTO noteDTO = new NoteDTO();
+            noteDTO.setValue(note.getValue());
+            noteDTOs.add(noteDTO);
+        }
+
+        // an empty default note
+        if (noteDTOs.size() == 0) {
+            noteDTOs.add(new NoteDTO());
+        }
+
+        return noteDTOs;
     }
 
     /**
@@ -713,6 +810,66 @@ public class ContactImpl extends ContactBaseImpl {
         return phoneDTOs;
 
     }
+    
+    /**
+     * 
+     * @return
+     * @since 1.1.2
+     */
+    public List<FileDTO> getPhotos() {
+
+        List<FileDTO> fileDTOs = new ArrayList<FileDTO>();
+
+        List<Photo> photos = getVCard().getPhotos();
+
+        for (Photo photo : photos) {
+
+            FileDTO fileDTO = new FileDTO();
+            fileDTO.setUrl(photo.getUrl());
+
+            ImageType contentType = photo.getContentType();
+
+            if (Validator.isNotNull(contentType)) {
+                DataUri dataUri = new DataUri(contentType.getMediaType(),
+                        photo.getData());
+                fileDTO.setData(dataUri.toString());
+            }
+
+            fileDTOs.add(fileDTO);
+        }
+
+        // an empty default photo
+        if (fileDTOs.size() == 0) {
+            fileDTOs.add(new FileDTO());
+        }
+
+        return fileDTOs;
+
+    }
+
+    /**
+     * 
+     * @return a dataURI for the entity the vCard represents, i.e. the first
+     *         photo if the vCard represents a person or a logo if the vCard
+     *         represents an organization.
+     * @since 1.1.6
+     */
+    public String getPortrait() {
+
+        String portrait = null;
+
+        List<Photo> photos = getVCard().getPhotos();
+        List<Logo> logos = getVCard().getLogos();
+
+        if (logos.size() > 0) {
+            portrait = getLogos().get(0).getData();
+        } else if (photos.size() > 0) {
+            portrait = getPhotos().get(0).getData();
+        }
+
+        return portrait;
+
+    }
 
     @Override
     public String getSalutation() {
@@ -728,6 +885,42 @@ public class ContactImpl extends ContactBaseImpl {
         }
 
         return salutation;
+
+    }
+    
+    /**
+     * 
+     * @return
+     * @since 1.1.3
+     */
+    public List<FileDTO> getSounds() {
+
+        List<FileDTO> fileDTOs = new ArrayList<FileDTO>();
+
+        List<Sound> sounds = getVCard().getSounds();
+
+        for (Sound sound : sounds) {
+
+            FileDTO fileDTO = new FileDTO();
+            fileDTO.setUrl(sound.getUrl());
+
+            SoundType contentType = sound.getContentType();
+
+            if (Validator.isNotNull(contentType)) {
+                DataUri dataUri = new DataUri(contentType.getMediaType(),
+                        sound.getData());
+                fileDTO.setData(dataUri.toString());
+            }
+
+            fileDTOs.add(fileDTO);
+        }
+
+        // an empty default sound
+        if (fileDTOs.size() == 0) {
+            fileDTOs.add(new FileDTO());
+        }
+
+        return fileDTOs;
 
     }
 

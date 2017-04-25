@@ -47,32 +47,32 @@
 <aui:fieldset label="job">
     <aui:container>
         <aui:row>
-            <aui:col width="50">
+            <aui:col span="6">
                 <aui:input name="title" bean="<%=contact_%>"
                     inlineField="true" helpMessage="title-help" 
-                    disabled="<%= !hasUpdatePermission %>" required="false"/>
+                    disabled="<%= !hasUpdatePermission %>"/>
             </aui:col>
-            <aui:col width="50">
+            <aui:col span="6">
                 <aui:input name="role" bean="<%=contact_%>"
                     helpMessage="role-help" disabled="<%= !hasUpdatePermission %>" />
             </aui:col>
         </aui:row>
         <aui:row>
-            <aui:col width="50">
+            <aui:col span="6">
                 <aui:input name="company" bean="<%=contact_%>"
                     inlineField="true" helpMessage="company-help" 
-                    disabled="<%= !hasUpdatePermission %>" required="false"/>
+                    disabled="<%= !hasUpdatePermission %>"/>
             </aui:col>
-            <aui:col width="50">
+            <aui:col span="6">
                 <aui:input name="department" bean="<%=contact_%>"
                     helpMessage="department-help" disabled="<%= !hasUpdatePermission %>" />
             </aui:col>
         </aui:row>
         <aui:row>
-            <aui:col width="50">
+            <aui:col span="6">
                 <aui:input name="office" bean="<%=contact_%>"
                     inlineField="true" helpMessage="office-help" 
-                    disabled="<%= !hasUpdatePermission %>" required="false"/>
+                    disabled="<%= !hasUpdatePermission %>"/>
             </aui:col>
         </aui:row>
     </aui:container>
@@ -106,9 +106,8 @@
                         </aui:select>
                         <aui:input name="url.address" inlineField="true"
                             value="<%=url.getAddress()%>" label=""
-                            disabled="<%=!hasUpdatePermission%>" />
-
-                        <liferay-ui:icon-help message="url.address-help" />
+                            disabled="<%=!hasUpdatePermission%>" 
+                            helpMessage="url.address-help" />
                     </div>
                 </div>
             </aui:col>
@@ -132,11 +131,10 @@
                     <div class="row-fields">
 	                    <div class="sort-handle"></div>
 	                
-	                        <aui:input name="calendar.uri" inlineField="true"
+	                        <aui:input name="calendar.uri" inlineField="true" inlineLabel="left"
 	                            value="<%=calendar.getUri()%>" label="calendar-request-uri"
-	                            disabled="<%=!hasUpdatePermission%>" />
-	
-	                    <liferay-ui:icon-help message="calendar-request.uri-help" />
+	                            disabled="<%=!hasUpdatePermission%>" 
+	                            helpMessage="calendar-request.uri-help"/>
 	                </div>
                 </div>
             </aui:col>
@@ -160,11 +158,12 @@
                     <div class="row-fields">
                         <div class="sort-handle"></div>
                     
-                            <aui:input name="freeBusyUrl.url" inlineField="true"
+                            <aui:input name="freeBusyUrl.url" 
+                                inlineLabel="left"
                                 value="<%=freeBusyUrl.getAddress()%>" label="free-busy-url"
-                                disabled="<%=!hasUpdatePermission%>" />
+                                disabled="<%=!hasUpdatePermission%>"
+                                helpMessage="free-busy.url-help"/>
     
-                        <liferay-ui:icon-help message="free-busy.url-help" />
                     </div>
                 </div>
             </aui:col>
@@ -189,10 +188,10 @@
                         <div class="sort-handle"></div>
                     
                             <aui:input name="calendar.uri" inlineField="true"
+                                inlineLabel="left"
                                 value="<%=calendarUri.getUri()%>" label="calendar-uri"
-                                disabled="<%=!hasUpdatePermission%>" />
-    
-                        <liferay-ui:icon-help message="calendar.uri-help" />
+                                disabled="<%=!hasUpdatePermission%>" 
+                                helpMessage="calendar.uri-help"/>
                     </div>
                 </div>
             </aui:col>
@@ -206,18 +205,18 @@
 <aui:fieldset label="miscellaneous">
     <aui:container>
         <aui:row>
-            <aui:col width="50">
+            <aui:col span="6">
                 <aui:input name="birthday" bean="<%=contact_%>"
                     inlineField="true" helpMessage="birthday-help" 
                     disabled="<%= !hasUpdatePermission %>" required="false"/>
             </aui:col>
-            <aui:col width="50">
+            <aui:col span="6">
                 <aui:input name="anniversary" bean="<%=contact_%>"
                     helpMessage="anniversary-help" disabled="<%= !hasUpdatePermission %>" />
             </aui:col>
         </aui:row>
         <aui:row>
-            <aui:col width="50">
+            <aui:col span="6">
                 <aui:input name="birthplace" bean="<%=contact_%>"
                     inlineField="true" helpMessage="birthplace-help" 
                     disabled="<%= !hasUpdatePermission %>" required="false"/>
