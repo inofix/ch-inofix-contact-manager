@@ -9,6 +9,7 @@
 <%@ include file="/init.jsp"%>
 
 <%@ page import="ch.inofix.contact.dto.UrlDTO" %>
+<%@ page import="ch.inofix.contact.dto.UriDTO" %>
 
 <%
     Contact contact_ = (Contact) request.getAttribute(ContactManagerWebKeys.CONTACT);
@@ -46,36 +47,32 @@
 <aui:fieldset label="job">
     <aui:container>
         <aui:row>
-            <aui:col width="50">
+            <aui:col span="6">
                 <aui:input name="title" bean="<%=contact_%>"
                     inlineField="true" helpMessage="title-help" 
-                    disabled="<%= !hasUpdatePermission %>" required="false"/>
+                    disabled="<%= !hasUpdatePermission %>"/>
             </aui:col>
-            <aui:col width="50">
+            <aui:col span="6">
                 <aui:input name="role" bean="<%=contact_%>"
                     helpMessage="role-help" disabled="<%= !hasUpdatePermission %>" />
             </aui:col>
         </aui:row>
         <aui:row>
-            <aui:col width="50">
+            <aui:col span="6">
                 <aui:input name="company" bean="<%=contact_%>"
                     inlineField="true" helpMessage="company-help" 
-                    disabled="<%= !hasUpdatePermission %>" required="false"/>
+                    disabled="<%= !hasUpdatePermission %>"/>
             </aui:col>
-            <aui:col width="50">
+            <aui:col span="6">
                 <aui:input name="department" bean="<%=contact_%>"
                     helpMessage="department-help" disabled="<%= !hasUpdatePermission %>" />
             </aui:col>
         </aui:row>
         <aui:row>
-            <aui:col width="50">
+            <aui:col span="6">
                 <aui:input name="office" bean="<%=contact_%>"
                     inlineField="true" helpMessage="office-help" 
-                    disabled="<%= !hasUpdatePermission %>" required="false"/>
-            </aui:col>
-            <aui:col width="50">
-                <aui:input name="role" bean="<%=contact_%>"
-                    helpMessage="role-help" disabled="<%= !hasUpdatePermission %>" />
+                    disabled="<%= !hasUpdatePermission %>"/>
             </aui:col>
         </aui:row>
     </aui:container>
@@ -109,9 +106,8 @@
                         </aui:select>
                         <aui:input name="url.address" inlineField="true"
                             value="<%=url.getAddress()%>" label=""
-                            disabled="<%=!hasUpdatePermission%>" />
-
-                        <liferay-ui:icon-help message="url.address-help" />
+                            disabled="<%=!hasUpdatePermission%>" 
+                            helpMessage="url.address-help" />
                     </div>
                 </div>
             </aui:col>
@@ -122,11 +118,154 @@
     </aui:container>
 </aui:fieldset>
 
+<aui:fieldset label="calendar-requests" id="calendarRequests">
+    <aui:container>
+        <%
+            List<UriDTO> calendarRequests = contact_.getCalendarRequestUris();
+
+            for (UriDTO calendar : calendarRequests) {
+        %>
+        <aui:row>
+            <aui:col span="12">
+                <div class="lfr-form-row">
+                    <div class="row-fields">
+	                    <div class="sort-handle"></div>
+	                
+	                        <aui:input name="calendar.uri" inlineField="true" inlineLabel="left"
+	                            value="<%=calendar.getUri()%>" label="calendar-request-uri"
+	                            disabled="<%=!hasUpdatePermission%>" 
+	                            helpMessage="calendar-request.uri-help"/>
+	                </div>
+                </div>
+            </aui:col>
+        </aui:row>
+        <%
+            }
+        %>
+    </aui:container>
+</aui:fieldset>
+
+<aui:fieldset label="free-busy" id="freeBusy">
+    <aui:container>
+        <%
+        List<UrlDTO> freeBusyUrls = contact_.getFreeBusyUrls();
+
+            for (UrlDTO freeBusyUrl : freeBusyUrls) {
+        %>
+        <aui:row>
+            <aui:col span="12">
+                <div class="lfr-form-row">
+                    <div class="row-fields">
+                        <div class="sort-handle"></div>
+                    
+                            <aui:input name="freeBusyUrl.url" 
+                                inlineLabel="left"
+                                value="<%=freeBusyUrl.getAddress()%>" label="free-busy-url"
+                                disabled="<%=!hasUpdatePermission%>"
+                                helpMessage="free-busy.url-help"/>
+    
+                    </div>
+                </div>
+            </aui:col>
+        </aui:row>
+        <%
+            }
+        %>
+    </aui:container>
+</aui:fieldset>
+
+<aui:fieldset label="calendars" id="calendars">
+    <aui:container>
+        <%
+        List<UriDTO> calendarUris = contact_.getCalendarUris();
+
+            for (UriDTO calendarUri : calendarUris) {
+        %>
+        <aui:row>
+            <aui:col span="12">
+                <div class="lfr-form-row">
+                    <div class="row-fields">
+                        <div class="sort-handle"></div>
+                    
+                            <aui:input name="calendar.uri" inlineField="true"
+                                inlineLabel="left"
+                                value="<%=calendarUri.getUri()%>" label="calendar-uri"
+                                disabled="<%=!hasUpdatePermission%>" 
+                                helpMessage="calendar.uri-help"/>
+                    </div>
+                </div>
+            </aui:col>
+        </aui:row>
+        <%
+            }
+        %>
+    </aui:container>
+</aui:fieldset>
+
+<aui:fieldset label="miscellaneous">
+    <aui:container>
+        <aui:row>
+            <aui:col span="6">
+                <aui:input name="birthday" bean="<%=contact_%>"
+                    inlineField="true" helpMessage="birthday-help" 
+                    disabled="<%= !hasUpdatePermission %>" required="false"/>
+            </aui:col>
+            <aui:col span="6">
+                <aui:input name="anniversary" bean="<%=contact_%>"
+                    helpMessage="anniversary-help" disabled="<%= !hasUpdatePermission %>" />
+            </aui:col>
+        </aui:row>
+        <aui:row>
+            <aui:col span="6">
+                <aui:input name="birthplace" bean="<%=contact_%>"
+                    inlineField="true" helpMessage="birthplace-help" 
+                    disabled="<%= !hasUpdatePermission %>" required="false"/>
+            </aui:col>
+        </aui:row>
+    </aui:container>
+</aui:fieldset>
+
 <%-- Configure auto-fields --%>
 <aui:script use="liferay-auto-fields">
 
     var urlAutoFields = new Liferay.AutoFields({
         contentBox : 'fieldset#<portlet:namespace />webAdresses',
+        namespace : '<portlet:namespace />',
+        sortable : true,
+        sortableHandle: '.sort-handle',
+        on : {
+            'clone' : function(event) {
+                restoreOriginalNames(event);
+            }
+        }
+    }).render();
+    
+    var calendarRequestAutoFields = new Liferay.AutoFields({
+        contentBox : 'fieldset#<portlet:namespace />calendarRequests',
+        namespace : '<portlet:namespace />',
+        sortable : true,
+        sortableHandle: '.sort-handle',
+        on : {
+            'clone' : function(event) {
+                restoreOriginalNames(event);
+            }
+        }
+    }).render();
+
+    var freeBusyAutoFields = new Liferay.AutoFields({
+        contentBox : 'fieldset#<portlet:namespace />freeBusy',
+        namespace : '<portlet:namespace />',
+        sortable : true,
+        sortableHandle: '.sort-handle',
+        on : {
+            'clone' : function(event) {
+                restoreOriginalNames(event);
+            }
+        }
+    }).render();
+    
+    var calendarAutoFields = new Liferay.AutoFields({
+        contentBox : 'fieldset#<portlet:namespace />calendars',
         namespace : '<portlet:namespace />',
         sortable : true,
         sortableHandle: '.sort-handle',

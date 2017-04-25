@@ -23,39 +23,57 @@ import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import aQute.bnd.annotation.ProviderType;
+import ch.inofix.contact.dto.AddressDTO;
 import ch.inofix.contact.dto.CategoriesDTO;
 import ch.inofix.contact.dto.EmailDTO;
 import ch.inofix.contact.dto.ExpertiseDTO;
+import ch.inofix.contact.dto.FileDTO;
 import ch.inofix.contact.dto.HobbyDTO;
 import ch.inofix.contact.dto.ImppDTO;
 import ch.inofix.contact.dto.InterestDTO;
 import ch.inofix.contact.dto.LanguageDTO;
+import ch.inofix.contact.dto.NoteDTO;
 import ch.inofix.contact.dto.PhoneDTO;
+import ch.inofix.contact.dto.UriDTO;
 import ch.inofix.contact.dto.UrlDTO;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
+import ezvcard.parameter.AddressType;
 import ezvcard.parameter.EmailType;
 import ezvcard.parameter.ExpertiseLevel;
 import ezvcard.parameter.HobbyLevel;
+import ezvcard.parameter.ImageType;
 import ezvcard.parameter.ImppType;
 import ezvcard.parameter.InterestLevel;
+import ezvcard.parameter.KeyType;
+import ezvcard.parameter.SoundType;
 import ezvcard.parameter.TelephoneType;
+import ezvcard.property.Address;
+import ezvcard.property.CalendarRequestUri;
+import ezvcard.property.CalendarUri;
 import ezvcard.property.Categories;
 import ezvcard.property.Email;
 import ezvcard.property.Expertise;
 import ezvcard.property.FormattedName;
+import ezvcard.property.FreeBusyUrl;
 import ezvcard.property.Gender;
 import ezvcard.property.Hobby;
 import ezvcard.property.Impp;
 import ezvcard.property.Interest;
+import ezvcard.property.Key;
 import ezvcard.property.Kind;
 import ezvcard.property.Language;
+import ezvcard.property.Logo;
+import ezvcard.property.Note;
 import ezvcard.property.Organization;
+import ezvcard.property.Photo;
 import ezvcard.property.RawProperty;
+import ezvcard.property.Sound;
 import ezvcard.property.StructuredName;
 import ezvcard.property.Telephone;
 import ezvcard.property.Timezone;
 import ezvcard.property.Url;
+import ezvcard.util.DataUri;
 
 /**
  * The extended model implementation for the Contact service. Represents a row
@@ -86,6 +104,100 @@ public class ContactImpl extends ContactBaseImpl {
     public ContactImpl() {
     }
 
+    /**
+     * 
+     * @param address
+     * @return
+     * @since 1.0.8
+     */
+    private AddressDTO getAddress(Address address) {
+
+        AddressDTO addressDTO = new AddressDTO();
+
+        if (address != null) {
+
+            addressDTO.setCountry(address.getCountry());
+            addressDTO.setLabel(address.getLabel());
+            addressDTO.setLanguage(address.getLanguage());
+            addressDTO.setLocality(address.getLocality());
+            addressDTO.setPoBox(address.getPoBox());
+            addressDTO.setPostalCode(address.getPostalCode());
+            addressDTO.setRegion(address.getRegion());
+            addressDTO.setStreetAddress(address.getStreetAddress());
+            addressDTO.setTimezone(address.getTimezone());
+
+            // TODO: Add multi-type support
+            StringBuilder sb = new StringBuilder();
+            List<AddressType> types = address.getTypes();
+            if (types.size() > 0) {
+                for (AddressType type : types) {
+                    sb.append(type.getValue());
+                }
+            } else {
+                sb.append("other");
+            }
+
+            addressDTO.setType(sb.toString());
+        }
+
+        return addressDTO;
+    }
+
+    /**
+     * 
+     * @return the preferred address.
+     * @since 1.0.8
+     */
+    public AddressDTO getAddress() {
+
+        List<Address> addresses = getVCard().getAddresses();
+
+        if (addresses != null) {
+
+            for (Address address : addresses) {
+                Integer pref = address.getPref();
+                if (pref != null) {
+                    if (pref == 1) {
+                        return getAddress(address);
+                    }
+                }
+            }
+        }
+
+        Address address = getVCard().getProperty(Address.class);
+
+        return getAddress(address);
+
+    }
+
+    /**
+     * 
+     * @return
+     * @since 1.0.0
+     */
+    public List<AddressDTO> getAddresses() {
+
+        List<AddressDTO> addressDTOs = new ArrayList<AddressDTO>();
+
+        List<Address> addresses = getVCard().getAddresses();
+
+        for (Address address : addresses) {
+
+            AddressDTO addressDTO = getAddress(address);
+
+            addressDTOs.add(addressDTO);
+
+        }
+
+        // an empty default address
+        if (addressDTOs.size() == 0) {
+            addressDTOs.add(new AddressDTO());
+        }
+
+        return addressDTOs;
+
+    }
+
     @Override
     public String getCompany() {
 
@@ -103,6 +215,58 @@ public class ContactImpl extends ContactBaseImpl {
         return str;
 
     }
+
+    public List<UriDTO> getCalendarRequestUris() {
+
+        List<UriDTO> uriDTOs = new ArrayList<UriDTO>();
+
+        List<CalendarRequestUri> calendarRequestUris = getVCard()
+                .getCalendarRequestUris();
+
+        for (CalendarRequestUri calendarRequestUri : calendarRequestUris) {
+
+            UriDTO uriDTO = new UriDTO();
+
+            uriDTO.setUri(calendarRequestUri.getValue());
+            uriDTO.setType(calendarRequestUri.getType());
+
+            uriDTOs.add(uriDTO);
+        }
+
+        // an empty default calendarRequestUri
+        if (uriDTOs.size() == 0) {
+            uriDTOs.add(new UriDTO());
+        }
+
+        return uriDTOs;
+
+    }
+
+    public List<UriDTO> getCalendarUris() {
+
+        List<UriDTO> uriDTOs = new ArrayList<UriDTO>();
+
+        List<CalendarUri> calendarUris = getVCard().getCalendarUris();
+
+        for (CalendarUri calendarUri : calendarUris) {
+
+            UriDTO uriDTO = new UriDTO();
+
+            uriDTO.setUri(calendarUri.getValue());
+            uriDTO.setType(calendarUri.getType());
+
+            uriDTOs.add(uriDTO);
+        }
+
+        // an empty default calendarUri
+        if (uriDTOs.size() == 0) {
+            uriDTOs.add(new UriDTO());
+        }
+
+        return uriDTOs;
+
+    }
+
 
     /**
      *
@@ -398,6 +562,37 @@ public class ContactImpl extends ContactBaseImpl {
         return interestDTOs;
     }
 
+    public List<FileDTO> getKeys() {
+
+        List<FileDTO> fileDTOs = new ArrayList<FileDTO>();
+
+        List<Key> keys = getVCard().getKeys();
+
+        for (Key key : keys) {
+
+            FileDTO fileDTO = new FileDTO();
+            fileDTO.setUrl(key.getUrl());
+
+            KeyType contentType = key.getContentType();
+
+            if (Validator.isNotNull(contentType)) {
+                DataUri dataUri = new DataUri(contentType.getMediaType(),
+                        key.getData());
+                fileDTO.setData(dataUri.toString());
+            }
+
+            fileDTOs.add(fileDTO);
+        }
+
+        // an empty default key
+        if (fileDTOs.size() == 0) {
+            fileDTOs.add(new FileDTO());
+        }
+
+        return fileDTOs;
+
+    }
+
     /**
      *
      * @return
@@ -439,6 +634,42 @@ public class ContactImpl extends ContactBaseImpl {
 
         return languageDTOs;
     }
+    
+    /**
+     * 
+     * @return
+     * @since 1.1.3
+     */
+    public List<FileDTO> getLogos() {
+
+        List<FileDTO> fileDTOs = new ArrayList<FileDTO>();
+
+        List<Logo> logos = getVCard().getLogos();
+
+        for (Logo logo : logos) {
+
+            FileDTO fileDTO = new FileDTO();
+            fileDTO.setUrl(logo.getUrl());
+
+            ImageType contentType = logo.getContentType();
+
+            if (Validator.isNotNull(contentType)) {
+                DataUri dataUri = new DataUri(contentType.getMediaType(),
+                        logo.getData());
+                fileDTO.setData(dataUri.toString());
+            }
+
+            fileDTOs.add(fileDTO);
+        }
+
+        // an empty default logo
+        if (fileDTOs.size() == 0) {
+            fileDTOs.add(new FileDTO());
+        }
+
+        return fileDTOs;
+
+    }
 
     @Override
     public String getName() {
@@ -477,6 +708,25 @@ public class ContactImpl extends ContactBaseImpl {
 
         return name;
 
+    }
+    
+    public List<NoteDTO> getNotes() {
+
+        List<Note> notes = getVCard().getNotes();
+        List<NoteDTO> noteDTOs = new ArrayList<NoteDTO>();
+
+        for (Note note : notes) {
+            NoteDTO noteDTO = new NoteDTO();
+            noteDTO.setValue(note.getValue());
+            noteDTOs.add(noteDTO);
+        }
+
+        // an empty default note
+        if (noteDTOs.size() == 0) {
+            noteDTOs.add(new NoteDTO());
+        }
+
+        return noteDTOs;
     }
 
     /**
@@ -560,6 +810,66 @@ public class ContactImpl extends ContactBaseImpl {
         return phoneDTOs;
 
     }
+    
+    /**
+     * 
+     * @return
+     * @since 1.1.2
+     */
+    public List<FileDTO> getPhotos() {
+
+        List<FileDTO> fileDTOs = new ArrayList<FileDTO>();
+
+        List<Photo> photos = getVCard().getPhotos();
+
+        for (Photo photo : photos) {
+
+            FileDTO fileDTO = new FileDTO();
+            fileDTO.setUrl(photo.getUrl());
+
+            ImageType contentType = photo.getContentType();
+
+            if (Validator.isNotNull(contentType)) {
+                DataUri dataUri = new DataUri(contentType.getMediaType(),
+                        photo.getData());
+                fileDTO.setData(dataUri.toString());
+            }
+
+            fileDTOs.add(fileDTO);
+        }
+
+        // an empty default photo
+        if (fileDTOs.size() == 0) {
+            fileDTOs.add(new FileDTO());
+        }
+
+        return fileDTOs;
+
+    }
+
+    /**
+     * 
+     * @return a dataURI for the entity the vCard represents, i.e. the first
+     *         photo if the vCard represents a person or a logo if the vCard
+     *         represents an organization.
+     * @since 1.1.6
+     */
+    public String getPortrait() {
+
+        String portrait = null;
+
+        List<Photo> photos = getVCard().getPhotos();
+        List<Logo> logos = getVCard().getLogos();
+
+        if (logos.size() > 0) {
+            portrait = getLogos().get(0).getData();
+        } else if (photos.size() > 0) {
+            portrait = getPhotos().get(0).getData();
+        }
+
+        return portrait;
+
+    }
 
     @Override
     public String getSalutation() {
@@ -577,6 +887,42 @@ public class ContactImpl extends ContactBaseImpl {
         return salutation;
 
     }
+    
+    /**
+     * 
+     * @return
+     * @since 1.1.3
+     */
+    public List<FileDTO> getSounds() {
+
+        List<FileDTO> fileDTOs = new ArrayList<FileDTO>();
+
+        List<Sound> sounds = getVCard().getSounds();
+
+        for (Sound sound : sounds) {
+
+            FileDTO fileDTO = new FileDTO();
+            fileDTO.setUrl(sound.getUrl());
+
+            SoundType contentType = sound.getContentType();
+
+            if (Validator.isNotNull(contentType)) {
+                DataUri dataUri = new DataUri(contentType.getMediaType(),
+                        sound.getData());
+                fileDTO.setData(dataUri.toString());
+            }
+
+            fileDTOs.add(fileDTO);
+        }
+
+        // an empty default sound
+        if (fileDTOs.size() == 0) {
+            fileDTOs.add(new FileDTO());
+        }
+
+        return fileDTOs;
+
+    }
 
     @Override
     public VCard getVCard() {
@@ -591,6 +937,31 @@ public class ContactImpl extends ContactBaseImpl {
         }
 
         return vCard;
+
+    }
+
+    public List<UrlDTO> getFreeBusyUrls() {
+
+        List<UrlDTO> urlDTOs = new ArrayList<UrlDTO>();
+
+        List<FreeBusyUrl> urls = getVCard().getFbUrls();
+
+        for (FreeBusyUrl url : urls) {
+
+            UrlDTO urlDTO = new UrlDTO();
+
+            urlDTO.setAddress(url.getValue());
+            urlDTO.setType(url.getType());
+
+            urlDTOs.add(urlDTO);
+        }
+
+        // an empty default freeBusyURL
+        if (urlDTOs.size() == 0) {
+            urlDTOs.add(new UrlDTO());
+        }
+
+        return urlDTOs;
 
     }
 
