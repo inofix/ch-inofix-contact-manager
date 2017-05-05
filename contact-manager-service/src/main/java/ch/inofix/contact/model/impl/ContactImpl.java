@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Inofix GmbH, Luzern. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -92,6 +92,7 @@ import ezvcard.util.DataUri;
  * @modified 2017-04-12 17:27
  * @version 1.2.1
  */
+@SuppressWarnings("serial")
 @ProviderType
 public class ContactImpl extends ContactBaseImpl {
     /*
@@ -105,7 +106,7 @@ public class ContactImpl extends ContactBaseImpl {
     }
 
     /**
-     * 
+     *
      * @param address
      * @return
      * @since 1.0.8
@@ -144,10 +145,11 @@ public class ContactImpl extends ContactBaseImpl {
     }
 
     /**
-     * 
+     *
      * @return the preferred address.
      * @since 1.0.8
      */
+    @Override
     public AddressDTO getAddress() {
 
         List<Address> addresses = getVCard().getAddresses();
@@ -171,10 +173,11 @@ public class ContactImpl extends ContactBaseImpl {
     }
 
     /**
-     * 
+     *
      * @return
      * @since 1.0.0
      */
+    @Override
     public List<AddressDTO> getAddresses() {
 
         List<AddressDTO> addressDTOs = new ArrayList<AddressDTO>();
@@ -216,6 +219,7 @@ public class ContactImpl extends ContactBaseImpl {
 
     }
 
+    @Override
     public List<UriDTO> getCalendarRequestUris() {
 
         List<UriDTO> uriDTOs = new ArrayList<UriDTO>();
@@ -242,6 +246,7 @@ public class ContactImpl extends ContactBaseImpl {
 
     }
 
+    @Override
     public List<UriDTO> getCalendarUris() {
 
         List<UriDTO> uriDTOs = new ArrayList<UriDTO>();
@@ -310,6 +315,7 @@ public class ContactImpl extends ContactBaseImpl {
 
     }
 
+    @Override
     public EmailDTO getEmail() {
 
         List<Email> emails = getVCard().getEmails();
@@ -562,6 +568,7 @@ public class ContactImpl extends ContactBaseImpl {
         return interestDTOs;
     }
 
+    @Override
     public List<FileDTO> getKeys() {
 
         List<FileDTO> fileDTOs = new ArrayList<FileDTO>();
@@ -634,12 +641,13 @@ public class ContactImpl extends ContactBaseImpl {
 
         return languageDTOs;
     }
-    
+
     /**
-     * 
+     *
      * @return
      * @since 1.1.3
      */
+    @Override
     public List<FileDTO> getLogos() {
 
         List<FileDTO> fileDTOs = new ArrayList<FileDTO>();
@@ -709,7 +717,8 @@ public class ContactImpl extends ContactBaseImpl {
         return name;
 
     }
-    
+
+    @Override
     public List<NoteDTO> getNotes() {
 
         List<Note> notes = getVCard().getNotes();
@@ -734,6 +743,7 @@ public class ContactImpl extends ContactBaseImpl {
      * @return the preferred phone.
      * @since 1.0.8
      */
+    @Override
     public PhoneDTO getPhone() {
 
         List<Telephone> phones = getVCard().getTelephoneNumbers();
@@ -810,12 +820,13 @@ public class ContactImpl extends ContactBaseImpl {
         return phoneDTOs;
 
     }
-    
+
     /**
-     * 
+     *
      * @return
      * @since 1.1.2
      */
+    @Override
     public List<FileDTO> getPhotos() {
 
         List<FileDTO> fileDTOs = new ArrayList<FileDTO>();
@@ -848,12 +859,13 @@ public class ContactImpl extends ContactBaseImpl {
     }
 
     /**
-     * 
+     *
      * @return a dataURI for the entity the vCard represents, i.e. the first
      *         photo if the vCard represents a person or a logo if the vCard
      *         represents an organization.
      * @since 1.1.6
      */
+    @Override
     public String getPortrait() {
 
         String portrait = null;
@@ -887,12 +899,13 @@ public class ContactImpl extends ContactBaseImpl {
         return salutation;
 
     }
-    
+
     /**
-     * 
+     *
      * @return
      * @since 1.1.3
      */
+    @Override
     public List<FileDTO> getSounds() {
 
         List<FileDTO> fileDTOs = new ArrayList<FileDTO>();
@@ -940,6 +953,7 @@ public class ContactImpl extends ContactBaseImpl {
 
     }
 
+    @Override
     public List<UrlDTO> getFreeBusyUrls() {
 
         List<UrlDTO> urlDTOs = new ArrayList<UrlDTO>();
@@ -1035,6 +1049,7 @@ public class ContactImpl extends ContactBaseImpl {
         return str;
     }
 
+    @Override
     public List<UrlDTO> getUrls() {
         List<UrlDTO> urlDTOs = new ArrayList<UrlDTO> ();
 
@@ -1054,9 +1069,9 @@ public class ContactImpl extends ContactBaseImpl {
 
         return urlDTOs;
 
-        
+
     }
-    
+
     private UrlDTO getUrl(Url url) {
 
         UrlDTO urlDTO = new UrlDTO();
