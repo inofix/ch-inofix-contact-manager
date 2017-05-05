@@ -9,6 +9,16 @@ A vCard based contact manager for the Liferay Portal.
 1. Run ServiceBuilder: `gradle buildService`
 1. Build: `gradle jar`
 
+## How To Deploy
+Change the current working directory to $WORKSPACE/bundles/deploy and install the osgi-modules required by the contact-manager.
+1. `cd $WORKSPACE/bundles/deploy`
+1. `wget https://zeus.inofix.ch/repo/liferay/7.0.0/vinnie_2.0.0.jar`
+1. `wget http://central.maven.org/maven2/com/googlecode/ez-vcard/ez-vcard/0.10.2/ez-vcard-0.10.2.jar`
+1. `wget http://central.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.6.1/jackson-annotations-2.6.1.jar`
+1. `wget http://central.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.6.1/jackson-core-2.6.1.jar`
+1. `wget http://central.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.6.1/jackson-databind-2.6.1.jar`
+1. `wget http://central.maven.org/maven2/org/jsoup/jsoup/1.8.3/jsoup-1.8.3.jar`
+
 ## How To Contribute
 1. Fork this repository to your individual github account.
 1. Clone your personal fork to your local machine.
