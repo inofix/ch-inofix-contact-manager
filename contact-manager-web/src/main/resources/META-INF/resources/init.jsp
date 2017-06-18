@@ -2,8 +2,8 @@
     init.jsp: Common setup code for the contact manager portlet.
 
     Created:     2017-03-30 16:44 by Stefan Luebbers
-    Modified:    2017-04-12 14:27 by Christian Berndt
-    Version:     1.0.2
+    Modified:    2017-06-18 21:30 by Christian Berndt
+    Version:     1.0.3
 --%>
 
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -72,7 +72,22 @@
     PortletURL portletURL = renderResponse.createRenderURL();
 
     String currentURL = portletURL.toString();
-    
+
+    String markupView = "lexicon";
+
+    String tabs1 = ParamUtil.getString(request, "tabs1", "timetracker");
+    String tabs2 = ParamUtil.getString(request, "tabs2", "export");
+
     ContactManagerConfiguration contactManagerConfiguration = (ContactManagerConfiguration) renderRequest
             .getAttribute(ContactManagerConfiguration.class.getName());
+
+    if (Validator.isNotNull(contactManagerConfiguration)) {
+
+        markupView = portletPreferences.getValue("markup-view", contactManagerConfiguration.markupView());
+
+        // because of current checkbox configuration
+        if ("false".equals(markupView)) {
+            markupView = "";
+        }
+    }
 %>
