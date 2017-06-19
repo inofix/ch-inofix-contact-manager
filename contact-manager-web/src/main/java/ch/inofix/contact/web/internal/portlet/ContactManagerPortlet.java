@@ -51,17 +51,16 @@ import ezvcard.property.Uid;
  * @author Stefan Luebbers
  * @author Christian Berndt
  * @created 2017-03-30 19:52
- * @modified 2017-04-12 14:57
- * @version 1.0.2
+ * @modified 2017-06-19 18:26
+ * @version 1.0.3
  */
 
-@Component(immediate = true,
-        property = { "com.liferay.portlet.css-class-wrapper=portlet-contact-manager",
-                "com.liferay.portlet.display-category=category.inofix", "com.liferay.portlet.instanceable=false",
-                "com.liferay.portlet.header-portlet-css=/css/main.css", "javax.portlet.display-name=Contact Manager",
-                "javax.portlet.init-param.template-path=/", "javax.portlet.init-param.view-template=/view.jsp",
-                "javax.portlet.resource-bundle=content.Language", "javax.portlet.security-role-ref=power-user,user" },
-        service = Portlet.class)
+@Component(immediate = true, property = { "com.liferay.portlet.css-class-wrapper=portlet-contact-manager",
+        "com.liferay.portlet.display-category=category.inofix", "com.liferay.portlet.instanceable=false",
+        "com.liferay.portlet.header-portlet-css=/css/main.css", "javax.portlet.display-name=Contact Manager",
+        "javax.portlet.init-param.template-path=/", "javax.portlet.init-param.view-template=/view.jsp",
+        "javax.portlet.resource-bundle=content.Language",
+        "javax.portlet.security-role-ref=power-user,user" }, service = Portlet.class)
 public class ContactManagerPortlet extends MVCPortlet {
 
     @Override
@@ -241,6 +240,15 @@ public class ContactManagerPortlet extends MVCPortlet {
         Contact contact = _contactService.getContact(contactId);
 
         portletRequest.setAttribute(ContactManagerWebKeys.CONTACT, contact);
+    }
+
+    /**
+     * Disable the get- / sendRedirect feature of LiferayPortlet.
+     */
+    @Override
+    protected String getRedirect(ActionRequest actionRequest, ActionResponse actionResponse) {
+
+        return null;
     }
 
     @Reference

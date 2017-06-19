@@ -2,11 +2,11 @@
     contact_action.jsp: The action menu of the contact manager's default view.
     
     Created:    2017-04-11 16:00 by Stefan Luebbers
-    Modified:   2017-04-12 10:47 by Christian Berndt
-    Version:    1.0.1
+    Modified:   2017-06-19 17:12 by Christian Berndt
+    Version:    1.0.2
 --%>
 
-<%@ include file="init.jsp"%>
+<%@ include file="/init.jsp"%>
 
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
 
@@ -20,54 +20,23 @@
     
     editURL = HttpUtil.setParameter(editURL, renderResponse.getNamespace() + "contactId", contact_.getContactId()); 
     viewURL = HttpUtil.setParameter(viewURL, renderResponse.getNamespace() + "contactId", contact_.getContactId()); 
+
+    boolean hasUpdatePermission = ContactPermission.contains(permissionChecker, contact_,
+            ContactActionKeys.UPDATE);
+    boolean hasViewPermission = ContactPermission.contains(permissionChecker, contact_,
+            ContactActionKeys.VIEW);
+    boolean hasDeletePermission = ContactPermission.contains(permissionChecker, contact_,
+            ContactActionKeys.DELETE);
+    boolean hasPermissionsPermission = ContactPermission.contains(permissionChecker, contact_, 
+            ContactActionKeys.PERMISSIONS);
 %>
 
-<%
-    String taglibEditURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "editContact', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(request, "edit-x", contact_.getContactId())) + "', uri:'" + HtmlUtil.escapeJS(editURL) + "'});";            
-    String taglibViewURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "viewContact', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(request, "view-x", contact_.getContactId())) + "', uri:'" + HtmlUtil.escapeJS(viewURL) + "'});";
-
-%>
-
-<%
-    //TODO reenable permission checks
-    boolean hasDeletePermission = true; //ContactPermission.contains(permissionChecker,
-            //contact_.getContactId(), ContactActionKeys.DELETE);   
-    boolean hasPermissionsPermission = true; //ContactPermission.contains(permissionChecker,
-            //contact_.getContactId(), ContactActionKeys.PERMISSIONS);  
-    boolean hasUpdatePermission = true; //ContactPermission.contains(permissionChecker,
-            //contact_.getContactId(), ContactActionKeys.UPDATE);
-    boolean hasViewPermission = true; //ContactPermission.contains(permissionChecker,
-            //contact_.getContactId(), ContactActionKeys.VIEW);;
-%>
-<%--                             <liferay-ui:search-container-column-text align="right"> --%>
-        
-<%--                                 <liferay-ui:icon-menu> --%>
-        
-<%--                                     <c:if test="<%= hasUpdatePermission %>"> --%>
-<%--                                         <liferay-ui:icon image="edit" url="<%=taglibEditURL%>" /> --%>
-<%--                                     </c:if> --%>
-<%--                                     <c:if test="<%= hasPermissionsPermission %>"> --%>
-<%--                                         <liferay-ui:icon image="permissions" url="<%= permissionsURL %>" /> --%>
-<%--                                     </c:if> --%>
-<%--                                     <c:if test="<%= hasViewPermission %>"> --%>
-<%--                                         <liferay-ui:icon image="view" url="<%=taglibViewURL%>" /> --%>
-<%--                                     </c:if> --%>
-<%--                                     <c:if test="<%= hasViewPermission %>"> --%>
-<%--                                         <liferay-ui:icon image="download" url="<%= downloadVCardURL %>" /> --%>
-<%--                                     </c:if> --%>
-<%--                                     <c:if test="<%= hasDeletePermission %>"> --%>
-<%--                                         <liferay-ui:icon-delete url="<%=deleteURL%>" /> --%>
-<%--                                     </c:if> --%>
-        
-<%--                                 </liferay-ui:icon-menu> --%>
-        
-<%--                             </liferay-ui:search-container-column-text> --%>
 <liferay-ui:icon-menu showWhenSingleIcon="true">
 
     <c:if test="<%=hasViewPermission%>">
 
         <liferay-ui:icon iconCssClass="icon-eye-open" message="view" 
-            url="<%=taglibViewURL%>" />
+            url="<%=viewURL%>" />
 
     </c:if>
 
@@ -86,7 +55,7 @@
     <c:if test="<%=hasUpdatePermission%>">
 
         <liferay-ui:icon iconCssClass="icon-edit" message="edit" 
-            url="<%=taglibEditURL%>" />
+            url="<%=editURL%>" />
 
     </c:if>
 
@@ -103,19 +72,17 @@
     </c:if>
 
     <c:if test="<%= hasPermissionsPermission %>">
-<% // TODO %>
-<%--         <liferay-security:permissionsURL --%>
-<%--             modelResource="<%= Contact.class.getName() %>" --%>
-<%--             modelResourceDescription="<%= String.valueOf(contact_.getContactId()) %>" --%>
-<%--             resourcePrimKey="<%= String.valueOf(contact_.getContactId()) %>" --%>
-<%--             var="permissionsEntryURL" --%>
-<%--             windowState="<%= LiferayWindowState.POP_UP.toString() %>" /> --%>
 
-<%-- -
+        <liferay-security:permissionsURL
+            modelResource="<%= Contact.class.getName() %>"
+            modelResourceDescription="<%= String.valueOf(contact_.getContactId()) %>"
+            resourcePrimKey="<%= String.valueOf(contact_.getContactId()) %>"
+            var="permissionsEntryURL"
+            windowState="<%= LiferayWindowState.POP_UP.toString() %>" />
+
         <liferay-ui:icon iconCssClass="icon-cog" message="permissions"
             method="get" url="<%= permissionsEntryURL %>"
             useDialog="<%= true %>" />
---%>
     </c:if>
 
 </liferay-ui:icon-menu>

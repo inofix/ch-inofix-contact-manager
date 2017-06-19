@@ -3,15 +3,17 @@ package ch.inofix.contact.web.internal.search;
 import javax.portlet.PortletRequest;
 
 import com.liferay.portal.kernel.dao.search.DisplayTerms;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
- * 
+ *
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-24 22:12
- * @modified 2017-04-11 16:45
- * @version 1.0.4
+ * @modified 2017-06-19 17:25
+ * @version 1.0.5
  *
  */
 public class ContactDisplayTerms extends DisplayTerms {
@@ -26,6 +28,7 @@ public class ContactDisplayTerms extends DisplayTerms {
     public static final String MODIFIED_DATE = "modifiedDate";
     public static final String NAME = "name";
     public static final String PHONE = "phone";
+    public static final String STATUS = "status";
     public static final String USER_NAME = "userName";
 
     public ContactDisplayTerms(PortletRequest portletRequest) {
@@ -40,6 +43,11 @@ public class ContactDisplayTerms extends DisplayTerms {
         // TODO: add default IMPP
         name = ParamUtil.getString(portletRequest, NAME);
         modifiedDate = ParamUtil.getString(portletRequest, MODIFIED_DATE);
+        String statusString = ParamUtil.getString(portletRequest, STATUS);
+
+        if (Validator.isNotNull(statusString)) {
+            status = GetterUtil.getInteger(statusString);
+        }
         phone = ParamUtil.getString(portletRequest, PHONE);
         userName = ParamUtil.getString(portletRequest, USER_NAME);
     }
@@ -116,6 +124,14 @@ public class ContactDisplayTerms extends DisplayTerms {
         this.phone = phone;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     public String getUserName() {
         return userName;
     }
@@ -133,6 +149,7 @@ public class ContactDisplayTerms extends DisplayTerms {
     protected String modifiedDate;
     protected String name;
     protected String phone;
+    protected int status;
     protected String userName;
 
 }
