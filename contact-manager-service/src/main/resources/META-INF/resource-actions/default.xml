@@ -6,13 +6,12 @@
     default.xml: The contact-manager portlet's permission configuration.
     
     Created:    2015-05-19 18:32 by Christian Berndt
-    Modified:   2017-03-30 16:48 by Christian Berndt
-    Version:    1.0.3
+    Modified:   2017-06-19 22:42 by Christian Berndt
+    Version:    1.0.4
 -->
 <resource-action-mapping>
 
-    <!-- Permission configuration for -->
-    <!-- a contact portlet instance.  -->
+
     <model-resource>
         <model-name>ch.inofix.contact</model-name>
         <portlet-ref>
@@ -23,7 +22,7 @@
             <supports>
                 <action-key>ADD_CONTACT</action-key>
                 <action-key>DELETE_CONTACTS</action-key>
-<!--                 <action-key>EXPORT_IMPORT_CONTACTS</action-key> -->
+                <action-key>EXPORT_IMPORT_CONTACTS</action-key>
 <!--                 <action-key>IMPORT_CONTACTS</action-key> -->
 <!--                 <action-key>PERMISSIONS</action-key> -->
             </supports>
@@ -33,12 +32,12 @@
             <guest-defaults/>
             <guest-unsupported>
                 <action-key>ADD_CONTACT</action-key>
+                <action-key>DELETE_CONTACTS</action-key>
+                <action-key>EXPORT_IMPORT_CONTACTS</action-key>
             </guest-unsupported>
         </permissions>
     </model-resource>
 
-    <!-- Permission configuration for -->
-    <!-- a single contact object.     -->
     <model-resource>
         <model-name>ch.inofix.contact.model.Contact</model-name>
         <portlet-ref>

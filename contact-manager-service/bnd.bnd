@@ -2,6 +2,8 @@ Bundle-Name: Inofix Contact Manager Service
 Bundle-SymbolicName: ch.inofix.contact.service
 Bundle-Version: 1.0.0
 Export-Package: \
+    ch.inofix.contact.background.task,\
+    ch.inofix.contact.internal.exportimport.configuration,\
 	ch.inofix.contact.model.impl,\
 	ch.inofix.contact.service.permission,\
     ch.inofix.contact.service.util

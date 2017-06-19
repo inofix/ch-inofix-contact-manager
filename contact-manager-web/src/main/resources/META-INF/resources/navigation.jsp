@@ -2,8 +2,8 @@
     navigation.jsp: Default navigation of Inofix' contact-manager.
     
     Created:     2017-06-18 23:56 by Christian Berndt
-    Modified:    2017-06-18 23:56 by Christian Berndt
-    Version:     1.0.0
+    Modified:    2017-06-19 23:19 by Christian Berndt
+    Version:     1.0.1
 --%>
 
 <%@ include file="/init.jsp" %>
@@ -14,6 +14,7 @@
     
     PortletURL exportImportURL = renderResponse.createRenderURL();
     exportImportURL.setParameter("tabs1", "export-import"); 
+    exportImportURL.setParameter("tabs2", "import"); 
 %>
 
 <aui:nav-bar cssClass="collapse-basic-search" markupView="<%= markupView %>">
