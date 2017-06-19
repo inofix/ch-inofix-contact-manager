@@ -2,8 +2,8 @@
     init.jsp: Common setup code for the contact manager portlet.
 
     Created:     2017-03-30 16:44 by Stefan Luebbers
-    Modified:    2017-06-19 15:45 by Christian Berndt
-    Version:     1.0.4
+    Modified:    2017-06-19 23:24 by Christian Berndt
+    Version:     1.0.5
 --%>
 
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -16,9 +16,12 @@
 <%@taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui"%>
 <%@taglib uri="http://liferay.com/tld/util" prefix="liferay-util"%>
 
+<%@page import="ch.inofix.contact.background.task.ContactExportBackgroundTaskExecutor"%>
+<%@page import="ch.inofix.contact.background.task.ContactImportBackgroundTaskExecutor"%>
 <%@page import="ch.inofix.contact.constants.ContactActionKeys"%>
 <%@page import="ch.inofix.contact.constants.PortletKeys"%>
 <%@page import="ch.inofix.contact.model.Contact"%>
+<%@page import="ch.inofix.contact.service.permission.ContactManagerPermission"%>
 <%@page import="ch.inofix.contact.service.permission.ContactPermission"%>
 <%@page import="ch.inofix.contact.service.ContactServiceUtil"%>
 <%@page import="ch.inofix.contact.service.util.ContactUtil"%>
@@ -28,6 +31,7 @@
 <%@page import="ch.inofix.contact.web.internal.search.ContactSearch"%>
 <%@page import="ch.inofix.contact.web.internal.search.ContactSearchTerms"%>
 
+<%@page import="com.liferay.portal.kernel.backgroundtask.BackgroundTaskManagerUtil"%>
 <%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchContainer"%>
 <%@page import="com.liferay.portal.kernel.exception.PortalException"%>
