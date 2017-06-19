@@ -2,8 +2,8 @@
     configuration.jsp: configuration of the contact manager portlet.
     
     Created:    2017-04-12 17:05 by Stefan Lübbers
-    Modified:   2017-05-18 21:23 by Stefan Lübbers
-    Version:    1.0.1
+    Modified:   2017-06-19 16:19 by Christian Berndt
+    Version:    1.0.2
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -21,6 +21,8 @@
         portraitDisplay = portletPreferences.getValue("portrait-display", contactManagerConfiguration.portraitDisplay());
         viewByDefault = portletPreferences.getValue("view-by-default", contactManagerConfiguration.viewByDefault());
     }
+    
+    PortletURL portletURL = renderResponse.createRenderURL();
     
     ContactSearch searchContainer = new ContactSearch(liferayPortletRequest, portletURL);
     List<String> headerList = searchContainer.getHeaderNames();

@@ -27,8 +27,8 @@ import ch.inofix.contact.web.configuration.ContactManagerConfiguration;
  * @author Stefan Luebbers
  * @author Christian Berndt
  * @created 2017-04-12 17:35
- * @modified 2017-04-14 00:17
- * @version 1.0.0
+ * @modified 2017-06-19 17:28
+ * @version 1.0.1
  */
 
 @Component(configurationPid = "ch.inofix.contact.web.configuration.ContactManagerConfiguration",
@@ -46,14 +46,16 @@ public class ContactManagerConfigurationAction extends DefaultConfigurationActio
             throws Exception {
 
         String columns = ParamUtil.getString(actionRequest, "columns");
+        String markupView = ParamUtil.getString(actionRequest, "markup-view");
         String maxHeight = ParamUtil.getString(actionRequest, "max-height");
-        String viewByDefault = ParamUtil.getString(actionRequest, "view-by-default");
         String portraitDisplay = ParamUtil.getString(actionRequest, "portrait-display");
+        String viewByDefault = ParamUtil.getString(actionRequest, "view-by-default");
 
         setPreference(actionRequest, "columns", columns.split(","));
+        setPreference(actionRequest, "markup-view", markupView);
         setPreference(actionRequest, "max-height", maxHeight);
-        setPreference(actionRequest, "view-by-default", viewByDefault);
         setPreference(actionRequest, "portrait-display", portraitDisplay);
+        setPreference(actionRequest, "view-by-default", viewByDefault);
 
         super.processAction(portletConfig, actionRequest, actionResponse);
     }
