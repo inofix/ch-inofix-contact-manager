@@ -93,8 +93,8 @@ import ezvcard.property.Uid;
  * @author Stefan Luebbers
  * @author Christian Berndt
  * @created 2017-03-30 19:52
- * @modified 2017-06-20 19:13
- * @version 1.0.4
+ * @modified 2017-06-21 18:11
+ * @version 1.0.5
  */
 @Component(immediate = true, property = { "com.liferay.portlet.css-class-wrapper=portlet-contact-manager",
         "com.liferay.portlet.display-category=category.inofix",
@@ -190,18 +190,15 @@ public class ContactManagerPortlet extends MVCPortlet {
     public void serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
             throws PortletException {
 
-        _log.info("serveResource");
-
         try {
             String resourceID = resourceRequest.getResourceID();
 
-            _log.info("resourceId = " + resourceID);
-
             if (resourceID.equals("download")) {
+
                 // TODO
                 throw new UnsupportedOperationException();
-
                 // download(resourceRequest, resourceResponse);
+
             } else if (resourceID.equals("exportContacts")) {
 
                 // TODO

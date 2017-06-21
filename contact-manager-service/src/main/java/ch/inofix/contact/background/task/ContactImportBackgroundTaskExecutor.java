@@ -17,10 +17,13 @@ import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.transaction.TransactionInvokerUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 
+import ch.inofix.contact.service.ContactLocalServiceUtil;
 
 public class ContactImportBackgroundTaskExecutor extends BaseExportImportBackgroundTaskExecutor {
 
     public ContactImportBackgroundTaskExecutor() {
+
+        _log.info("ContactImportBackgroundTaskExecutor()");
 
         // TODO
         // setBackgroundTaskStatusMessageTranslator(new
@@ -33,13 +36,13 @@ public class ContactImportBackgroundTaskExecutor extends BaseExportImportBackgro
 
     @Override
     public BackgroundTaskExecutor clone() {
-        ContactImportBackgroundTaskExecutor taskRecordImportBackgroundTaskExecutor = new ContactImportBackgroundTaskExecutor();
+        ContactImportBackgroundTaskExecutor contactImportBackgroundTaskExecutor = new ContactImportBackgroundTaskExecutor();
 
-        taskRecordImportBackgroundTaskExecutor
+        contactImportBackgroundTaskExecutor
                 .setBackgroundTaskStatusMessageTranslator(getBackgroundTaskStatusMessageTranslator());
-        taskRecordImportBackgroundTaskExecutor.setIsolationLevel(getIsolationLevel());
+        contactImportBackgroundTaskExecutor.setIsolationLevel(getIsolationLevel());
 
-        return taskRecordImportBackgroundTaskExecutor;
+        return contactImportBackgroundTaskExecutor;
     }
 
     @Override
@@ -66,7 +69,7 @@ public class ContactImportBackgroundTaskExecutor extends BaseExportImportBackgro
                 if (_log.isDebugEnabled()) {
                     _log.debug(t, t);
                 } else if (_log.isWarnEnabled()) {
-                    _log.warn("Unable to import taskRecords: " + t.getMessage());
+                    _log.warn("Unable to import contacts: " + t.getMessage());
                 }
 
                 throw new SystemException(t);
@@ -91,8 +94,7 @@ public class ContactImportBackgroundTaskExecutor extends BaseExportImportBackgro
         @Override
         public Void call() throws PortalException {
 
-            // TODO
-            // ContactLocalServiceUtil.importContacts(_exportImportConfiguration, _file);
+            ContactLocalServiceUtil.importContacts(_exportImportConfiguration, _file);
 
             return null;
         }
