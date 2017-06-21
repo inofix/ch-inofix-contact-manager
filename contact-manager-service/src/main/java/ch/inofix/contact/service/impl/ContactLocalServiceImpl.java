@@ -14,14 +14,25 @@
 
 package ch.inofix.contact.service.impl;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.liferay.asset.kernel.model.AssetEntry;
 import com.liferay.asset.kernel.model.AssetLinkConstants;
+import com.liferay.exportimport.kernel.controller.ExportImportControllerRegistryUtil;
+import com.liferay.exportimport.kernel.controller.ImportController;
+import com.liferay.exportimport.kernel.model.ExportImportConfiguration;
+import com.liferay.portal.kernel.backgroundtask.BackgroundTask;
+import com.liferay.portal.kernel.backgroundtask.BackgroundTaskManagerUtil;
+import com.liferay.portal.kernel.exception.LocaleException;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
@@ -40,12 +51,14 @@ import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.permission.ModelPermissions;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
-import com.liferay.portal.kernel.util.File;
+//import com.liferay.portal.kernel.util.File;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import aQute.bnd.annotation.ProviderType;
+import ch.inofix.contact.background.task.ContactImportBackgroundTaskExecutor;
 import ch.inofix.contact.model.Contact;
 import ch.inofix.contact.service.base.ContactLocalServiceBaseImpl;
 
@@ -63,7 +76,11 @@ import ch.inofix.contact.service.base.ContactLocalServiceBaseImpl;
  * be accessed from within the same VM.
  * </p>
  *
+ * @author Christian Berndt
  * @author Stefan Luebbers
+ * @created 2017-06-20 17:19
+ * @modified 2017-06-20 17:19
+ * @version 1.0.0
  * @see ContactLocalServiceBaseImpl
  * @see ch.inofix.contact.service.ContactLocalServiceUtil
  */
@@ -246,145 +263,94 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
 
     }
 
-    /**
-     * Imports the contacts from the file.
-     *
-     * @param userId
-     *            the primary key of the user
-     * @param groupId
-     *            the primary key of the group
-     * @param privateLayout
-     *            whether the layout is private to the group
-     * @param parameterMap
-     *            the mapping of parameters indicating which information will be
-     *            imported.
-     * @param file
-     *            the file with the data
-     * @since 1.0.7
-     * @throws PortalException
-     *             if a group or user with the primary key could not be found,
-     *             or if some other portal exception occurred
-     * @see com.liferay.portal.lar.LayoutImporter
-     */
     @Override
-    public void importContacts(long userId, long groupId, boolean privateLayout, Map<String, String[]> parameterMap,
-            File file) throws PortalException {
+    public void importContacts(ExportImportConfiguration exportImportConfiguration, File file) throws PortalException {
 
-        // TODO Upgrade import
+        _log.info("importContacts");
 
-        // try {
-        // ContactImporter contactImporter = new ContactImporter();
-        //
-        // contactImporter.importContacts(userId, groupId, privateLayout,
-        // parameterMap, file);
-        // } catch (PortalException pe) {
-        // Throwable cause = pe.getCause();
-        //
-        // if (cause instanceof LocaleException) {
-        // throw (PortalException) cause;
-        // }
-        //
-        // _log.error(pe);
-        //
-        // throw pe;
-        // } catch (SystemException se) {
-        //
-        // _log.error(se);
-        //
-        // throw se;
-        // } catch (Exception e) {
-        //
-        // _log.error(e);
-        //
-        // throw new SystemException(e);
-        // }
+        try {
+            ImportController contactImportController = ExportImportControllerRegistryUtil
+                    .getImportController(Contact.class.getName());
+
+            contactImportController.importFile(exportImportConfiguration, file);
+
+        } catch (PortalException pe) {
+            Throwable cause = pe.getCause();
+
+            if (cause instanceof LocaleException) {
+                throw (PortalException) cause;
+            }
+
+            throw pe;
+        } catch (SystemException se) {
+            throw se;
+        } catch (Exception e) {
+            throw new SystemException(e);
+        }
     }
 
-    /**
-     * Imports the contacts from the input stream.
-     *
-     * @param userId
-     *            the primary key of the user
-     * @param groupId
-     *            the primary key of the group
-     * @param privateLayout
-     *            whether the layout is private to the group
-     * @param parameterMap
-     *            the mapping of parameters indicating which information will be
-     *            imported.
-     * @param is
-     *            the input stream
-     * @since 1.0.7
-     * @throws PortalException
-     *             if a group or user with the primary key could not be found,
-     *             or if some other portal exception occurred
-     * @throws SystemException
-     *             if a system exception occurred
-     */
     @Override
-    public void importContacts(long userId, long groupId, boolean privateLayout, Map<String, String[]> parameterMap,
-            InputStream is) throws PortalException {
+    public void importContacts(ExportImportConfiguration exportImportConfiguration, InputStream inputStream)
+            throws PortalException {
 
-        // TODO Upgrade import
+        _log.info("importContacts");
 
-        // File file = null;
-        //
-        // try {
-        // file = FileUtil.createTempFile("vcf");
-        //
-        // FileUtil.write(file, is);
-        //
-        // importContacts(userId, groupId, privateLayout, parameterMap, file);
-        //
-        // } catch (IOException ioe) {
-        //
-        // _log.error(ioe);
-        //
-        // throw new SystemException(ioe);
-        // } finally {
-        // FileUtil.delete(file);
-        // }
+        File file = null;
+
+        try {
+            file = FileUtil.createTempFile("lar");
+
+            FileUtil.write(file, inputStream);
+
+            importContacts(exportImportConfiguration, file);
+
+        } catch (IOException ioe) {
+            throw new SystemException(ioe);
+        } finally {
+            FileUtil.delete(file);
+        }
     }
 
-    /**
-     * @param userId
-     * @param taskName
-     * @param groupId
-     * @param privateLayout
-     * @param parameterMap
-     * @param file
-     * @return
-     * @since 1.0.7
-     * @throws PortalException
-     * @throws SystemException
-     */
     @Override
-    public long importContactsInBackground(long userId, String taskName, long groupId, boolean privateLayout,
-            Map<String, String[]> parameterMap, File file) throws PortalException {
+    public long importContactsInBackground(long userId, ExportImportConfiguration exportImportConfiguration, File file)
+            throws PortalException {
 
-        // TODO Upgrade import
+        _log.info("importContactsInBackground");
 
-        // Map<String, Serializable> taskContextMap = new HashMap<String,
-        // Serializable>();
-        // taskContextMap.put("userId", userId);
-        // taskContextMap.put("groupId", groupId);
-        // taskContextMap.put("parameterMap", (Serializable) parameterMap);
-        // taskContextMap.put("privateLayout", privateLayout);
-        //
-        // String[] servletContextNames =
-        // parameterMap.get("servletContextNames");
-        //
-        // BackgroundTask backgroundTask = BackgroundTaskLocalServiceUtil
-        // .addBackgroundTask(userId, groupId, taskName,
-        // servletContextNames,
-        // ContactImportBackgroundTaskExecutor.class,
-        // taskContextMap, new ServiceContext());
-        //
-        // BackgroundTaskLocalServiceUtil.addBackgroundTaskAttachment(userId,
-        // backgroundTask.getBackgroundTaskId(), taskName, file);
-        //
-        // return backgroundTask.getBackgroundTaskId();
-        return 0;
+        Map<String, Serializable> taskContextMap = new HashMap<>();
+
+        taskContextMap.put("exportImportConfigurationId", exportImportConfiguration.getExportImportConfigurationId());
+
+        BackgroundTask backgroundTask = BackgroundTaskManagerUtil.addBackgroundTask(userId,
+                exportImportConfiguration.getGroupId(), exportImportConfiguration.getName(),
+                ContactImportBackgroundTaskExecutor.class.getName(), taskContextMap, new ServiceContext());
+
+        backgroundTask.addAttachment(userId, file.getName(), file);
+
+        return backgroundTask.getBackgroundTaskId();
+    }
+
+    @Override
+    public long importContactsInBackground(long userId, ExportImportConfiguration exportImportConfiguration,
+            InputStream inputStream) throws PortalException {
+
+        _log.info("importContactsInBackground");
+
+        File file = null;
+
+        try {
+
+            file = FileUtil.createTempFile("lar");
+
+            FileUtil.write(file, inputStream);
+
+            return importContactsInBackground(userId, exportImportConfiguration, file);
+
+        } catch (IOException ioe) {
+            throw new SystemException(ioe);
+        } finally {
+            FileUtil.delete(file);
+        }
     }
 
     @Override
