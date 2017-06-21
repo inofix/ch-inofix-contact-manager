@@ -16,20 +16,7 @@
     String orderByType = ParamUtil.getString(request, "orderByType", "desc");
     String searchContainerId = "importContacthProcesses";
     tabs1 = ParamUtil.getString(request, "tabs1"); 
-    tabs2 = ParamUtil.getString(request, "tabs2"); 
-
-//     PortletURL portletURL = renderResponse.createRenderURL();
-
-//     portletURL.setParameter("groupId", String.valueOf(groupId));
-//     portletURL.setParameter("displayStyle", displayStyle);
-//     portletURL.setParameter("mvcPath", "/import/view.jsp"); 
-//     portletURL.setParameter("navigation", navigation);
-//     portletURL.setParameter("orderByCol", orderByCol);
-//     portletURL.setParameter("orderByType", orderByType);
-//     portletURL.setParameter("searchContainerId", searchContainerId);
-//     portletURL.setParameter("tabs1", tabs1);
-//     portletURL.setParameter("tabs2", tabs2);
-    
+    tabs2 = ParamUtil.getString(request, "tabs2");    
 %>
 
 <c:choose>
@@ -46,10 +33,10 @@
             <liferay-util:param name="orderByType" value="<%= orderByType %>" />
             <liferay-util:param name="searchContainerId" value="<%= searchContainerId %>" />
         </liferay-util:include>
-
         <liferay-util:include page="/import/add_button.jsp" servletContext="<%= application %>">
             <liferay-util:param name="groupId" value="<%= String.valueOf(groupId) %>" />
             <liferay-util:param name="displayStyle" value="<%= displayStyle %>" />
         </liferay-util:include>
     </c:otherwise>
 </c:choose>
+

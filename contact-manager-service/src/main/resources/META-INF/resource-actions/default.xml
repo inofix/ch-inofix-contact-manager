@@ -6,8 +6,8 @@
     default.xml: The contact-manager portlet's permission configuration.
     
     Created:    2015-05-19 18:32 by Christian Berndt
-    Modified:   2017-06-19 22:42 by Christian Berndt
-    Version:    1.0.4
+    Modified:   2017-06-20 19:28 by Christian Berndt
+    Version:    1.0.5
 -->
 <resource-action-mapping>
 
@@ -22,8 +22,9 @@
             <supports>
                 <action-key>ADD_CONTACT</action-key>
                 <action-key>DELETE_CONTACTS</action-key>
+                <action-key>EXPORT_CONTACTS</action-key>
                 <action-key>EXPORT_IMPORT_CONTACTS</action-key>
-<!--                 <action-key>IMPORT_CONTACTS</action-key> -->
+                <action-key>IMPORT_CONTACTS</action-key>
 <!--                 <action-key>PERMISSIONS</action-key> -->
             </supports>
             <site-member-defaults>
@@ -33,7 +34,9 @@
             <guest-unsupported>
                 <action-key>ADD_CONTACT</action-key>
                 <action-key>DELETE_CONTACTS</action-key>
+                <action-key>EXPORT_CONTACTS</action-key>
                 <action-key>EXPORT_IMPORT_CONTACTS</action-key>
+                <action-key>IMPORT_CONTACTS</action-key>
             </guest-unsupported>
         </permissions>
     </model-resource>

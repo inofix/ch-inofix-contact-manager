@@ -17,6 +17,7 @@
 %>
 
 <div id="<portlet:namespace />importProcessesSearchContainer">
+
     <liferay-util:include page="/export_import_toolbar.jsp" servletContext="<%= application %>">
         <liferay-util:param name="groupId" value="<%= String.valueOf(scopeGroupId) %>" />
         <liferay-util:param name="displayStyle" value="<%= displayStyle %>" />
@@ -25,7 +26,7 @@
         <liferay-util:param name="orderByType" value="<%= orderByType %>" />
         <liferay-util:param name="searchContainerId" value="<%= searchContainerId %>" />
     </liferay-util:include>
-
+    
     <div class="container-fluid-1280" id="<portlet:namespace />processesContainer">
         <liferay-util:include page="/import/processes_list/import_contacts_processes.jsp" servletContext="<%= application %>">
             <liferay-util:param name="groupId" value="<%= String.valueOf(scopeGroupId) %>" />

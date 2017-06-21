@@ -14,14 +14,23 @@
 
 package ch.inofix.contact.service.impl;
 
+import java.io.InputStream;
+import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
+import com.liferay.exportimport.kernel.model.ExportImportConfiguration;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.util.Digester;
+import com.liferay.portal.kernel.util.DigesterUtil;
+import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.util.TempFileEntryUtil;
 
 import aQute.bnd.annotation.ProviderType;
 import ch.inofix.contact.constants.ContactActionKeys;
@@ -47,8 +56,8 @@ import ch.inofix.contact.service.permission.ContactPermission;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-07 23:50
- * @modified 2017-04-10 15:55
- * @version 1.0.5
+ * @modified 2017-06-20 18:07
+ * @version 1.0.6
  * @see ContactServiceBaseImpl
  * @see ch.inofix.contact.service.ContactServiceUtil
  */
@@ -69,6 +78,20 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
 
         return contactLocalService.addContact(getUserId(), card, uid, serviceContext);
 
+    }
+
+    @Override
+    public FileEntry addTempFileEntry(long groupId, String folderName, String fileName, InputStream inputStream,
+            String mimeType) throws PortalException {
+
+        _log.info("addTempFileEntry");
+
+        // TODO: re-enable permission check
+        // ContactManagerPermission.check(getPermissionChecker(), groupId,
+        // ContactActionKeys.IMPORT_CONTACTS);
+
+        return TempFileEntryUtil.addTempFileEntry(groupId, getUserId(),
+                DigesterUtil.digestHex(Digester.SHA_256, folderName), fileName, inputStream, mimeType);
     }
 
     @Override
@@ -100,6 +123,17 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
     }
 
     @Override
+    public void deleteTempFileEntry(long groupId, String folderName, String fileName) throws PortalException {
+
+        // TODO: re-enable permission check
+        // ContactManagerPermission.check(getPermissionChecker(), groupId,
+        // ContactActionKeys.IMPORT_CONTACTS);
+
+        TempFileEntryUtil.deleteTempFileEntry(groupId, getUserId(),
+                DigesterUtil.digestHex(Digester.SHA_256, folderName), fileName);
+    }
+
+    @Override
     public Contact getContact(long contactId) throws PortalException {
 
         ContactPermission.check(getPermissionChecker(), contactId, ContactActionKeys.VIEW);
@@ -108,19 +142,35 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
 
     }
 
-    // TODO reactivate import
-    // public long importContactsInBackground(long userId, String taskName,
-    // long groupId, boolean privateLayout,
-    // Map<String, String[]> parameterMap, File file)
-    // throws PortalException {
-    //
-    // ContactPortletPermission.check(getPermissionChecker(), groupId,
-    // ActionKeys.IMPORT_CONTACTS);
-    //
-    // return ContactLocalServiceUtil.importContactsInBackground(userId,
-    // taskName, groupId, privateLayout, parameterMap, file);
-    //
-    // }
+    @Override
+    public String[] getTempFileNames(long groupId, String folderName) throws PortalException {
+
+        // TODO: re-enable permission checks
+        // ContactManagerPermission.check(getPermissionChecker(), groupId,
+        // ContactActionKeys.EXPORT_IMPORT_CONTACTS);
+
+        return TempFileEntryUtil.getTempFileNames(groupId, getUserId(),
+                DigesterUtil.digestHex(Digester.SHA_256, folderName));
+    }
+
+    @Override
+    public long importContactsInBackground(ExportImportConfiguration exportImportConfiguration, InputStream inputStream)
+            throws PortalException {
+
+        _log.info("importContactsInBackground()");
+
+        Map<String, Serializable> settingsMap = exportImportConfiguration.getSettingsMap();
+
+        long targetGroupId = MapUtil.getLong(settingsMap, "targetGroupId");
+
+        _log.info("targetGroupId = " + targetGroupId);
+
+        // TODO: re-enable permission checks
+        // ContactManagerPermission.check(getPermissionChecker(), targetGroupId,
+        // ContactActionKeys.IMPORT_CONTACTS);
+
+        return contactLocalService.importContactsInBackground(getUserId(), exportImportConfiguration, inputStream);
+    }
 
     @Override
     public Hits search(long userId, long groupId, String keywords, int start, int end, Sort sort)
@@ -139,5 +189,5 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
 
     }
 
-    private static Log log = LogFactoryUtil.getLog(ContactServiceImpl.class.getName());
+    private static Log _log = LogFactoryUtil.getLog(ContactServiceImpl.class.getName());
 }

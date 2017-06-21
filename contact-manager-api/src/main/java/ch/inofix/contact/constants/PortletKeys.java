@@ -3,7 +3,7 @@ package ch.inofix.contact.constants;
 /**
  *
  * @author Stefan Luebbers
- * @author Christian Bernd
+ * @author Christian Berndt
  * @created 2017-03-29 10:30
  * @modified 2017-04-14 00:14
  * @version 1.0.1

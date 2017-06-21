@@ -2,8 +2,8 @@
     init.jsp: Common setup code for the contact manager portlet.
 
     Created:     2017-03-30 16:44 by Stefan Luebbers
-    Modified:    2017-06-19 23:24 by Christian Berndt
-    Version:     1.0.5
+    Modified:    2017-06-20 18:49 by Christian Berndt
+    Version:     1.0.6
 --%>
 
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -31,16 +31,21 @@
 <%@page import="ch.inofix.contact.web.internal.search.ContactSearch"%>
 <%@page import="ch.inofix.contact.web.internal.search.ContactSearchTerms"%>
 
+<%@page import="com.liferay.exportimport.kernel.lar.ExportImportHelper"%>
+<%@page import="com.liferay.exportimport.kernel.lar.ExportImportHelperUtil"%>
+<%@page import="com.liferay.portal.kernel.backgroundtask.BackgroundTask"%>
 <%@page import="com.liferay.portal.kernel.backgroundtask.BackgroundTaskManagerUtil"%>
 <%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchContainer"%>
 <%@page import="com.liferay.portal.kernel.exception.PortalException"%>
 <%@page import="com.liferay.portal.kernel.exception.SystemException"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="com.liferay.portal.kernel.model.Group"%>
 <%@page import="com.liferay.portal.kernel.model.User"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portal.kernel.portlet.PortalPreferences"%>
 <%@page import="com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
 <%@page import="com.liferay.portal.kernel.search.Document"%>
 <%@page import="com.liferay.portal.kernel.search.Field"%>
 <%@page import="com.liferay.portal.kernel.search.Hits"%>
@@ -66,6 +71,7 @@
 <%@page import="com.liferay.portal.kernel.util.SetUtil"%>
 <%@page import="com.liferay.portal.kernel.util.StringPool"%>
 <%@page import="com.liferay.portal.kernel.util.StringUtil"%>
+<%@page import="com.liferay.portal.kernel.util.TextFormatter"%>
 <%@page import="com.liferay.portal.kernel.util.Validator"%>
 <%@page import="com.liferay.portal.kernel.util.WebKeys"%>
 <%@page import="com.liferay.portal.kernel.workflow.WorkflowConstants"%>
@@ -93,7 +99,7 @@
     String tabs1 = ParamUtil.getString(request, "tabs1", "timetracker");
     String tabs2 = ParamUtil.getString(request, "tabs2", "export");
 
-    ContactManagerConfiguration contactManagerConfiguration = (ContactManagerConfiguration) renderRequest
+    ContactManagerConfiguration contactManagerConfiguration = (ContactManagerConfiguration) request
             .getAttribute(ContactManagerConfiguration.class.getName());
 
     if (Validator.isNotNull(contactManagerConfiguration)) {
