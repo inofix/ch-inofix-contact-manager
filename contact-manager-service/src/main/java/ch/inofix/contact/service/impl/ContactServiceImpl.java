@@ -16,6 +16,7 @@ package ch.inofix.contact.service.impl;
 
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,8 +57,8 @@ import ch.inofix.contact.service.permission.ContactPermission;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-07 23:50
- * @modified 2017-06-20 18:07
- * @version 1.0.6
+ * @modified 2017-06-22 16:51
+ * @version 1.0.7
  * @see ContactServiceBaseImpl
  * @see ch.inofix.contact.service.ContactServiceUtil
  */
@@ -177,6 +178,15 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
             throws PortalException {
 
         return contactLocalService.search(userId, groupId, keywords, start, end, sort);
+    }
+
+    @Override
+    public Hits search(long userId, long groupId, long ownerUserId, String company, String fullName, int status,
+            LinkedHashMap<String, Object> params, boolean andSearch, int start, int end, Sort sort)
+            throws PortalException {
+
+        return contactLocalService.search(userId, groupId, ownerUserId, company, fullName, status, params, andSearch,
+                start, end, sort);
     }
 
     @Override

@@ -96,7 +96,7 @@
 
     String markupView = "lexicon";
 
-    String tabs1 = ParamUtil.getString(request, "tabs1", "timetracker");
+    String tabs1 = ParamUtil.getString(request, "tabs1", "contacts");
     String tabs2 = ParamUtil.getString(request, "tabs2", "export");
 
     ContactManagerConfiguration contactManagerConfiguration = (ContactManagerConfiguration) request

@@ -3,6 +3,8 @@ package ch.inofix.contact.web.internal.search;
 import javax.portlet.PortletRequest;
 
 import com.liferay.portal.kernel.dao.search.DisplayTerms;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -12,8 +14,8 @@ import com.liferay.portal.kernel.util.Validator;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-24 22:12
- * @modified 2017-06-19 17:25
- * @version 1.0.5
+ * @modified 2017-06-22 16:51
+ * @version 1.0.6
  *
  */
 public class ContactDisplayTerms extends DisplayTerms {
@@ -48,6 +50,7 @@ public class ContactDisplayTerms extends DisplayTerms {
         if (Validator.isNotNull(statusString)) {
             status = GetterUtil.getInteger(statusString);
         }
+
         phone = ParamUtil.getString(portletRequest, PHONE);
         userName = ParamUtil.getString(portletRequest, USER_NAME);
     }
@@ -151,5 +154,7 @@ public class ContactDisplayTerms extends DisplayTerms {
     protected String phone;
     protected int status;
     protected String userName;
+
+    private static Log _log = LogFactoryUtil.getLog(ContactDisplayTerms.class);
 
 }

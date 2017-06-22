@@ -2,17 +2,15 @@
  * main.css: The contact-manager portlet's css configuration
  *
  * Created:     2015-05-08 15:51 by Christian Berndt
- * Modified:    2017-04-12 15:50 by Christian Berndt
- * Version:     1.2.0
+ * Modified:    2017-06-22 17:05 by Christian Berndt
+ * Version:     1.2.1
  *
  */
 @import "bourbon";
 @import "mixins";
 
 .item-remove {
-    
-    .taglib-text-icon {   
-     
+    .taglib-text-icon {    
         &:before {
             content: "\f00d"; 
             font-family: 'fontawesome-alloy';
@@ -31,5 +29,52 @@
 }
  
 .portlet-contact-manager {
+    
+    .contact-search {
+    
+        .basic-search {
+            margin-right: 30px;
+        }
+    
+        .btn-xs {
+        
+            position: absolute; 
+            right: 0; 
+            top: 16px;
+        
+            .icon-monospaced {
+            
+                height: 16px;
+                line-height: 16px;
+                width: 16px;
+                
+                .lexicon-icon {
+                    height: 16px;
+                    line-height: 16px;
+                    width: 16px;
+                    padding: 4px;                
+                }
+            }
+        }
+    
+        fieldset {
+            display: inline;
+            vertical-align: top;            
+        }
+        
+        .form-group {
+            margin-right: 10px;
+        }
+        
+        .form-group-inline {
+            vertical-align: top;
+        }
+        
+        .lfr-input-date {
+            .form-control {
+                width: 100px;
+            }
+        }
+    }
 }
 

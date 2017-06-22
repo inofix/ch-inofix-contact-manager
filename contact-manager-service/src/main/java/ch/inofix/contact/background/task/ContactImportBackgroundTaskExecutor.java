@@ -19,11 +19,15 @@ import com.liferay.portal.kernel.util.FileUtil;
 
 import ch.inofix.contact.service.ContactLocalServiceUtil;
 
+/**
+ * @author Christian Berndt
+ * @created 2017-06-19 00:09
+ * @modified 2017-06-22 10:10
+ * @version 1.0.1
+ */
 public class ContactImportBackgroundTaskExecutor extends BaseExportImportBackgroundTaskExecutor {
 
     public ContactImportBackgroundTaskExecutor() {
-
-        _log.info("ContactImportBackgroundTaskExecutor()");
 
         // TODO
         // setBackgroundTaskStatusMessageTranslator(new
