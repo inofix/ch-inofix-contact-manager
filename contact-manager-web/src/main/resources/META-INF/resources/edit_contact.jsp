@@ -2,8 +2,8 @@
     edit_contact.jsp: edit a single contact. 
     
     Created:    2015-05-07 23:40 by Christian Berndt
-    Modified:   2017-06-19 17:32 by Christian Berndt
-    Version:    1.1.9
+    Modified:   2017-06-22 17:54 by Christian Berndt
+    Version:    1.2.0
 --%>
 
 <%@ include file="init.jsp"%>
@@ -39,12 +39,14 @@
 
 <div class="container-fluid-1280">
 
-    <portlet:actionURL name="updateContact" var="updateContactURL">
+    <portlet:actionURL var="updateContactURL">
         <portlet:param name="mvcPath" value="/edit_contact.jsp" />
     </portlet:actionURL>
 
     <aui:form method="post" action="<%=updateContactURL%>" name="fm">
 
+        <aui:input name="cmd" type="hidden" 
+            value="<%= Constants.UPDATE %>"/>
         <aui:input name="contactId" type="hidden"
             value="<%=String.valueOf(contact_.getContactId())%>" />
         <aui:input name="redirect" type="hidden"
