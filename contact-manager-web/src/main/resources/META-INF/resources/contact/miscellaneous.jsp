@@ -277,7 +277,7 @@
 </aui:fieldset>
 
 
-<%-- Configure autofields --%>
+<%-- Configure autofields 
 <aui:script use="liferay-auto-fields">
 
     var expertiseAutoFields = new Liferay.AutoFields({
@@ -317,3 +317,4 @@
     }).render();
 
 </aui:script>
+--%>

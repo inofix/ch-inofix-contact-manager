@@ -1062,7 +1062,7 @@ public class ContactImpl extends ContactBaseImpl {
             urlDTOs.add(urlDTO);
         }
 
-        // an empty default email
+        // an empty default url
         if (urlDTOs.size() == 0) {
             urlDTOs.add(new UrlDTO());
         }

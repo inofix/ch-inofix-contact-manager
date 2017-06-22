@@ -158,7 +158,7 @@
 </aui:fieldset>
 
  
-<%-- Configure autofields --%>
+<%-- Configure autofields 
 <aui:script use="liferay-auto-fields">
 	var photoAutoFields = new Liferay.AutoFields({
 		contentBox : 'fieldset#<portlet:namespace />photos',
@@ -208,4 +208,4 @@
         }
     }).render();
 </aui:script>
- 
+ --%>
