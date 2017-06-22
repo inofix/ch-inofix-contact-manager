@@ -2,8 +2,8 @@
     contact_action.jsp: The action menu of the contact manager's default view.
     
     Created:    2017-04-11 16:00 by Stefan Luebbers
-    Modified:   2017-06-19 17:12 by Christian Berndt
-    Version:    1.0.2
+    Modified:   2017-06-22 19:19 by Christian Berndt
+    Version:    1.0.3
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -61,7 +61,8 @@
 
     <c:if test="<%=hasDeletePermission%>">
 
-        <portlet:actionURL var="deleteURL" name="deleteContact">
+        <portlet:actionURL var="deleteURL">
+            <portlet:param name="cmd" value="<%= Constants.DELETE %>"/>
             <portlet:param name="redirect" value="<%=currentURL%>" />
             <portlet:param name="contactId"
                 value="<%=String.valueOf(contact_.getContactId())%>" />

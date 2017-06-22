@@ -94,8 +94,8 @@ import ezvcard.property.Uid;
  * @author Stefan Luebbers
  * @author Christian Berndt
  * @created 2017-03-30 19:52
- * @modified 2017-06-22 17:14
- * @version 1.0.6
+ * @modified 2017-06-22 19:22
+ * @version 1.0.7
  */
 @Component(immediate = true, property = { "com.liferay.portlet.css-class-wrapper=portlet-contact-manager",
         "com.liferay.portlet.display-category=category.inofix",
@@ -131,6 +131,11 @@ public class ContactManagerPortlet extends MVCPortlet {
 
                 validateFile(actionRequest, actionResponse, ExportImportHelper.TEMP_FOLDER_NAME);
                 hideDefaultSuccessMessage(actionRequest);
+
+            } else if (cmd.equals(Constants.DELETE)) {
+
+                deleteContacts(actionRequest, actionResponse);
+                addSuccessMessage(actionRequest, actionResponse);
 
             } else if (cmd.equals(Constants.DELETE_TEMP)) {
 
@@ -303,6 +308,24 @@ public class ContactManagerPortlet extends MVCPortlet {
 
             throw new PortalException(cause);
         }
+    }
+
+    protected void deleteContacts(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+
+        _log.info("deleteContacts");
+
+        long contactId = ParamUtil.getLong(actionRequest, "contactId");
+
+        long[] contactIds = ParamUtil.getLongValues(actionRequest, "deleteContactIds");
+
+        if (contactId > 0) {
+            contactIds = new long[] { contactId };
+        }
+
+        for (long id : contactIds) {
+            _contactService.deleteContact(id);
+        }
+
     }
 
     protected void deleteTempFileEntry(ActionRequest actionRequest, ActionResponse actionResponse, String folderName)
