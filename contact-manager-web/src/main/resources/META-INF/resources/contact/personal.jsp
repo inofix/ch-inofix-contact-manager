@@ -225,7 +225,7 @@
     </aui:container>
 </aui:fieldset>
 
-<%-- Configure auto-fields --%>
+<%-- Configure auto-fields 
 <aui:script use="liferay-auto-fields">
 
     var urlAutoFields = new Liferay.AutoFields({
@@ -278,3 +278,4 @@
 
 </aui:script>
 
+--%>

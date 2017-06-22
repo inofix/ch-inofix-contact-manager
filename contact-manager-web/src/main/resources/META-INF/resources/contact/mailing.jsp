@@ -8,7 +8,6 @@
 
 <%@ include file="/init.jsp"%>
 
-<%-- Import required classes --%>
 <%@page import="ezvcard.parameter.AddressType"%>
 <%@page import="ch.inofix.contact.dto.AddressDTO"%>
 
@@ -97,7 +96,7 @@
 </aui:fieldset>
 
 
-<%-- Configure auto-fields --%>
+<%-- Configure auto-fields 
 <aui:script use="liferay-auto-fields">
 
     var addressAutoFields = new Liferay.AutoFields({
@@ -113,3 +112,5 @@
     }).render();
     
 </aui:script>
+
+--%>

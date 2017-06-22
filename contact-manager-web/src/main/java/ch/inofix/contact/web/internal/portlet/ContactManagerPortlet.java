@@ -63,6 +63,7 @@ import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.upload.UploadRequestSizeException;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
@@ -93,8 +94,8 @@ import ezvcard.property.Uid;
  * @author Stefan Luebbers
  * @author Christian Berndt
  * @created 2017-03-30 19:52
- * @modified 2017-06-21 18:11
- * @version 1.0.5
+ * @modified 2017-06-22 17:14
+ * @version 1.0.6
  */
 @Component(immediate = true, property = { "com.liferay.portlet.css-class-wrapper=portlet-contact-manager",
         "com.liferay.portlet.display-category=category.inofix",
@@ -187,6 +188,23 @@ public class ContactManagerPortlet extends MVCPortlet {
     }
 
     @Override
+    public void render(RenderRequest renderRequest, RenderResponse renderResponse)
+            throws IOException, PortletException {
+
+        try {
+            getContact(renderRequest);
+        } catch (Exception e) {
+            if (e instanceof NoSuchResourceException || e instanceof PrincipalException) {
+                SessionErrors.add(renderRequest, e.getClass());
+            } else {
+                throw new PortletException(e);
+            }
+        }
+
+        super.render(renderRequest, renderResponse);
+    }
+
+    @Override
     public void serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
             throws PortletException {
 
@@ -214,145 +232,6 @@ public class ContactManagerPortlet extends MVCPortlet {
         } catch (Exception e) {
             throw new PortletException(e);
         }
-    }
-
-    @Override
-    public void render(RenderRequest renderRequest, RenderResponse renderResponse)
-            throws IOException, PortletException {
-
-        try {
-            getContact(renderRequest);
-        } catch (Exception e) {
-            if (e instanceof NoSuchResourceException || e instanceof PrincipalException) {
-                SessionErrors.add(renderRequest, e.getClass());
-            } else {
-                throw new PortletException(e);
-            }
-        }
-
-        super.render(renderRequest, renderResponse);
-    }
-
-    public void updateContact(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-
-        ServiceContext serviceContext = ServiceContextFactory.getInstance(Contact.class.getName(), actionRequest);
-
-        UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
-
-        long contactId = ParamUtil.getLong(actionRequest, "contactId");
-
-        Contact contact = null;
-
-        String card = "";
-        String uid = null;
-
-        if (contactId > 0) {
-
-            contact = _contactService.getContact(contactId);
-            uid = contact.getUid();
-            card = contact.getCard();
-
-        } else {
-
-            VCard vCard = new VCard();
-            vCard.setUid(Uid.random());
-            uid = vCard.getUid().getValue();
-            card = Ezvcard.write(vCard).version(VCardVersion.V4_0).go();
-
-        }
-
-        // Pass the required parameters to the render phase
-
-        actionResponse.setRenderParameter("contactId", String.valueOf(contactId));
-        // actionResponse.setRenderParameter("backURL", backURL);
-        // actionResponse.setRenderParameter("historyKey", historyKey);
-        // actionResponse.setRenderParameter("mvcPath", mvcPath);
-        // actionResponse.setRenderParameter("redirect", redirect);
-        // actionResponse.setRenderParameter("windowId", windowId);
-
-        // Retrieve associated file data
-        File[] keyFiles = uploadPortletRequest.getFiles("key.file");
-        File[] logoFiles = uploadPortletRequest.getFiles("logo.file");
-        File[] photoFiles = uploadPortletRequest.getFiles("photo.file");
-        File[] soundFiles = uploadPortletRequest.getFiles("sound.file");
-
-        Map<String, File[]> map = new HashMap<String, File[]>();
-
-        if (keyFiles != null) {
-            map.put("key.file", keyFiles);
-        }
-        if (logoFiles != null) {
-            map.put("logo.file", logoFiles);
-        }
-        if (photoFiles != null) {
-            map.put("photo.file", photoFiles);
-        }
-        if (soundFiles != null) {
-            map.put("sound.file", soundFiles);
-        }
-
-        // Update the vCard with the request parameters
-
-        try {
-
-            VCard vCard = Ezvcard.parse(card).first();
-            vCard = PortletUtil.getVCard(uploadPortletRequest, vCard, map);
-            card = Ezvcard.write(vCard).version(VCardVersion.V4_0).go();
-
-            _log.debug(card);
-
-        } catch (ImageFileFormatException iffe) {
-
-            SessionErrors.add(actionRequest, "the-image-file-format-is-not-supported");
-
-            // Store the unmodified contact as a request attribute
-
-            uploadPortletRequest.setAttribute(ContactManagerWebKeys.CONTACT, contact);
-
-            return;
-
-        } catch (KeyFileFormatException kffe) {
-
-            SessionErrors.add(actionRequest, "the-key-file-format-is-not-supported");
-
-            // Store the unmodified contact as a request attribute
-
-            uploadPortletRequest.setAttribute(ContactManagerWebKeys.CONTACT, contact);
-
-            return;
-
-        } catch (SoundFileFormatException sffe) {
-
-            SessionErrors.add(actionRequest, "the-sound-file-format-is-not-supported");
-
-            // Store the unmodified contact as a request attribute
-
-            uploadPortletRequest.setAttribute(ContactManagerWebKeys.CONTACT, contact);
-
-            return;
-        }
-
-        // Store contact information in vCard format
-
-        if (contactId <= 0) {
-
-            // Add contact
-
-            contact = _contactService.addContact(card, uid, serviceContext);
-
-        } else {
-
-            // Update contact
-
-            contact = _contactService.updateContact(contactId, card, uid, serviceContext);
-        }
-
-        // TODO
-        // String redirect = getEditContactURL(actionRequest, actionResponse,
-        // contact);
-
-        // actionRequest.setAttribute(WebKeys.REDIRECT, redirect);
-
     }
 
     @Activate
@@ -484,6 +363,35 @@ public class ContactManagerPortlet extends MVCPortlet {
         portletRequest.setAttribute(ContactManagerWebKeys.CONTACT, contact);
     }
 
+    protected String getEditContactURL(ActionRequest actionRequest, ActionResponse actionResponse, Contact contact)
+            throws Exception {
+
+        _log.info("getEditContactURL");
+
+        ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+        String editContactURL = getRedirect(actionRequest, actionResponse);
+
+        if (Validator.isNull(editContactURL)) {
+            editContactURL = PortalUtil.getLayoutFullURL(themeDisplay);
+        }
+
+        String namespace = actionResponse.getNamespace();
+        String windowState = actionResponse.getWindowState().toString();
+
+        editContactURL = HttpUtil.setParameter(editContactURL, "p_p_id", PortletKeys.CONTACT_MANAGER);
+        editContactURL = HttpUtil.setParameter(editContactURL, "p_p_state", windowState);
+        editContactURL = HttpUtil.setParameter(editContactURL, namespace + "mvcPath",
+                templatePath + "edit_contact.jsp");
+        editContactURL = HttpUtil.setParameter(editContactURL, namespace + "redirect",
+                getRedirect(actionRequest, actionResponse));
+        editContactURL = HttpUtil.setParameter(editContactURL, namespace + "backURL",
+                ParamUtil.getString(actionRequest, "backURL"));
+        editContactURL = HttpUtil.setParameter(editContactURL, namespace + "contactId", contact.getContactId());
+
+        return editContactURL;
+    }
+
     /**
      * from ExportLayoutsMVCAction
      *
@@ -564,11 +472,11 @@ public class ContactManagerPortlet extends MVCPortlet {
     /**
      * Disable the get- / sendRedirect feature of LiferayPortlet.
      */
-    @Override
-    protected String getRedirect(ActionRequest actionRequest, ActionResponse actionResponse) {
-
-        return null;
-    }
+//    @Override
+//    protected String getRedirect(ActionRequest actionRequest, ActionResponse actionResponse) {
+//
+//        return null;
+//    }
 
     protected void importContacts(ActionRequest actionRequest, String folderName) throws Exception {
 
@@ -611,8 +519,7 @@ public class ContactManagerPortlet extends MVCPortlet {
 
     }
 
-    protected void importContacts(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
-            throws Exception {
+    protected void importContacts(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws Exception {
 
         String cmd = ParamUtil.getString(resourceRequest, Constants.CMD);
 
@@ -650,6 +557,126 @@ public class ContactManagerPortlet extends MVCPortlet {
     @Reference(unbind = "-")
     protected void setExportImportService(ExportImportService exportImportService) {
         _exportImportService = exportImportService;
+    }
+
+    protected void updateContact(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+
+        _log.info("updateContact");
+
+        ServiceContext serviceContext = ServiceContextFactory.getInstance(Contact.class.getName(), actionRequest);
+
+        UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
+
+        long contactId = ParamUtil.getLong(actionRequest, "contactId");
+
+        Contact contact = null;
+
+        String card = "";
+        String uid = null;
+
+        if (contactId > 0) {
+
+            contact = _contactService.getContact(contactId);
+            uid = contact.getUid();
+            card = contact.getCard();
+
+        } else {
+
+            VCard vCard = new VCard();
+            vCard.setUid(Uid.random());
+            uid = vCard.getUid().getValue();
+            card = Ezvcard.write(vCard).version(VCardVersion.V4_0).go();
+
+        }
+
+        _log.info("card = " + card);
+
+        // Retrieve associated file data
+        File[] keyFiles = uploadPortletRequest.getFiles("key.file");
+        File[] logoFiles = uploadPortletRequest.getFiles("logo.file");
+        File[] photoFiles = uploadPortletRequest.getFiles("photo.file");
+        File[] soundFiles = uploadPortletRequest.getFiles("sound.file");
+
+        Map<String, File[]> map = new HashMap<String, File[]>();
+
+        if (keyFiles != null) {
+            map.put("key.file", keyFiles);
+        }
+        if (logoFiles != null) {
+            map.put("logo.file", logoFiles);
+        }
+        if (photoFiles != null) {
+            map.put("photo.file", photoFiles);
+        }
+        if (soundFiles != null) {
+            map.put("sound.file", soundFiles);
+        }
+
+        // Update the vCard with the request parameters
+
+        try {
+
+            VCard vCard = Ezvcard.parse(card).first();
+            vCard = PortletUtil.getVCard(uploadPortletRequest, vCard, map);
+            card = Ezvcard.write(vCard).version(VCardVersion.V4_0).go();
+
+            _log.debug(card);
+
+        } catch (ImageFileFormatException iffe) {
+
+            SessionErrors.add(actionRequest, "the-image-file-format-is-not-supported");
+
+            // Store the unmodified contact as a request attribute
+
+            uploadPortletRequest.setAttribute(ContactManagerWebKeys.CONTACT, contact);
+
+            return;
+
+        } catch (KeyFileFormatException kffe) {
+
+            SessionErrors.add(actionRequest, "the-key-file-format-is-not-supported");
+
+            // Store the unmodified contact as a request attribute
+
+            uploadPortletRequest.setAttribute(ContactManagerWebKeys.CONTACT, contact);
+
+            return;
+
+        } catch (SoundFileFormatException sffe) {
+
+            SessionErrors.add(actionRequest, "the-sound-file-format-is-not-supported");
+
+            // Store the unmodified contact as a request attribute
+
+            uploadPortletRequest.setAttribute(ContactManagerWebKeys.CONTACT, contact);
+
+            return;
+        }
+
+        // Store contact information in vCard format
+
+        if (contactId <= 0) {
+
+            // Add contact
+
+            _log.info("add contact");
+
+            contact = _contactService.addContact(card, uid, serviceContext);
+
+        } else {
+
+            // Update contact
+
+            _log.info("update contact");
+
+            contact = _contactService.updateContact(contactId, card, uid, serviceContext);
+        }
+
+        // TODO
+        String redirect = getEditContactURL(actionRequest, actionResponse, contact);
+
+        actionRequest.setAttribute(WebKeys.REDIRECT, redirect);
+
     }
 
     protected void validateFile(ActionRequest actionRequest, ActionResponse actionResponse, String folderName)
@@ -713,8 +740,6 @@ public class ContactManagerPortlet extends MVCPortlet {
     private ExportImportService _exportImportService;
 
     private volatile ContactManagerConfiguration _contactManagerConfiguration;
-
-    // private static final String REQUEST_PROCESSED = "request_processed";
 
     private static final Log _log = LogFactoryUtil.getLog(ContactManagerPortlet.class.getName());
 

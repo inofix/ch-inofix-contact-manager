@@ -21,7 +21,7 @@
     }
 
     String redirect = ParamUtil.getString(request, "redirect");
-    
+
     String backURL = ParamUtil.getString(request, "backURL", redirect);
     
     portletDisplay.setShowBackIcon(true);
@@ -45,6 +45,8 @@
 
     <aui:form method="post" action="<%=updateContactURL%>" name="fm">
 
+        <aui:input name="backURL" type="hidden"
+            value="<%= backURL %>" />
         <aui:input name="cmd" type="hidden" 
             value="<%= Constants.UPDATE %>"/>
         <aui:input name="contactId" type="hidden"
@@ -53,12 +55,21 @@
             value="<%= redirect %>" />
 
         <div class="lfr-form-content">
+        
+<%--             <liferay-util:include page="/contact/general.jsp" servletContext="<%= application %>"/> --%>
 
             <liferay-ui:form-navigator
                 showButtons="<%=hasUpdatePermission%>"
                 id="<%=FormNavigatorConstants.FORM_NAVIGATOR_ID_CONTACT%>" />
 
         </div>
+        
+        <%-- 
+        <aui:button-row>
+            <aui:button cssClass="btn-lg" disabled="<%= !hasUpdatePermission %>" type="submit" />           
+            <aui:button cssClass="btn-lg" href="<%= redirect %>" type="cancel" />
+        </aui:button-row>
+        --%>
 
     </aui:form>
 

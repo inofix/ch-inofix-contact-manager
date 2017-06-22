@@ -315,7 +315,42 @@
 
 </aui:fieldset>
 
-<%-- Configure auto-fields --%>
+<aui:fieldset>
+    <aui:select name="status" disabled="<%=!hasUpdatePermission%>">
+        <aui:option
+            value="<%=WorkflowConstants.STATUS_APPROVED%>"
+            selected="<%=WorkflowConstants.STATUS_APPROVED == contact_.getStatus()%>">
+            <liferay-ui:message key="approved" />
+        </aui:option>
+        <aui:option
+            value="<%=WorkflowConstants.STATUS_DENIED%>"
+            selected="<%=WorkflowConstants.STATUS_DENIED == contact_.getStatus()%>">
+            <liferay-ui:message key="denied" />
+        </aui:option>
+        <aui:option
+            value="<%=WorkflowConstants.STATUS_DRAFT%>"
+            selected="<%=WorkflowConstants.STATUS_DRAFT == contact_.getStatus()%>">
+            <liferay-ui:message key="draft" />
+        </aui:option>
+        <aui:option
+            value="<%=WorkflowConstants.STATUS_INACTIVE%>"
+            selected="<%=WorkflowConstants.STATUS_INACTIVE == contact_.getStatus()%>">
+            <liferay-ui:message key="inactive" />
+        </aui:option>
+        <aui:option
+            value="<%=WorkflowConstants.STATUS_INCOMPLETE%>"
+            selected="<%=WorkflowConstants.STATUS_INCOMPLETE == contact_.getStatus()%>">
+            <liferay-ui:message key="incomplete" />
+        </aui:option>
+        <aui:option
+            value="<%=WorkflowConstants.STATUS_PENDING%>"
+            selected="<%=WorkflowConstants.STATUS_PENDING == contact_.getStatus()%>">
+            <liferay-ui:message key="pending" />
+        </aui:option>
+    </aui:select>
+</aui:fieldset>
+
+<%-- Configure auto-fields 
 <aui:script use="liferay-auto-fields">
 
     var emailAutoFields = new Liferay.AutoFields({
@@ -367,3 +402,5 @@
     }).render();
 
 </aui:script>
+
+--%>

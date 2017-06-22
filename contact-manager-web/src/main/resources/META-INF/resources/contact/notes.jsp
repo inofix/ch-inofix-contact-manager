@@ -8,7 +8,6 @@
 
 <%@ include file="/init.jsp"%>
 
-<%-- Import required classes --%>
 <%@page import="ch.inofix.contact.dto.NoteDTO"%>
 
 <%
@@ -52,7 +51,7 @@
     %>
 </aui:fieldset>
 
-<%-- Configure auto-fields --%>
+<%-- Configure auto-fields 
 <aui:script use="liferay-auto-fields">
 
     var noteAutoFields = new Liferay.AutoFields({
@@ -68,3 +67,5 @@
     }).render();
 
 </aui:script>
+--%>
+
