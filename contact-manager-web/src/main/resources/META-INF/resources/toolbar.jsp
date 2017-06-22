@@ -2,12 +2,13 @@
     toolbar.jsp: The toolbar of the contact-manager portlet
     
     Created:    2015-07-03 19:00 by Christian Berndt
-    Modified:   2017-06-19 15:57 by Christian Berndt
-    Version:    1.0.3
+    Modified:   2017-06-22 19:12 by Christian Berndt
+    Version:    1.0.4
  --%>
 
 <%@ include file="init.jsp"%>
 
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="com.liferay.trash.kernel.util.TrashUtil"%>
 
 <%
@@ -22,8 +23,7 @@
     int total = GetterUtil.getInteger(request.getAttribute("view.jsp-total"));
     
     PortletURL portletURL = renderResponse.createRenderURL();
-    portletURL.setParameters(renderRequest.getParameterMap());
-    
+    portletURL.setParameters(renderRequest.getParameterMap());  
 %>
 
 <liferay-frontend:management-bar 
@@ -48,6 +48,30 @@
         <liferay-util:include page="/display_style_buttons.jsp"
             servletContext="<%=application%>" />
     </liferay-frontend:management-bar-buttons>
+    
+    <liferay-frontend:management-bar-action-buttons>
+        <%--    
+        <liferay-frontend:management-bar-sidenav-toggler-button
+            icon="info-circle"
+            label="info"
+        />
+        --%>
+        <liferay-frontend:management-bar-button href='<%= "javascript:" + renderResponse.getNamespace() + "deleteEntries();" %>' icon='<%= "times" %>' label='<%= "delete" %>' />
+<%--         <liferay-frontend:management-bar-button href='<%= "javascript:" + renderResponse.getNamespace() + "deleteEntries();" %>' icon='<%= TrashUtil.isTrashEnabled(scopeGroupId) ? "trash" : "times" %>' label='<%= TrashUtil.isTrashEnabled(scopeGroupId) ? "recycle-bin" : "delete" %>' /> --%>
+    </liferay-frontend:management-bar-action-buttons>
 
 </liferay-frontend:management-bar>
 
+<aui:script>
+    function <portlet:namespace />deleteEntries() {
+        if (confirm('<%= UnicodeLanguageUtil.get(request, "are-you-sure-you-want-to-delete-the-selected-entries") %>')) {
+            var form = AUI.$(document.<portlet:namespace />fm);
+
+            form.attr('method', 'post');
+            form.fm('<%= Constants.CMD %>').val('<%= Constants.DELETE %>');
+            form.fm('deleteContactIds').val(Liferay.Util.listCheckedExcept(form, '<portlet:namespace />allRowIds'));
+
+            submitForm(form);
+        }
+    }
+</aui:script>
