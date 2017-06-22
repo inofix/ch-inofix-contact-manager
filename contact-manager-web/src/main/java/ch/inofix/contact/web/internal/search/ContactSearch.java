@@ -29,8 +29,8 @@ import ch.inofix.contact.model.Contact;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-24 22:01
- * @modified 2017-06-19 17:21
- * @version 1.0.7
+ * @modified 2017-06-21 23:37
+ * @version 1.0.8
  *
  */
 public class ContactSearch extends SearchContainer<Contact> {
@@ -40,8 +40,6 @@ public class ContactSearch extends SearchContainer<Contact> {
     static List<String> headerNames = new ArrayList<String>();
     static Map<String, String> orderableHeaders = new HashMap<String, String>();
 
-    // The list of header names corresponds bean properties of
-    // ch.inofix.portlet.contact.model.ContactImpl
     static {
         headerNames.add("company");
         headerNames.add("contact-id");
@@ -59,13 +57,13 @@ public class ContactSearch extends SearchContainer<Contact> {
         headerNames.add("status");
         headerNames.add("user-name");
 
-        orderableHeaders.put("company", "company");
+        orderableHeaders.put("company", "company_sortable");
         orderableHeaders.put("contact-id", "contact-id");
         orderableHeaders.put("create-date", "createDate_Number_sortable");
         orderableHeaders.put("email", "email_sortable");
         // TODO: enable default fax
         // orderableHeaders.put("fax", "fax");
-        orderableHeaders.put("full-name", "full-name");
+        orderableHeaders.put("full-name", "fullName_sortable");
         // TODO: enable default impp
         // orderableHeaders.put("impp", "impp");
         orderableHeaders.put("modified-date", "modifiedDate_Number_sortable");
@@ -120,17 +118,19 @@ public class ContactSearch extends SearchContainer<Contact> {
                 preferences.setValue(portletId, "contacts-order-by-col", orderByCol);
                 preferences.setValue(portletId, "contacts-order-by-type", orderByType);
             } else {
-                orderByCol = preferences.getValue(portletId, "contacts-order-by-col", "last-name");
+                orderByCol = preferences.getValue(portletId, "contacts-order-by-col", "modified-date");
                 orderByType = preferences.getValue(portletId, "contacts-order-by-type", "asc");
             }
 
             setOrderableHeaders(orderableHeaders);
+
             if (Validator.isNotNull(orderableHeaders.get(orderByCol))) {
                 setOrderByCol(orderableHeaders.get(orderByCol));
             } else {
                 _log.error(orderByCol + " is not an orderable header.");
                 setOrderByCol(orderByCol);
             }
+
             setOrderByType(orderByType);
 
         } catch (Exception e) {

@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +46,7 @@ import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.search.QueryConfig;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
@@ -55,6 +57,7 @@ import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import aQute.bnd.annotation.ProviderType;
@@ -79,8 +82,8 @@ import ch.inofix.contact.service.base.ContactLocalServiceBaseImpl;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2017-06-20 17:19
- * @modified 2017-06-20 17:19
- * @version 1.0.0
+ * @modified 2017-06-22 16:51
+ * @version 1.0.1
  * @see ContactLocalServiceBaseImpl
  * @see ch.inofix.contact.service.ContactLocalServiceUtil
  */
@@ -266,8 +269,6 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
     @Override
     public void importContacts(ExportImportConfiguration exportImportConfiguration, File file) throws PortalException {
 
-        _log.info("importContacts");
-
         try {
             ImportController contactImportController = ExportImportControllerRegistryUtil
                     .getImportController(Contact.class.getName());
@@ -293,8 +294,6 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
     public void importContacts(ExportImportConfiguration exportImportConfiguration, InputStream inputStream)
             throws PortalException {
 
-        _log.info("importContacts");
-
         File file = null;
 
         try {
@@ -315,8 +314,6 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
     public long importContactsInBackground(long userId, ExportImportConfiguration exportImportConfiguration, File file)
             throws PortalException {
 
-        _log.info("importContactsInBackground");
-
         Map<String, Serializable> taskContextMap = new HashMap<>();
 
         taskContextMap.put("exportImportConfigurationId", exportImportConfiguration.getExportImportConfigurationId());
@@ -334,12 +331,11 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
     public long importContactsInBackground(long userId, ExportImportConfiguration exportImportConfiguration,
             InputStream inputStream) throws PortalException {
 
-        _log.info("importContactsInBackground");
-
         File file = null;
 
         try {
 
+            // TODO: use format of uploaded file or .vcf
             file = FileUtil.createTempFile("lar");
 
             FileUtil.write(file, inputStream);
@@ -361,27 +357,37 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
             sort = new Sort(Field.MODIFIED_DATE, true);
         }
 
+        String company = null;
+        String fullName = null;
+        boolean andOperator = false;
+
+        if (Validator.isNotNull(keywords)) {
+
+            company = keywords;
+            fullName = keywords;
+
+        } else {
+            andOperator = true;
+        }
+
+        return search(userId, groupId, 0, company, fullName, WorkflowConstants.STATUS_ANY, null, andOperator, start,
+                end, sort);
+
+    }
+
+    @Override
+    public Hits search(long userId, long groupId, long ownerUserId, String company, String fullName, int status,
+            LinkedHashMap<String, Object> params, boolean andSearch, int start, int end, Sort sort)
+            throws PortalException {
+
+        if (sort == null) {
+            sort = new Sort(Field.MODIFIED_DATE, true);
+        }
+
         Indexer<Contact> indexer = IndexerRegistryUtil.getIndexer(Contact.class.getName());
 
-        SearchContext searchContext = new SearchContext();
-
-        searchContext.setAttribute(Field.STATUS, WorkflowConstants.STATUS_ANY);
-
-        searchContext.setAttribute("paginationType", "more");
-
-        Group group = GroupLocalServiceUtil.getGroup(groupId);
-
-        searchContext.setCompanyId(group.getCompanyId());
-
-        searchContext.setEnd(end);
-        if (groupId > 0) {
-            searchContext.setGroupIds(new long[] { groupId });
-        }
-        searchContext.setSorts(sort);
-        searchContext.setStart(start);
-        searchContext.setUserId(userId);
-
-        searchContext.setKeywords(keywords);
+        SearchContext searchContext = buildSearchContext(userId, groupId, ownerUserId, company, fullName, status,
+                params, andSearch, start, end, sort);
 
         return indexer.search(searchContext);
 
@@ -490,6 +496,80 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
 
         resourceLocalService.updateResources(contact.getCompanyId(), contact.getGroupId(), Contact.class.getName(),
                 contact.getContactId(), groupPermissions, guestPermissions);
+    }
+
+    protected SearchContext buildSearchContext(long userId, long groupId, long ownerUserId, String company,
+            String fullName, int status, LinkedHashMap<String, Object> params, boolean andSearch, int start, int end,
+            Sort sort) throws PortalException {
+
+        _log.info("buildSearchContext()");
+        _log.info("userId = " + userId);
+        _log.info("groupId = " + groupId);
+        _log.info("ownerUserId = " + ownerUserId);
+        _log.info("company = " + company);
+        _log.info("fullName = " + fullName);
+        _log.info("status = " + status);
+        _log.info("params = " + params);
+        _log.info("andSearch = " + andSearch);
+        _log.info("start = " + start);
+        _log.info("end = " + end);
+        _log.info("sort = " + sort);
+
+        SearchContext searchContext = new SearchContext();
+
+        searchContext.setAttribute(Field.STATUS, status);
+
+        if (Validator.isNotNull(company)) {
+            searchContext.setAttribute("company", company);
+        }
+
+        if (Validator.isNotNull(fullName)) {
+            searchContext.setAttribute("fullName", fullName);
+        }
+
+        searchContext.setAttribute("paginationType", "more");
+
+        Group group = GroupLocalServiceUtil.getGroup(groupId);
+
+        searchContext.setCompanyId(group.getCompanyId());
+
+        if (ownerUserId > 0) {
+            searchContext.setOwnerUserId(ownerUserId);
+        }
+
+        searchContext.setEnd(end);
+        if (groupId > 0) {
+            searchContext.setGroupIds(new long[] { groupId });
+        }
+        searchContext.setSorts(sort);
+        searchContext.setStart(start);
+        searchContext.setUserId(userId);
+
+        searchContext.setAndSearch(andSearch);
+
+        if (params != null) {
+
+            String keywords = (String) params.remove("keywords");
+
+            if (Validator.isNotNull(keywords)) {
+                searchContext.setKeywords(keywords);
+            }
+        }
+
+        QueryConfig queryConfig = new QueryConfig();
+
+        queryConfig.setHighlightEnabled(false);
+        queryConfig.setScoreEnabled(false);
+
+        searchContext.setQueryConfig(queryConfig);
+
+        if (sort != null) {
+            searchContext.setSorts(sort);
+        }
+
+        searchContext.setStart(start);
+
+        return searchContext;
     }
 
     private static Log _log = LogFactoryUtil.getLog(ContactLocalServiceImpl.class.getName());

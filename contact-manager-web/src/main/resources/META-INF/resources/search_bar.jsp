@@ -1,9 +1,9 @@
 <%--
-    search.jsp: The extended search of the timetracker portlet.
+    search.jsp: The extended search of the contact-manager portlet.
 
     Created:     2017-06-18 00:04 by Christian Berndt
-    Modified:    2017-06-18 00:04 by Christian Berndt
-    Version:     1.0.0
+    Modified:    2017-06-22 10:12 by Christian Berndt
+    Version:     1.0.1
 --%>
 
 <%@ include file="/init.jsp" %>
@@ -17,7 +17,7 @@
 
 <%
     ContactDisplayTerms displayTerms = new ContactDisplayTerms(renderRequest);
-    int status = ParamUtil.getInteger(request, "status");
+    int status = ParamUtil.getInteger(request, "status", -1);
     
     List<User> users = Collections.emptyList();
     
@@ -34,19 +34,25 @@
     
     <aui:fieldset>
         
-        TODO: add fields for advanced search
-        <%--   
         <aui:input inlineField="<%=true%>"
-            name="<%=ContactDisplayTerms.DESCRIPTION%>" size="20"
-            value="<%=displayTerms.getDescription()%>" />
+            name="<%=ContactDisplayTerms.FULL_NAME%>" size="20"
+            value="<%=displayTerms.getFullName()%>" />
+            
+        <aui:input inlineField="<%=true%>"
+            name="<%=ContactDisplayTerms.COMPANY%>" size="20"
+            value="<%=displayTerms.getCompany()%>" />
+
+            <%--   
         
         <aui:select name="<%=ContactDisplayTerms.OWNER_USER_ID%>" inlineField="<%= true %>">
             <aui:option value="" label="any-user"/>
             <% for (User selectUser : users) { %>
                 <aui:option value="<%= selectUser.getUserId() %>" label="<%= selectUser.getFullName() %>"/>
             <% } %>
-        </aui:select>        
-            
+        </aui:select>  
+         
+         --%>      
+    
         <aui:select name="status" inlineField="<%= true %>"
             last="true">
             <aui:option
@@ -84,9 +90,7 @@
                 selected="<%= WorkflowConstants.STATUS_PENDING == status %>">
                 <liferay-ui:message key="pending" />
             </aui:option>
-        </aui:select>
-                --%>
-        
+        </aui:select>        
         
     </aui:fieldset>
     

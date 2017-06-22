@@ -1,5 +1,6 @@
 package ch.inofix.contact.search;
 
+import java.util.LinkedHashMap;
 import java.util.Locale;
 
 import javax.portlet.PortletRequest;
@@ -17,13 +18,17 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.BaseIndexer;
+import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.IndexWriterHelperUtil;
 import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.Summary;
+import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import ch.inofix.contact.model.Contact;
@@ -35,8 +40,8 @@ import ch.inofix.contact.service.ContactLocalServiceUtil;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-20 13:28
- * @modified 2017-04-13 23:43
- * @version 1.0.8
+ * @modified 2017-06-21 23:52
+ * @version 1.0.9
  *
  */
 @Component(immediate = true, service = Indexer.class)
@@ -67,8 +72,33 @@ public class ContactIndexer extends BaseIndexer<Contact> {
     }
 
     @Override
-    protected void doDelete(Contact contact) throws Exception {
+    public void postProcessContextBooleanFilter(BooleanFilter contextBooleanFilter, SearchContext searchContext)
+            throws Exception {
 
+        addStatus(contextBooleanFilter, searchContext);
+
+    }
+
+    @Override
+    public void postProcessSearchQuery(BooleanQuery searchQuery, BooleanFilter fullQueryBooleanFilter,
+            SearchContext searchContext) throws Exception {
+
+        addSearchTerm(searchQuery, searchContext, "company", false);
+        addSearchTerm(searchQuery, searchContext, "fullName", false);
+
+        LinkedHashMap<String, Object> params = (LinkedHashMap<String, Object>) searchContext.getAttribute("params");
+
+        if (params != null) {
+            String expandoAttributes = (String) params.get("expandoAttributes");
+
+            if (Validator.isNotNull(expandoAttributes)) {
+                addSearchExpando(searchQuery, searchContext, expandoAttributes);
+            }
+        }
+    }
+
+    @Override
+    protected void doDelete(Contact contact) throws Exception {
         deleteDocument(contact.getCompanyId(), contact.getContactId());
     }
 
@@ -79,22 +109,22 @@ public class ContactIndexer extends BaseIndexer<Contact> {
 
         // Set document field values (in alphabetical order)
 
-        document.addKeyword("company", contact.getCompany());
-        document.addKeyword("contactId", contact.getContactId());
+        document.addTextSortable("company", contact.getCompany());
+        document.addNumberSortable("contactId", contact.getContactId());
         document.addText(Field.CONTENT, contact.getCard());
-        document.addDate(Field.CREATE_DATE, contact.getCreateDate());
-        document.addKeyword("email", contact.getEmail().getAddress());
+        document.addDateSortable(Field.CREATE_DATE, contact.getCreateDate());
+        document.addTextSortable("email", contact.getEmail().getAddress());
         // TODO: add default fax
-        document.addText("fullName", contact.getFullName(false));
-        document.addKeyword(Field.GROUP_ID, getSiteGroupId(contact.getGroupId()));
+        document.addTextSortable("fullName", contact.getFullName(false));
+//        document.addKeyword(Field.GROUP_ID, getSiteGroupId(contact.getGroupId()));
         // TODO add default impp
-        document.addDate(Field.MODIFIED_DATE, contact.getModifiedDate());
-        document.addKeyword(Field.NAME, contact.getName());
-        document.addKeyword("phone", contact.getPhone().getNumber());
-        document.addKeyword(Field.SCOPE_GROUP_ID, contact.getGroupId());
-        document.addText(Field.TITLE, contact.getFullName(true));
+        document.addDateSortable(Field.MODIFIED_DATE, contact.getModifiedDate());
+        document.addTextSortable(Field.NAME, contact.getName());
+        document.addTextSortable("phone", contact.getPhone().getNumber());
+//        document.addKeyword(Field.SCOPE_GROUP_ID, contact.getGroupId());
+        document.addTextSortable(Field.TITLE, contact.getFullName(true));
         document.addKeyword("vCardUID", contact.getUid());
-        document.addKeyword("x-salutation", contact.getSalutation());
+        document.addTextSortable("x-salutation", contact.getSalutation());
 
         return document;
     }
