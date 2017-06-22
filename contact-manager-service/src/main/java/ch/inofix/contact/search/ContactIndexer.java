@@ -40,8 +40,8 @@ import ch.inofix.contact.service.ContactLocalServiceUtil;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-20 13:28
- * @modified 2017-06-21 23:52
- * @version 1.0.9
+ * @modified 2017-06-22 17:10
+ * @version 1.1.0
  *
  */
 @Component(immediate = true, service = Indexer.class)
@@ -118,7 +118,7 @@ public class ContactIndexer extends BaseIndexer<Contact> {
         document.addTextSortable("fullName", contact.getFullName(false));
 //        document.addKeyword(Field.GROUP_ID, getSiteGroupId(contact.getGroupId()));
         // TODO add default impp
-        document.addDateSortable(Field.MODIFIED_DATE, contact.getModifiedDate());
+        document.addDateSortable("modifiedDate", contact.getModifiedDate());
         document.addTextSortable(Field.NAME, contact.getName());
         document.addTextSortable("phone", contact.getPhone().getNumber());
 //        document.addKeyword(Field.SCOPE_GROUP_ID, contact.getGroupId());

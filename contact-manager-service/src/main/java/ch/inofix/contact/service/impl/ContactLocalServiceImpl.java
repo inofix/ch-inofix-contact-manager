@@ -502,19 +502,6 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
             String fullName, int status, LinkedHashMap<String, Object> params, boolean andSearch, int start, int end,
             Sort sort) throws PortalException {
 
-        _log.info("buildSearchContext()");
-        _log.info("userId = " + userId);
-        _log.info("groupId = " + groupId);
-        _log.info("ownerUserId = " + ownerUserId);
-        _log.info("company = " + company);
-        _log.info("fullName = " + fullName);
-        _log.info("status = " + status);
-        _log.info("params = " + params);
-        _log.info("andSearch = " + andSearch);
-        _log.info("start = " + start);
-        _log.info("end = " + end);
-        _log.info("sort = " + sort);
-
         SearchContext searchContext = new SearchContext();
 
         searchContext.setAttribute(Field.STATUS, status);
