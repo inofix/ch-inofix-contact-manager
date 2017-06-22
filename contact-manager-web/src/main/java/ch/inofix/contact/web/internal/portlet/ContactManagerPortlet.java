@@ -41,8 +41,10 @@ import com.liferay.exportimport.kernel.model.ExportImportConfiguration;
 import com.liferay.exportimport.kernel.service.ExportImportConfigurationLocalService;
 import com.liferay.exportimport.kernel.service.ExportImportService;
 import com.liferay.exportimport.kernel.staging.StagingUtil;
+import com.liferay.portal.kernel.backgroundtask.BackgroundTaskManagerUtil;
 import com.liferay.portal.kernel.exception.LayoutPrototypeException;
 import com.liferay.portal.kernel.exception.LocaleException;
+import com.liferay.portal.kernel.exception.NoSuchBackgroundTaskException;
 import com.liferay.portal.kernel.exception.NoSuchResourceException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -94,8 +96,8 @@ import ezvcard.property.Uid;
  * @author Stefan Luebbers
  * @author Christian Berndt
  * @created 2017-03-30 19:52
- * @modified 2017-06-22 19:22
- * @version 1.0.7
+ * @modified 2017-06-22 20:57
+ * @version 1.0.8
  */
 @Component(immediate = true, property = { "com.liferay.portlet.css-class-wrapper=portlet-contact-manager",
         "com.liferay.portlet.display-category=category.inofix",
@@ -121,9 +123,6 @@ public class ContactManagerPortlet extends MVCPortlet {
 
         String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 
-        _log.info("processAction");
-        _log.info("cmd = " + cmd);
-
         try {
             if (cmd.equals(Constants.ADD_TEMP)) {
 
@@ -135,6 +134,11 @@ public class ContactManagerPortlet extends MVCPortlet {
             } else if (cmd.equals(Constants.DELETE)) {
 
                 deleteContacts(actionRequest, actionResponse);
+                addSuccessMessage(actionRequest, actionResponse);
+
+            } else if (cmd.equals("deleteBackgroundTasks")) {
+
+                deleteBackgroundTasks(actionRequest, actionResponse);
                 addSuccessMessage(actionRequest, actionResponse);
 
             } else if (cmd.equals(Constants.DELETE_TEMP)) {
@@ -308,6 +312,34 @@ public class ContactManagerPortlet extends MVCPortlet {
 
             throw new PortalException(cause);
         }
+    }
+
+    protected void deleteBackgroundTasks(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+
+        _log.info("deleteBackgroundTasks");
+
+        try {
+            long[] backgroundTaskIds = ParamUtil.getLongValues(actionRequest, "deleteBackgroundTaskIds");
+
+            for (long backgroundTaskId : backgroundTaskIds) {
+                BackgroundTaskManagerUtil.deleteBackgroundTask(backgroundTaskId);
+            }
+        } catch (Exception e) {
+            if (e instanceof NoSuchBackgroundTaskException || e instanceof PrincipalException) {
+
+                SessionErrors.add(actionRequest, e.getClass());
+
+                actionResponse.setRenderParameter("mvcPath", "/error.jsp");
+            } else {
+                throw e;
+            }
+        }
+
+        String tabs1 = ParamUtil.getString(actionRequest, "tabs1");
+        String tabs2 = ParamUtil.getString(actionRequest, "tabs2");
+
+        actionResponse.setRenderParameter("tabs1", tabs1);
+        actionResponse.setRenderParameter("tabs2", tabs2);
     }
 
     protected void deleteContacts(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
@@ -495,11 +527,10 @@ public class ContactManagerPortlet extends MVCPortlet {
     /**
      * Disable the get- / sendRedirect feature of LiferayPortlet.
      */
-//    @Override
-//    protected String getRedirect(ActionRequest actionRequest, ActionResponse actionResponse) {
-//
-//        return null;
-//    }
+    @Override
+    protected String getRedirect(ActionRequest actionRequest, ActionResponse actionResponse) {
+        return null;
+    }
 
     protected void importContacts(ActionRequest actionRequest, String folderName) throws Exception {
 
