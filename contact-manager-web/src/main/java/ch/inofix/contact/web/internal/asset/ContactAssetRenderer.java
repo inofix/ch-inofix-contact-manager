@@ -27,10 +27,12 @@ import ch.inofix.contact.service.permission.ContactPermission;
 import ch.inofix.contact.web.internal.constants.ContactManagerWebKeys;
 
 /**
+ *
  * @author Christian Berndt
  * @created 2015-05-19 17:25
  * @modified 2017-04-14 00:29
  * @version 1.1.0
+ *
  */
 public class ContactAssetRenderer extends BaseJSPAssetRenderer<Contact> {
 
