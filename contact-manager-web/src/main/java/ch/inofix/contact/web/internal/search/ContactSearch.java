@@ -29,8 +29,8 @@ import ch.inofix.contact.model.Contact;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-24 22:01
- * @modified 2017-06-23 17:46
- * @version 1.0.9
+ * @modified 2017-06-23 20:08
+ * @version 1.1.0
  *
  */
 public class ContactSearch extends SearchContainer<Contact> {
@@ -54,7 +54,7 @@ public class ContactSearch extends SearchContainer<Contact> {
         headerNames.add("name");
         headerNames.add("phone");
         headerNames.add("portrait");
-        // headerNames.add("status");
+        headerNames.add("url");
         headerNames.add("user-name");
 
         orderableHeaders.put("company", "company_sortable");
@@ -69,7 +69,7 @@ public class ContactSearch extends SearchContainer<Contact> {
         orderableHeaders.put("modified-date", "modifiedDate_Number_sortable");
         orderableHeaders.put("name", "name");
         orderableHeaders.put("phone", "phone");
-        // orderableHeaders.put("status", "status");
+        orderableHeaders.put("url", "url_sortable");
         orderableHeaders.put("user-name", "userName_sortable");
     }
 

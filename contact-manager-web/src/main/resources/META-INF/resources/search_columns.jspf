@@ -3,8 +3,8 @@
     for the main view of the contact manager portlet.
 
     Created:     2013-10-07 14:41 by Christian Berndt
-    Modified:    2017-06-19 17:04 by Christian Berndt
-    Version:     1.1.8
+    Modified:    2017-06-23 19:13 by Christian Berndt
+    Version:     1.1.9
 --%>
 
 <%
@@ -15,13 +15,10 @@
     for (String column : columns) {
 %>
 
-<%-- 
 <c:if test='<%="company".equals(column)%>'>
-    <liferay-ui:search-container-column-text value="<%= company %>"
-        name="company" orderable="true" href="<%=detailURL%>"
-        orderableProperty="company_Number_sortable" />
+    <liferay-ui:search-container-column-text property="company"
+        orderable="true" href="<%=detailURL%>"/>
 </c:if>
---%>
 <c:if test='<%="contact-id".equals(column)%>'>
     <liferay-ui:search-container-column-text property="contactId"
         name="contact-id" orderable="true" href="<%=detailURL%>" />
@@ -54,6 +51,17 @@
 <c:if test='<%="status".equals(column)%>'>
     <liferay-ui:search-container-column-status property="status"
         orderable="true"/>
+</c:if>
+<c:if test='<%="url".equals(column)%>'>
+    <liferay-ui:search-container-column-text name="url" orderable="true">
+        <%
+            String url = contact_.getUrl();
+        %>
+        <c:if test="<%=Validator.isNotNull(url)%>">
+            <aui:a href="<%=url%>" label="<%=url%>" target="_blank"
+                iconCssClass="external" />
+        </c:if>
+    </liferay-ui:search-container-column-text>
 </c:if>
 <c:if test='<%="user-name".equals(column)%>'>
     <liferay-ui:search-container-column-text property="userName"
