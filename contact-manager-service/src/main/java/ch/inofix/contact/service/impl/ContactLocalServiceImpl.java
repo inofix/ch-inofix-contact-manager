@@ -53,6 +53,7 @@ import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.permission.ModelPermissions;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
+import com.liferay.portal.kernel.util.ContentTypes;
 //import com.liferay.portal.kernel.util.File;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
@@ -82,8 +83,8 @@ import ch.inofix.contact.service.base.ContactLocalServiceBaseImpl;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2017-06-20 17:19
- * @modified 2017-06-22 16:51
- * @version 1.0.1
+ * @modified 2017-06-23 13:39
+ * @version 1.0.2
  * @see ContactLocalServiceBaseImpl
  * @see ch.inofix.contact.service.ContactLocalServiceUtil
  */
@@ -106,11 +107,12 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
         User user = userPersistence.findByPrimaryKey(userId);
         long groupId = serviceContext.getScopeGroupId();
 
+        // TODO
+        // validate();
+
         long contactId = counterLocalService.increment();
 
         Contact contact = contactPersistence.create(contactId);
-
-        Date now = new Date();
 
         contact.setUuid(serviceContext.getUuid());
         contact.setGroupId(groupId);
@@ -118,10 +120,7 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
         contact.setUserId(user.getUserId());
         contact.setUserName(user.getFullName());
         contact.setExpandoBridgeAttributes(serviceContext);
-        contact.setCreateDate(now);
-        contact.setModifiedDate(now);
 
-        // TODO: validate the vCard string
         contact.setCard(card);
         contact.setUid(uid);
 
@@ -135,7 +134,6 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
         } else {
             addContactResources(contact, serviceContext.getModelPermissions());
         }
-
         // Asset
 
         updateAsset(userId, contact, serviceContext.getAssetCategoryIds(), serviceContext.getAssetTagNames(),
@@ -393,41 +391,39 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
 
     }
 
-    @Indexable(type = IndexableType.REINDEX)
     @Override
     public void updateAsset(long userId, Contact contact, long[] assetCategoryIds, String[] assetTagNames,
             long[] assetLinkEntryIds, Double priority) throws PortalException {
 
+        // TODO
         boolean visible = true;
-        boolean listable = true;
+        // boolean visible = false;
+        // if (contact.isApproved()) {
+        // visible = true;
+        // publishDate = contact.getCreateDate();
+        // }
 
-        long classTypeId = 0;
-        Date startDate = null;
-        Date endDate = null;
-        Date expirationDate = null;
-        String mimeType = "text/x-vcard";
-        String title = contact.getFullName(true);
-        String description = contact.getFormattedName();
-        String summary = HtmlUtil.extractText(StringUtil.shorten(contact.getFormattedName(), 500));
-        // TODO: What does url mean in this context?
-        String url = null;
-        // TODO: What does layoutUuid mean in this context?
-        String layoutUuid = null;
-        int height = 0;
-        int width = 0;
+        Date publishDate = contact.getCreateDate();
+
+        // TODO
+        String description = "TODO: contact description";
+        String summary = HtmlUtil.extractText(StringUtil.shorten(contact.getCard(), 500));
+
+        String className = Contact.class.getName();
+        long classPK = contact.getContactId();
 
         AssetEntry assetEntry = assetEntryLocalService.updateEntry(userId, contact.getGroupId(),
-                contact.getCreateDate(), contact.getModifiedDate(), Contact.class.getName(), contact.getContactId(),
-                contact.getUuid(), classTypeId, assetCategoryIds, assetTagNames, listable, visible, startDate, endDate,
-                expirationDate, mimeType, title, description, summary, url, layoutUuid, height, width, priority);
+                contact.getCreateDate(), contact.getModifiedDate(), className, classPK, contact.getUuid(), 0,
+                assetCategoryIds, assetTagNames, true, visible, null, null, publishDate, null, ContentTypes.TEXT_HTML,
+                contact.getName(), description, summary, null, null, 0, 0, priority);
 
         assetLinkLocalService.updateLinks(userId, assetEntry.getEntryId(), assetLinkEntryIds,
                 AssetLinkConstants.TYPE_RELATED);
+
+//        assetEntryLocalService.updateVisible(Contact.class.getName(), classPK, visible);
+
     }
 
-    /**
-     * @since 1.0.0
-     */
     @Override
     @Indexable(type = IndexableType.REINDEX)
     public Contact updateContact(long userId, long contactId, String card, String uid, ServiceContext serviceContext)
@@ -441,7 +437,7 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
 
         Contact contact = contactPersistence.findByPrimaryKey(contactId);
 
-        Date now = new Date();
+        // TODO: validate the vCard string
 
         contact.setUuid(serviceContext.getUuid());
         contact.setGroupId(groupId);
@@ -449,24 +445,20 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
         contact.setUserId(user.getUserId());
         contact.setUserName(user.getFullName());
         contact.setExpandoBridgeAttributes(serviceContext);
-        contact.setModifiedDate(now);
 
-        // TODO: validate the vCard string
         contact.setCard(card);
         contact.setUid(uid);
 
         contactPersistence.update(contact);
 
         // Resources
-        // TODO resourceLocalService.updateModel instead?
 
         resourceLocalService.addModelResources(contact, serviceContext);
-        // TODO add resourceLocalService.updateResources?
 
         // Asset
 
         updateAsset(userId, contact, serviceContext.getAssetCategoryIds(), serviceContext.getAssetTagNames(),
-                serviceContext.getAssetLinkEntryIds(), serviceContext.getAssetPriority()); // TODO
+                serviceContext.getAssetLinkEntryIds(), serviceContext.getAssetPriority());
 
         // Social
 

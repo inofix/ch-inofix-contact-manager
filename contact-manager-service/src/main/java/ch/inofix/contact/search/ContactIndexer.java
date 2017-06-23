@@ -21,11 +21,12 @@ import com.liferay.portal.kernel.search.BaseIndexer;
 import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
-import com.liferay.portal.kernel.search.IndexWriterHelperUtil;
+import com.liferay.portal.kernel.search.IndexWriterHelper;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -33,15 +34,15 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import ch.inofix.contact.model.Contact;
 import ch.inofix.contact.service.ContactLocalService;
-import ch.inofix.contact.service.ContactLocalServiceUtil;
+import ch.inofix.contact.service.permission.ContactPermission;
 
 /**
  *
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-20 13:28
- * @modified 2017-06-22 17:10
- * @version 1.1.0
+ * @modified 2017-06-23 13:10
+ * @version 1.1.1
  *
  */
 @Component(immediate = true, service = Indexer.class)
@@ -65,10 +66,8 @@ public class ContactIndexer extends BaseIndexer<Contact> {
     @Override
     public boolean hasPermission(PermissionChecker permissionChecker, String entryClassName, long entryClassPK,
             String actionId) throws Exception {
-        // TODO reactivate permission check
-        return true; // ContactPermission.contains(permissionChecker,
-                     // entryClassPK,
-                     // ActionKeys.VIEW);
+
+        return ContactPermission.contains(permissionChecker, entryClassPK, ActionKeys.VIEW);
     }
 
     @Override
@@ -113,16 +112,19 @@ public class ContactIndexer extends BaseIndexer<Contact> {
         document.addNumberSortable("contactId", contact.getContactId());
         document.addText(Field.CONTENT, contact.getCard());
         document.addDateSortable(Field.CREATE_DATE, contact.getCreateDate());
+        document.addText(Field.DESCRIPTION, "TODO: contact description");
         document.addTextSortable("email", contact.getEmail().getAddress());
         // TODO: add default fax
         document.addTextSortable("fullName", contact.getFullName(false));
-//        document.addKeyword(Field.GROUP_ID, getSiteGroupId(contact.getGroupId()));
+        // document.addKeyword(Field.GROUP_ID,
+        // getSiteGroupId(contact.getGroupId()));
         // TODO add default impp
         document.addDateSortable("modifiedDate", contact.getModifiedDate());
         document.addTextSortable(Field.NAME, contact.getName());
         document.addTextSortable("phone", contact.getPhone().getNumber());
-//        document.addKeyword(Field.SCOPE_GROUP_ID, contact.getGroupId());
-        document.addTextSortable(Field.TITLE, contact.getFullName(true));
+        document.addNumber(Field.STATUS, contact.getStatus());
+        // document.addKeyword(Field.SCOPE_GROUP_ID, contact.getGroupId());
+        document.addText(Field.TITLE, contact.getName());
         document.addKeyword("vCardUID", contact.getUid());
         document.addTextSortable("x-salutation", contact.getSalutation());
 
@@ -143,8 +145,7 @@ public class ContactIndexer extends BaseIndexer<Contact> {
 
         Document document = getDocument(contact);
 
-        IndexWriterHelperUtil.updateDocument(getSearchEngineId(), contact.getCompanyId(), document,
-                isCommitImmediately());
+        _indexWriterHelper.updateDocument(getSearchEngineId(), contact.getCompanyId(), document, isCommitImmediately());
     }
 
     @Override
@@ -158,7 +159,7 @@ public class ContactIndexer extends BaseIndexer<Contact> {
     @Override
     protected void doReindex(String className, long classPK) throws Exception {
 
-        Contact contact = ContactLocalServiceUtil.getContact(classPK);
+        Contact contact = _contactLocalService.getContact(classPK);
 
         doReindex(contact);
     }
@@ -182,7 +183,7 @@ public class ContactIndexer extends BaseIndexer<Contact> {
 
         });
         indexableActionableDynamicQuery.setCompanyId(companyId);
-        // TODO: what about the group?
+        // TODO: what does setGroupId()?
         // indexableActionableDynamicQuery.setGroupId(groupId);
         indexableActionableDynamicQuery
                 .setPerformActionMethod(new ActionableDynamicQuery.PerformActionMethod<Contact>() {
@@ -195,7 +196,7 @@ public class ContactIndexer extends BaseIndexer<Contact> {
                             indexableActionableDynamicQuery.addDocuments(document);
                         } catch (PortalException pe) {
                             if (_log.isWarnEnabled()) {
-                                _log.warn("Unable to index contact " + contact.getContactId(), pe);
+                                _log.warn("Unable to index bookmarks contact " + contact.getContactId(), pe);
                             }
                         }
                     }
@@ -215,4 +216,7 @@ public class ContactIndexer extends BaseIndexer<Contact> {
     private static final Log _log = LogFactoryUtil.getLog(ContactIndexer.class);
 
     private ContactLocalService _contactLocalService;
+
+    @Reference
+    private IndexWriterHelper _indexWriterHelper;
 }

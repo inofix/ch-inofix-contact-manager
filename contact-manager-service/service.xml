@@ -16,8 +16,8 @@
 
     <namespace>inofix_cm</namespace>
     
-    <entity name="Contact" uuid="true" local-service="true"
-        remote-service="true">
+    <entity local-service="true" name="Contact" 
+        remote-service="true" uuid="true" >
 
         <!-- PK fields -->
 

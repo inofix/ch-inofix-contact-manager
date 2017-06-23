@@ -10,14 +10,22 @@ import ch.inofix.contact.model.Contact;
 import ch.inofix.contact.service.ContactLocalServiceUtil;
 
 /**
-*
-* @author Stefan Luebbers
-* @created 2017-03-30 14:10
-* @modified 2017-03-30 14:10
-* @version 1.0.0
-*
-*/
+ *
+ * @author Stefan Luebbers
+ * @created 2017-03-30 14:10
+ * @modified 2017-06-22 02:14
+ * @version 1.0.1
+ *
+ */
 public class ContactPermission {
+
+    public static void check(PermissionChecker permissionChecker, Contact contact, String actionId)
+            throws PrincipalException {
+
+        if (!contains(permissionChecker, contact, actionId)) {
+            throw new PrincipalException();
+        }
+    }
 
     public static void check(PermissionChecker permissionChecker, long contactId, String actionId)
             throws PrincipalException {

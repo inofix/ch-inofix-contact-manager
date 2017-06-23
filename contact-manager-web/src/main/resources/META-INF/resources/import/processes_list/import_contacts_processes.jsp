@@ -2,8 +2,8 @@
     import_contacts_processes.jsp: list of import processes
     
     Created:    2017-06-19 23:32 by Christian Berndt
-    Modified:   2017-06-21 17:34 by Christian Berndt
-    Version:    1.0.1
+    Modified:   2017-06-22 20:56 by Christian Berndt
+    Version:    1.0.2
 --%>
 
 <%@ include file="/init.jsp" %>
@@ -48,8 +48,10 @@
 <aui:form action="<%= deleteBackgroundTasksURL %>" method="get" name="fm">
 
     <aui:input name="<%= Constants.CMD %>" type="hidden" value="deleteBackgroundTasks" />
-    <aui:input name="redirect" type="hidden" value="<%= currentURL.toString() %>" />
     <aui:input name="deleteBackgroundTaskIds" type="hidden" />
+    <aui:input name="redirect" type="hidden" value="<%= currentURL.toString() %>" />
+    <aui:input name="tabs1" type="hidden" value="<%= tabs1 %>"/>
+    <aui:input name="tabs2" type="hidden" value="<%= tabs2 %>"/>
    
     <liferay-ui:search-container
         emptyResultsMessage="no-import-processes-were-found"
