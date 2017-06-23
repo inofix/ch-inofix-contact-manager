@@ -96,8 +96,8 @@ import ezvcard.property.Uid;
  * @author Stefan Luebbers
  * @author Christian Berndt
  * @created 2017-03-30 19:52
- * @modified 2017-06-22 20:57
- * @version 1.0.8
+ * @modified 2017-06-23 20:35
+ * @version 1.0.9
  */
 @Component(immediate = true, property = { "com.liferay.portlet.css-class-wrapper=portlet-contact-manager",
         "com.liferay.portlet.display-category=category.inofix",
@@ -421,8 +421,6 @@ public class ContactManagerPortlet extends MVCPortlet {
     protected String getEditContactURL(ActionRequest actionRequest, ActionResponse actionResponse, Contact contact)
             throws Exception {
 
-        _log.info("getEditContactURL");
-
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
         String editContactURL = getRedirect(actionRequest, actionResponse);
@@ -534,8 +532,6 @@ public class ContactManagerPortlet extends MVCPortlet {
 
     protected void importContacts(ActionRequest actionRequest, String folderName) throws Exception {
 
-        _log.info("importContacts");
-
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
         long groupId = ParamUtil.getLong(actionRequest, "groupId");
@@ -615,9 +611,9 @@ public class ContactManagerPortlet extends MVCPortlet {
 
     protected void updateContact(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 
-        _log.info("updateContact");
-
         ServiceContext serviceContext = ServiceContextFactory.getInstance(Contact.class.getName(), actionRequest);
+
+        HttpServletRequest request = PortalUtil.getHttpServletRequest(actionRequest);
 
         UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 
@@ -643,9 +639,8 @@ public class ContactManagerPortlet extends MVCPortlet {
 
         }
 
-        _log.info("card = " + card);
-
         // Retrieve associated file data
+
         File[] keyFiles = uploadPortletRequest.getFiles("key.file");
         File[] logoFiles = uploadPortletRequest.getFiles("logo.file");
         File[] photoFiles = uploadPortletRequest.getFiles("photo.file");
@@ -671,10 +666,8 @@ public class ContactManagerPortlet extends MVCPortlet {
         try {
 
             VCard vCard = Ezvcard.parse(card).first();
-            vCard = PortletUtil.getVCard(uploadPortletRequest, vCard, map);
+            vCard = PortletUtil.getVCard(request, vCard, map);
             card = Ezvcard.write(vCard).version(VCardVersion.V4_0).go();
-
-            _log.debug(card);
 
         } catch (ImageFileFormatException iffe) {
 
@@ -713,20 +706,15 @@ public class ContactManagerPortlet extends MVCPortlet {
 
             // Add contact
 
-            _log.info("add contact");
-
             contact = _contactService.addContact(card, uid, serviceContext);
 
         } else {
 
             // Update contact
 
-            _log.info("update contact");
-
             contact = _contactService.updateContact(contactId, card, uid, serviceContext);
         }
 
-        // TODO
         String redirect = getEditContactURL(actionRequest, actionResponse, contact);
 
         actionRequest.setAttribute(WebKeys.REDIRECT, redirect);
