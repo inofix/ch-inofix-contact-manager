@@ -12,7 +12,7 @@ A vCard based contact manager for the Liferay Portal.
 ## How To Deploy
 Change the current working directory to $WORKSPACE/bundles/deploy and install the osgi-modules required by the contact-manager.
 1. `cd $WORKSPACE/bundles/deploy`
-1. `wget http://liferay-repo.inofix.ch/7.0.2/vinnie_2.0.0.jar`
+1. `wget http://liferay-repo.inofix.ch/7.0.3/vinnie_2.0.0.jar`
 1. `wget http://central.maven.org/maven2/com/googlecode/ez-vcard/ez-vcard/0.10.2/ez-vcard-0.10.2.jar`
 
 ## How To Contribute
