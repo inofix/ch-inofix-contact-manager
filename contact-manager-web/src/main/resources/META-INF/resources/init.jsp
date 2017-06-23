@@ -2,8 +2,8 @@
     init.jsp: Common setup code for the contact manager portlet.
 
     Created:     2017-03-30 16:44 by Stefan Luebbers
-    Modified:    2017-06-20 18:49 by Christian Berndt
-    Version:     1.0.6
+    Modified:    2017-06-23 14:44 by Christian Berndt
+    Version:     1.0.7
 --%>
 
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -41,6 +41,7 @@
 <%@page import="com.liferay.portal.kernel.exception.SystemException"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.model.Group"%>
+<%@page import="com.liferay.portal.kernel.model.Portlet"%>
 <%@page import="com.liferay.portal.kernel.model.User"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portal.kernel.portlet.PortalPreferences"%>
@@ -56,9 +57,11 @@
 <%@page import="com.liferay.portal.kernel.search.Sort"%>
 <%@page import="com.liferay.portal.kernel.search.SortFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.security.auth.PrincipalException"%>
+<%@page import="com.liferay.portal.kernel.service.PortletLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.service.UserLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
 <%@page import="com.liferay.portal.kernel.util.DateUtil"%>
+<%@page import="com.liferay.portal.kernel.util.FastDateFormatFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%@page import="com.liferay.portal.kernel.util.HttpUtil"%>
@@ -76,6 +79,7 @@
 <%@page import="com.liferay.portal.kernel.util.WebKeys"%>
 <%@page import="com.liferay.portal.kernel.workflow.WorkflowConstants"%>
 
+<%@page import="java.text.Format"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Arrays"%>
 <%@page import="java.util.List"%>
@@ -93,6 +97,9 @@
 
 <%
     PortalPreferences portalPreferences = PortletPreferencesFactoryUtil.getPortalPreferences(request);
+
+    Format dateFormatDate = FastDateFormatFactoryUtil.getDate(locale, timeZone);
+    Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZone);
 
     String markupView = "lexicon";
 

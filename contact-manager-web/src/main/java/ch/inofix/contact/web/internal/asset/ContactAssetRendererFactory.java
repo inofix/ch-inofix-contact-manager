@@ -35,8 +35,8 @@ import ch.inofix.contact.service.permission.ContactPermission;
  *
  * @author Christian Berndt
  * @created 2015-05-19 17:12
- * @modified 2017-04-14 00:30
- * @version 1.0.3
+ * @modified 2017-06-23 15:00
+ * @version 1.0.4
  *
  */
 @Component(immediate = true, property = {
@@ -46,10 +46,14 @@ public class ContactAssetRendererFactory extends BaseAssetRendererFactory<Contac
     public static final String TYPE = "contact";
 
     public ContactAssetRendererFactory() {
+
+        setCategorizable(true);
         setClassName(Contact.class.getName());
         setLinkable(true);
         setPortletId(PortletKeys.CONTACT_MANAGER);
         setSearchable(true);
+        setSelectable(true);
+
     }
 
     @Override
@@ -127,11 +131,13 @@ public class ContactAssetRendererFactory extends BaseAssetRendererFactory<Contac
 
     @Reference(target = "(osgi.web.symbolicname=ch.inofix.contact.web)", unbind = "-")
     public void setServletContext(ServletContext servletContext) {
+
         _servletContext = servletContext;
     }
 
     @Reference(unbind = "-")
     protected void setContactLocalService(ContactLocalService contactLocalService) {
+
         _contactLocalService = contactLocalService;
     }
 
