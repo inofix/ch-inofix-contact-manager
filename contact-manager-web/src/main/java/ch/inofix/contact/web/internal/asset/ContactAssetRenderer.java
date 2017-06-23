@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.trash.TrashRenderer;
 import com.liferay.portal.kernel.util.PortalUtil;
 
 import ch.inofix.contact.constants.PortletKeys;
@@ -30,11 +31,11 @@ import ch.inofix.contact.web.internal.constants.ContactManagerWebKeys;
  *
  * @author Christian Berndt
  * @created 2015-05-19 17:25
- * @modified 2017-04-14 00:29
- * @version 1.1.0
+ * @modified 2017-06-22 21:51
+ * @version 1.1.1
  *
  */
-public class ContactAssetRenderer extends BaseJSPAssetRenderer<Contact> {
+public class ContactAssetRenderer extends BaseJSPAssetRenderer<Contact> implements TrashRenderer {
 
     public ContactAssetRenderer(Contact contact) {
         _contact = contact;
@@ -70,6 +71,7 @@ public class ContactAssetRenderer extends BaseJSPAssetRenderer<Contact> {
         }
     }
 
+    @Override
     public String getPortletId() {
         AssetRendererFactory<Contact> assetRendererFactory = getAssetRendererFactory();
 
@@ -83,14 +85,20 @@ public class ContactAssetRenderer extends BaseJSPAssetRenderer<Contact> {
 
     @Override
     public String getSummary(PortletRequest portletRequest, PortletResponse portletResponse) {
-        return _contact.getFullName(true);
+
+        // TODO
+        return "TODO: contact summary";
+        // return _contact.getDescription();
     }
 
     @Override
     public String getTitle(Locale locale) {
-        return _contact.getFullName(true);
+
+        return _contact.getName();
+
     }
 
+    @Override
     public String getType() {
         return ContactAssetRendererFactory.TYPE;
     }
@@ -192,5 +200,4 @@ public class ContactAssetRenderer extends BaseJSPAssetRenderer<Contact> {
     private static final Log _log = LogFactoryUtil.getLog(ContactAssetRenderer.class);
 
     private final Contact _contact;
-
 }
