@@ -89,8 +89,8 @@ import ezvcard.util.DataUri;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-07 22:17
- * @modified 2017-04-12 17:27
- * @version 1.2.1
+ * @modified 2017-06-23 17:05
+ * @version 1.2.2
  */
 @SuppressWarnings("serial")
 @ProviderType
@@ -224,8 +224,7 @@ public class ContactImpl extends ContactBaseImpl {
 
         List<UriDTO> uriDTOs = new ArrayList<UriDTO>();
 
-        List<CalendarRequestUri> calendarRequestUris = getVCard()
-                .getCalendarRequestUris();
+        List<CalendarRequestUri> calendarRequestUris = getVCard().getCalendarRequestUris();
 
         for (CalendarRequestUri calendarRequestUri : calendarRequestUris) {
 
@@ -272,7 +271,6 @@ public class ContactImpl extends ContactBaseImpl {
 
     }
 
-
     /**
      *
      * @return
@@ -316,6 +314,24 @@ public class ContactImpl extends ContactBaseImpl {
     }
 
     @Override
+    public String getDepartment() {
+
+        String str = "";
+
+        List<Organization> organizations = getVCard().getOrganizations();
+
+        if (organizations.size() > 0) {
+            List<String> values = organizations.get(0).getValues();
+            if (values.size() > 1) {
+                str = values.get(1);
+            }
+        }
+
+        return str;
+
+    }
+
+    @Override
     public EmailDTO getEmail() {
 
         List<Email> emails = getVCard().getEmails();
@@ -345,7 +361,7 @@ public class ContactImpl extends ContactBaseImpl {
         if (email != null) {
             emailDTO.setAddress(email.getValue());
 
-            //emailDTO.setAddress(email.getValue());
+            // emailDTO.setAddress(email.getValue());
 
             // TODO: Add multi-type support
             StringBuilder sb = new StringBuilder();
@@ -422,6 +438,34 @@ public class ContactImpl extends ContactBaseImpl {
     }
 
     @Override
+    public String getFamilyName() {
+
+        String familyName = null;
+
+        StructuredName sn = getVCard().getStructuredName();
+
+        if (sn != null) {
+            familyName = sn.getFamily();
+        }
+
+        return familyName;
+    }
+
+    @Override
+    public String getFirstName() {
+
+        String firstName = null;
+
+        StructuredName sn = getVCard().getStructuredName();
+
+        if (sn != null) {
+            firstName = sn.getGiven();
+        }
+
+        return firstName;
+    }
+
+    @Override
     public String getFormattedName() {
 
         String formattedName = "";
@@ -433,6 +477,84 @@ public class ContactImpl extends ContactBaseImpl {
         }
 
         return formattedName;
+
+    }
+
+    @Override
+    public List<UrlDTO> getFreeBusyUrls() {
+
+        List<UrlDTO> urlDTOs = new ArrayList<UrlDTO>();
+
+        List<FreeBusyUrl> urls = getVCard().getFbUrls();
+
+        for (FreeBusyUrl url : urls) {
+
+            UrlDTO urlDTO = new UrlDTO();
+
+            urlDTO.setAddress(url.getValue());
+            urlDTO.setType(url.getType());
+
+            urlDTOs.add(urlDTO);
+        }
+
+        // an empty default freeBusyURL
+        if (urlDTOs.size() == 0) {
+            urlDTOs.add(new UrlDTO());
+        }
+
+        return urlDTOs;
+
+    }
+
+    @Override
+    public String getFullName() {
+        return getFullName(false);
+    }
+
+    @Override
+    public String getFullName(boolean firstLast) {
+
+        StringBuilder sb = new StringBuilder();
+
+        StructuredName sn = getVCard().getStructuredName();
+
+        if (sn != null) {
+            if (firstLast) {
+                sb.append(sn.getGiven());
+                sb.append(" ");
+                sb.append(sn.getFamily());
+            } else {
+                sb.append(sn.getFamily());
+                sb.append(", ");
+                sb.append(sn.getGiven());
+            }
+        }
+
+        String fullName = sb.toString();
+
+        if (Validator.isNull(fullName)) {
+
+            Organization organization = getVCard().getOrganization();
+
+            if (organization != null) {
+
+                List<String> values = organization.getValues();
+
+                Iterator<String> iterator = values.iterator();
+
+                while (iterator.hasNext()) {
+
+                    sb.append(iterator.next());
+                    if (iterator.hasNext()) {
+                        sb.append(", ");
+                    }
+
+                }
+            }
+
+        }
+
+        return fullName;
 
     }
 
@@ -583,8 +705,7 @@ public class ContactImpl extends ContactBaseImpl {
             KeyType contentType = key.getContentType();
 
             if (Validator.isNotNull(contentType)) {
-                DataUri dataUri = new DataUri(contentType.getMediaType(),
-                        key.getData());
+                DataUri dataUri = new DataUri(contentType.getMediaType(), key.getData());
                 fileDTO.setData(dataUri.toString());
             }
 
@@ -662,8 +783,7 @@ public class ContactImpl extends ContactBaseImpl {
             ImageType contentType = logo.getContentType();
 
             if (Validator.isNotNull(contentType)) {
-                DataUri dataUri = new DataUri(contentType.getMediaType(),
-                        logo.getData());
+                DataUri dataUri = new DataUri(contentType.getMediaType(), logo.getData());
                 fileDTO.setData(dataUri.toString());
             }
 
@@ -682,36 +802,14 @@ public class ContactImpl extends ContactBaseImpl {
     @Override
     public String getName() {
 
-        String firstLast = getFullName(true);
-        String lastFirst = getFullName(false);
+        String name = null;
 
-        String name = lastFirst;
+        if (Validator.isNull(getFamilyName()) && Validator.isNull(getFirstName())) {
 
-        if (Validator.isNull(firstLast)) {
+            name = getCompany();
 
-            Organization organization = getVCard().getOrganization();
-
-            if (organization != null) {
-
-                List<String> values = organization.getValues();
-
-                Iterator<String> iterator = values.iterator();
-
-                StringBuilder sb = new StringBuilder();
-
-                while (iterator.hasNext()) {
-
-                    sb.append(iterator.next());
-                    if (iterator.hasNext()) {
-                        sb.append(", ");
-                    }
-
-                }
-
-                name = sb.toString();
-
-            }
-
+        } else {
+            name = getFullName(false);
         }
 
         return name;
@@ -736,6 +834,24 @@ public class ContactImpl extends ContactBaseImpl {
         }
 
         return noteDTOs;
+    }
+
+    @Override
+    public String getOffice() {
+
+        String str = "";
+
+        List<Organization> organizations = getVCard().getOrganizations();
+
+        if (organizations.size() > 0) {
+            List<String> values = organizations.get(0).getValues();
+            if (values.size() > 2) {
+                str = values.get(2);
+            }
+        }
+
+        return str;
+
     }
 
     /**
@@ -841,8 +957,7 @@ public class ContactImpl extends ContactBaseImpl {
             ImageType contentType = photo.getContentType();
 
             if (Validator.isNotNull(contentType)) {
-                DataUri dataUri = new DataUri(contentType.getMediaType(),
-                        photo.getData());
+                DataUri dataUri = new DataUri(contentType.getMediaType(), photo.getData());
                 fileDTO.setData(dataUri.toString());
             }
 
@@ -920,8 +1035,7 @@ public class ContactImpl extends ContactBaseImpl {
             SoundType contentType = sound.getContentType();
 
             if (Validator.isNotNull(contentType)) {
-                DataUri dataUri = new DataUri(contentType.getMediaType(),
-                        sound.getData());
+                DataUri dataUri = new DataUri(contentType.getMediaType(), sound.getData());
                 fileDTO.setData(dataUri.toString());
             }
 
@@ -953,84 +1067,6 @@ public class ContactImpl extends ContactBaseImpl {
 
     }
 
-    @Override
-    public List<UrlDTO> getFreeBusyUrls() {
-
-        List<UrlDTO> urlDTOs = new ArrayList<UrlDTO>();
-
-        List<FreeBusyUrl> urls = getVCard().getFbUrls();
-
-        for (FreeBusyUrl url : urls) {
-
-            UrlDTO urlDTO = new UrlDTO();
-
-            urlDTO.setAddress(url.getValue());
-            urlDTO.setType(url.getType());
-
-            urlDTOs.add(urlDTO);
-        }
-
-        // an empty default freeBusyURL
-        if (urlDTOs.size() == 0) {
-            urlDTOs.add(new UrlDTO());
-        }
-
-        return urlDTOs;
-
-    }
-
-    @Override
-    public String getFullName() {
-        return getFullName(false);
-    }
-
-    @Override
-    public String getFullName(boolean firstLast) {
-
-        StringBuilder sb = new StringBuilder();
-
-        StructuredName sn = getVCard().getStructuredName();
-
-        if (sn != null) {
-            if (firstLast) {
-                sb.append(sn.getGiven());
-                sb.append(" ");
-                sb.append(sn.getFamily());
-            } else {
-                sb.append(sn.getFamily());
-                sb.append(", ");
-                sb.append(sn.getGiven());
-            }
-        }
-
-        String fullName = sb.toString();
-
-        if (Validator.isNull(fullName)) {
-
-            Organization organization = getVCard().getOrganization();
-
-            if (organization != null) {
-
-                List<String> values = organization.getValues();
-
-                Iterator<String> iterator = values.iterator();
-
-                while (iterator.hasNext()) {
-
-                    sb.append(iterator.next());
-                    if (iterator.hasNext()) {
-                        sb.append(", ");
-                    }
-
-                }
-            }
-
-        }
-
-        return fullName;
-
-    }
-
     /**
      *
      * @return
@@ -1051,7 +1087,7 @@ public class ContactImpl extends ContactBaseImpl {
 
     @Override
     public List<UrlDTO> getUrls() {
-        List<UrlDTO> urlDTOs = new ArrayList<UrlDTO> ();
+        List<UrlDTO> urlDTOs = new ArrayList<UrlDTO>();
 
         List<Url> urls = getVCard().getUrls();
 
@@ -1068,7 +1104,6 @@ public class ContactImpl extends ContactBaseImpl {
         }
 
         return urlDTOs;
-
 
     }
 
