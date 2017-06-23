@@ -11,11 +11,9 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import javax.portlet.PortletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.FileUtil;
@@ -85,14 +83,11 @@ import ezvcard.util.DataUri;
  *
  * @author Christian Berndt
  * @created 2015-05-16 15:31
- * @modified 2016-10-07 13:13
- * @version 1.1.6
+ * @modified 2017-06-23 16:46
+ * @version 1.1.7
  *
  */
 public class PortletUtil {
-
-    // Enable logging for this class
-    private static Log log = LogFactoryUtil.getLog(PortletUtil.class.getName());
 
     /**
      *
@@ -115,32 +110,11 @@ public class PortletUtil {
 
     }
 
-    /**
-     *
-     * @param vCard
-     * @return
-     * @since 1.0.9
-     */
-    public static String[] getAssetTagNames(VCard vCard) {
-
-        List<Categories> categories = vCard.getCategoriesList();
-
-        List<String> assetTags = new ArrayList<String>();
-
-        for (Categories category : categories) {
-
-            List<String> values = category.getValues();
-            assetTags.addAll(values);
-
-        }
-
-        String[] assetTagNames = new String[0];
-        return assetTags.toArray(assetTagNames);
-    }
-
     @SuppressWarnings("unchecked")
     public static VCard getVCard(HttpServletRequest request, VCard vCard, Map<String, File[]> map)
             throws PortalException {
+
+        _log.info("getVCard");
 
         // Retrieve the parameters and update the received vCard
         // with the parameter values.
@@ -746,21 +720,22 @@ public class PortletUtil {
             }
         }
 
-        if (parameters.containsKey("organization")) {
+        if (parameters.containsKey("company") || parameters.containsKey("department")
+                || parameters.containsKey("office")) {
 
             vCard.removeProperties(Organization.class);
 
-            String[] organizations = ParamUtil.getParameterValues(request, "organization");
-
             Organization organization = new Organization();
 
-            for (int i = 0; i < organizations.length; i++) {
+            String company = request.getParameter("company");
+            String department = request.getParameter("department");
+            String office = request.getParameter("office");
 
-                if (Validator.isNotNull(organizations[i])) {
-                    // TODO
-                    // organization.addValue(organizations[i]);
-                }
-            }
+            organization.getValues().add(company);
+            organization.getValues().add(department);
+            organization.getValues().add(office);
+
+            _log.info(organization);
 
             vCard.addOrganization(organization);
 
@@ -1119,6 +1094,29 @@ public class PortletUtil {
 
     /**
      *
+     * @param vCard
+     * @return
+     * @since 1.0.9
+     */
+    public static String[] getAssetTagNames(VCard vCard) {
+
+        List<Categories> categories = vCard.getCategoriesList();
+
+        List<String> assetTags = new ArrayList<String>();
+
+        for (Categories category : categories) {
+
+            List<String> values = category.getValues();
+            assetTags.addAll(values);
+
+        }
+
+        String[] assetTagNames = new String[0];
+        return assetTags.toArray(assetTagNames);
+    }
+
+    /**
+     *
      * @param portletRequest
      * @param vCard
      * @return
@@ -1127,13 +1125,15 @@ public class PortletUtil {
      * @throws IOException
      * @since 1.0.0
      */
-    public static VCard getVCard(PortletRequest portletRequest, VCard vCard, Map<String, File[]> map)
-            throws PortalException, SystemException {
-
-        HttpServletRequest request = PortalUtil.getHttpServletRequest(portletRequest);
-
-        return getVCard(request, vCard, map);
-    }
+    // public static VCard getVCard(PortletRequest portletRequest, VCard vCard,
+    // Map<String, File[]> map)
+    // throws PortalException, SystemException {
+    //
+    // HttpServletRequest request =
+    // PortalUtil.getHttpServletRequest(portletRequest);
+    //
+    // return getVCard(request, vCard, map);
+    // }
 
     /**
      *
@@ -1168,9 +1168,11 @@ public class PortletUtil {
             ResourceBundle bundle = ResourceBundle.getBundle("Language");
             return MessageFormat.format(bundle.getString(key), objects);
         } catch (MissingResourceException mre) {
-            log.warn(mre.getMessage());
+            _log.warn(mre.getMessage());
             return key;
         }
     }
+
+    private static Log _log = LogFactoryUtil.getLog(PortletUtil.class.getName());
 
 }
