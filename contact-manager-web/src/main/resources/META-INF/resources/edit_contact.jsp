@@ -2,8 +2,8 @@
     edit_contact.jsp: edit a single contact. 
     
     Created:    2015-05-07 23:40 by Christian Berndt
-    Modified:   2017-06-22 17:54 by Christian Berndt
-    Version:    1.2.0
+    Modified:   2017-06-23 17:50 by Christian Berndt
+    Version:    1.2.1
 --%>
 
 <%@ include file="init.jsp"%>
@@ -56,21 +56,12 @@
 
         <div class="lfr-form-content">
         
-<%--             <liferay-util:include page="/contact/general.jsp" servletContext="<%= application %>"/> --%>
-
             <liferay-ui:form-navigator
-                showButtons="<%=hasUpdatePermission%>"
+                showButtons="<%=hasUpdatePermission%>"                
                 id="<%=FormNavigatorConstants.FORM_NAVIGATOR_ID_CONTACT%>" />
 
         </div>
         
-        <%-- 
-        <aui:button-row>
-            <aui:button cssClass="btn-lg" disabled="<%= !hasUpdatePermission %>" type="submit" />           
-            <aui:button cssClass="btn-lg" href="<%= redirect %>" type="cancel" />
-        </aui:button-row>
-        --%>
-
     </aui:form>
 
 </div>
