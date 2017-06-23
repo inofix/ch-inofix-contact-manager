@@ -2,8 +2,8 @@
     search.jsp: The extended search of the contact-manager portlet.
 
     Created:     2017-06-18 00:04 by Christian Berndt
-    Modified:    2017-06-22 10:12 by Christian Berndt
-    Version:     1.0.1
+    Modified:    2017-06-23 17:47 by Christian Berndt
+    Version:     1.0.2
 --%>
 
 <%@ include file="/init.jsp" %>
@@ -51,7 +51,6 @@
             <% } %>
         </aui:select>  
          
-         --%>      
     
         <aui:select name="status" inlineField="<%= true %>"
             last="true">
@@ -90,8 +89,10 @@
                 selected="<%= WorkflowConstants.STATUS_PENDING == status %>">
                 <liferay-ui:message key="pending" />
             </aui:option>
-        </aui:select>        
+        </aui:select>  
         
+         --%>      
+              
     </aui:fieldset>
     
 </liferay-ui:search-toggle>
