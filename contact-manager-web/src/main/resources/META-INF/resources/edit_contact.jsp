@@ -2,8 +2,8 @@
     edit_contact.jsp: edit a single contact. 
     
     Created:    2015-05-07 23:40 by Christian Berndt
-    Modified:   2017-06-23 17:50 by Christian Berndt
-    Version:    1.2.1
+    Modified:   2017-06-23 21:25 by Christian Berndt
+    Version:    1.2.2
 --%>
 
 <%@ include file="init.jsp"%>
@@ -57,8 +57,10 @@
         <div class="lfr-form-content">
         
             <liferay-ui:form-navigator
+                id="<%=FormNavigatorConstants.FORM_NAVIGATOR_ID_CONTACT%>" 
+                markupView="<%= markupView %>"
                 showButtons="<%=hasUpdatePermission%>"                
-                id="<%=FormNavigatorConstants.FORM_NAVIGATOR_ID_CONTACT%>" />
+                />
 
         </div>
         
