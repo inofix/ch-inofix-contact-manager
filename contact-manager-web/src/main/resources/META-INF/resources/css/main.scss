@@ -2,8 +2,8 @@
  * main.css: The contact-manager portlet's css configuration
  *
  * Created:     2015-05-08 15:51 by Christian Berndt
- * Modified:    2017-06-22 17:05 by Christian Berndt
- * Version:     1.2.1
+ * Modified:    2017-06-23 21:29 by Christian Berndt
+ * Version:     1.2.2
  *
  */
 @import "bourbon";
@@ -29,6 +29,12 @@
 }
  
 .portlet-contact-manager {
+    
+    .btn-structured-name {
+        display: inline-block;
+        margin-top: 25px; 
+        vertical-align: top; 
+    }
     
     .contact-search {
     
@@ -74,6 +80,22 @@
             .form-control {
                 width: 100px;
             }
+        }
+    }
+    
+    .panel-group {
+    
+        .lfr-portal-tooltip {
+            display: inline-block;
+            margin: 0 0 0 5px;
+            padding: 0;
+            vertical-align: top;
+        }    
+    }
+    
+    .row-fields { 
+        .form-group {
+            margin-bottom: 0;
         }
     }
 }
