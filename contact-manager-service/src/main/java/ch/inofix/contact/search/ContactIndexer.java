@@ -41,8 +41,8 @@ import ch.inofix.contact.service.permission.ContactPermission;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-20 13:28
- * @modified 2017-06-23 13:10
- * @version 1.1.1
+ * @modified 2017-06-23 20:34
+ * @version 1.1.2
  *
  */
 @Component(immediate = true, service = Indexer.class)
@@ -125,6 +125,7 @@ public class ContactIndexer extends BaseIndexer<Contact> {
         document.addNumber(Field.STATUS, contact.getStatus());
         // document.addKeyword(Field.SCOPE_GROUP_ID, contact.getGroupId());
         document.addText(Field.TITLE, contact.getName());
+        document.addTextSortable("url", contact.getUrl());
         document.addKeyword("vCardUID", contact.getUid());
         document.addTextSortable("x-salutation", contact.getSalutation());
 

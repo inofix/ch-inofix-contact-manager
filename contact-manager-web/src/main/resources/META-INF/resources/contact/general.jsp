@@ -105,9 +105,21 @@
         <aui:row>
             <aui:col width="50">
                 <aui:input name="formattedName" bean="<%=contact_%>"
-                    inlineField="true" helpMessage="formatted-name-help" 
-                    disabled="<%= !hasUpdatePermission %>" required="true"/>
-                <% // TODO re-enable popover for structured name %>
+                    inlineField="true" helpMessage="formatted-name-help"
+                    disabled="<%=!hasUpdatePermission%>" />
+                <%
+                    // TODO re-enable popover for structured name
+                %>
+
+                <portlet:renderURL var="structuredNameURL"
+                    windowState="<%=LiferayWindowState.EXCLUSIVE.toString()%>">
+                    <portlet:param name="mvcPath"
+                        value="/contact/structured_name.jsp" />
+                </portlet:renderURL>
+
+                <aui:button useDialog="<%=true%>"
+                    href="<%=structuredNameURL.toString()%>"
+                    value="structured-name" />
                 <%-- 
                 <aui:button name="structuredNameBtn" value="structured-name"
                     cssClass="btn" />

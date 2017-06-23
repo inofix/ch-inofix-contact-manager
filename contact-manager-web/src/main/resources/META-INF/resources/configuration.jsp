@@ -103,7 +103,6 @@
                     </aui:field-wrapper>
                 </aui:fieldset>
 
-
                 <aui:fieldset label="portait-style"
                     helpMessage="portrait-style-help"
                     inlineField="false">

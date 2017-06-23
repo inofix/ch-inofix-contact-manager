@@ -89,8 +89,8 @@ import ezvcard.util.DataUri;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-07 22:17
- * @modified 2017-06-23 17:05
- * @version 1.2.2
+ * @modified 2017-06-23 20:33
+ * @version 1.2.3
  */
 @SuppressWarnings("serial")
 @ProviderType
@@ -1085,8 +1085,22 @@ public class ContactImpl extends ContactBaseImpl {
         return str;
     }
 
+    public String getUrl() {
+
+        String url = null;
+
+        List<UrlDTO> urls = getUrls();
+
+        if (urls.size() > 0) {
+            url = urls.get(0).getAddress();
+        }
+
+        return url;
+    }
+
     @Override
     public List<UrlDTO> getUrls() {
+
         List<UrlDTO> urlDTOs = new ArrayList<UrlDTO>();
 
         List<Url> urls = getVCard().getUrls();
