@@ -29,8 +29,8 @@ import ch.inofix.contact.model.Contact;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-24 22:01
- * @modified 2017-06-23 20:08
- * @version 1.1.0
+ * @modified 2017-06-24 15:52
+ * @version 1.1.2
  *
  */
 public class ContactSearch extends SearchContainer<Contact> {
@@ -41,8 +41,10 @@ public class ContactSearch extends SearchContainer<Contact> {
     static Map<String, String> orderableHeaders = new HashMap<String, String>();
 
     static {
+        headerNames.add("city");
         headerNames.add("company");
         headerNames.add("contact-id");
+        headerNames.add("country");
         headerNames.add("create-date");
         headerNames.add("email");
         // TODO: enable default fax
@@ -53,12 +55,15 @@ public class ContactSearch extends SearchContainer<Contact> {
         headerNames.add("modified-date");
         headerNames.add("name");
         headerNames.add("phone");
-        headerNames.add("portrait");
+        // TODO: enable the portrait column
+        // headerNames.add("portrait");
         headerNames.add("url");
         headerNames.add("user-name");
 
+        orderableHeaders.put("city", "city_sortable");
         orderableHeaders.put("company", "company_sortable");
         orderableHeaders.put("contact-id", "contact-id");
+        orderableHeaders.put("country", "country_sortable");
         orderableHeaders.put("create-date", "createDate_Number_sortable");
         orderableHeaders.put("email", "email_sortable");
         // TODO: enable default fax

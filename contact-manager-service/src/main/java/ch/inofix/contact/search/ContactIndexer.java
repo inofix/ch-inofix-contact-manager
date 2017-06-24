@@ -41,8 +41,8 @@ import ch.inofix.contact.service.permission.ContactPermission;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-20 13:28
- * @modified 2017-06-23 20:34
- * @version 1.1.2
+ * @modified 2017-06-24 15:44
+ * @version 1.1.3
  *
  */
 @Component(immediate = true, service = Indexer.class)
@@ -108,9 +108,11 @@ public class ContactIndexer extends BaseIndexer<Contact> {
 
         // Set document field values (in alphabetical order)
 
+        document.addTextSortable("city", contact.getAddress().getLocality());
         document.addTextSortable("company", contact.getCompany());
         document.addNumberSortable("contactId", contact.getContactId());
         document.addText(Field.CONTENT, contact.getCard());
+        document.addTextSortable("country", contact.getAddress().getCountry());
         document.addDateSortable(Field.CREATE_DATE, contact.getCreateDate());
         document.addText(Field.DESCRIPTION, "TODO: contact description");
         document.addTextSortable("email", contact.getEmail().getAddress());
