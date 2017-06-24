@@ -1,9 +1,9 @@
 <%-- 
-    edit_contact/edit_vcard.jsp: Edit the vCard String of the contact.
+    contact/vcard.jsp: Edit the vCard String of the contact.
     
     Created:    2015-05-08 15:42 by Christian Berndt
-    Modified:   2017-04-25 22:56 by Stefan Luebbers
-    Version:    1.0.4
+    Modified:   2017-06-24 13:45 by Christian Berndt
+    Version:    1.0.5
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -15,28 +15,23 @@
         contact_ = ContactServiceUtil.createContact();
     }
 
-    // TODO: check permissions
-    boolean hasUpdatePermission = true; 
+    boolean hasUpdatePermission = ContactPermission.contains(permissionChecker, contact_, ActionKeys.UPDATE);
 %>
 
-<aui:fieldset label="v-card">
+<aui:row>
+    <aui:fieldset cssClass="col-md-12" helpMessage="v-card-help" label="v-card" markupView="<%= markupView %>">
 
-	<aui:row>
-		<aui:col span="10">
-			<aui:input name="vCard" type="textarea" cssClass="v-card"
-				value="<%=contact_.getCard()%>" disabled="true" label=""
-				inlineField="true" />
-			<liferay-ui:icon-help message="v-card-help" />
-		</aui:col>
-		<aui:col span="2">
+		<aui:input name="vCard" type="textarea" cssClass="v-card"
+			value="<%=contact_.getCard()%>" disabled="true" label="" />
 
-			<portlet:resourceURL var="serveVCardURL" id="serveVCard">
-				<portlet:param name="contactId"
-					value="<%= String.valueOf(contact_.getContactId()) %>" />
-			</portlet:resourceURL>
+        <%-- 
+		<portlet:resourceURL var="serveVCardURL" id="serveVCard">
+			<portlet:param name="contactId"
+				value="<%= String.valueOf(contact_.getContactId()) %>" />
+		</portlet:resourceURL>
 
-			<aui:button href="<%=serveVCardURL%>" value="download" />
-
-		</aui:col>
-	</aui:row>
-</aui:fieldset>
+		<aui:button href="<%=serveVCardURL%>" value="download" />
+        --%>
+        
+    </aui:fieldset>
+</aui:row>

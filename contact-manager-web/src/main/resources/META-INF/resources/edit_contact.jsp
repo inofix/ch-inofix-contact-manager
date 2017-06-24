@@ -2,8 +2,8 @@
     edit_contact.jsp: edit a single contact. 
     
     Created:    2015-05-07 23:40 by Christian Berndt
-    Modified:   2017-06-23 21:25 by Christian Berndt
-    Version:    1.2.2
+    Modified:   2017-06-24 14:56 by Christian Berndt
+    Version:    1.2.4
 --%>
 
 <%@ include file="init.jsp"%>
@@ -17,23 +17,22 @@
         contact_ = ContactServiceUtil.createContact();
         renderResponse.setTitle(LanguageUtil.get(request, "new-contact"));
     } else {
-        renderResponse.setTitle(String.valueOf(contact_.getFullName()));
+        renderResponse.setTitle(String.valueOf(contact_.getName()));
     }
 
     String redirect = ParamUtil.getString(request, "redirect");
 
     String backURL = ParamUtil.getString(request, "backURL", redirect);
-    
+
     portletDisplay.setShowBackIcon(true);
     portletDisplay.setURLBack(redirect);
-    
+
     boolean hasUpdatePermission = ContactPermission.contains(permissionChecker, contact_,
             ContactActionKeys.UPDATE);
-    boolean hasViewPermission = ContactPermission.contains(permissionChecker, contact_,
-            ContactActionKeys.VIEW);
+    boolean hasViewPermission = ContactPermission.contains(permissionChecker, contact_, ContactActionKeys.VIEW);
     boolean hasDeletePermission = ContactPermission.contains(permissionChecker, contact_,
             ContactActionKeys.DELETE);
-    boolean hasPermissionsPermission = ContactPermission.contains(permissionChecker, contact_, 
+    boolean hasPermissionsPermission = ContactPermission.contains(permissionChecker, contact_,
             ContactActionKeys.PERMISSIONS);
 %>
 
@@ -55,15 +54,15 @@
             value="<%= redirect %>" />
 
         <div class="lfr-form-content">
-        
+                    
             <liferay-ui:form-navigator
-                id="<%=FormNavigatorConstants.FORM_NAVIGATOR_ID_CONTACT%>" 
-                markupView="<%= markupView %>"
-                showButtons="<%=hasUpdatePermission%>"                
-                />
+                 id="<%=FormNavigatorConstants.FORM_NAVIGATOR_ID_CONTACT%>"
+                 markupView="<%= markupView %>"
+                 showButtons="<%=hasUpdatePermission%>"
+                 />
 
         </div>
-        
+       
     </aui:form>
 
 </div>

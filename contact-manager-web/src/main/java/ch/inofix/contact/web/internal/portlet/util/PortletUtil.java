@@ -6,10 +6,12 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,6 +21,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
 import ch.inofix.contact.exception.ImageFileFormatException;
@@ -57,7 +60,6 @@ import ezvcard.property.Kind;
 import ezvcard.property.Language;
 import ezvcard.property.Logo;
 import ezvcard.property.Member;
-import ezvcard.property.Nickname;
 import ezvcard.property.Note;
 import ezvcard.property.Organization;
 import ezvcard.property.Photo;
@@ -83,8 +85,8 @@ import ezvcard.util.DataUri;
  *
  * @author Christian Berndt
  * @created 2015-05-16 15:31
- * @modified 2017-06-23 16:46
- * @version 1.1.7
+ * @modified 2017-06-24 11:41
+ * @version 1.1.8
  *
  */
 public class PortletUtil {
@@ -114,8 +116,6 @@ public class PortletUtil {
     public static VCard getVCard(HttpServletRequest request, VCard vCard, Map<String, File[]> map)
             throws PortalException {
 
-        _log.info("getVCard");
-
         // Retrieve the parameters and update the received vCard
         // with the parameter values.
         //
@@ -128,6 +128,21 @@ public class PortletUtil {
         // contact-manager portlet will be left untouched.
 
         Map<String, String[]> parameters = request.getParameterMap();
+
+        if (_log.isDebugEnabled()) {
+
+            Set<String> keySet = parameters.keySet();
+
+            Iterator<String> iterator = keySet.iterator();
+
+            while (iterator.hasNext()) {
+
+                String parameter = iterator.next();
+
+                _log.debug(parameter + " = " + request.getParameter(parameter));
+
+            }
+        }
 
         // Retrieve and set vCard properties (in alphabetical order)
 
@@ -686,15 +701,7 @@ public class PortletUtil {
 
         if (parameters.containsKey("nickname")) {
 
-            String[] names = ParamUtil.getParameterValues(request, "nickname");
-
-            Nickname nickname = new Nickname();
-
-            for (String name : names) {
-
-                // TODO
-                // nickname.addValue(name);
-            }
+            String nickname = ParamUtil.getString(request, "nickname");
 
             vCard.setNickname(nickname);
         }
@@ -1013,17 +1020,50 @@ public class PortletUtil {
             String snPrefix = ParamUtil.getString(request, "structuredName.prefix");
             String snSuffix = ParamUtil.getString(request, "structuredName.suffix");
 
-            // TODO
-            // structuredName.addAdditional(snAdditional);
+            structuredName.getAdditionalNames().add(snAdditional);
             structuredName.setFamily(snFamily);
             structuredName.setGiven(snGiven);
-            // TODO
-            // structuredName.addPrefix(snPrefix);
-            // TODO
-            // structuredName.addSuffix(snSuffix);
+            structuredName.getPrefixes().add(snPrefix);
+            structuredName.getSuffixes().add(snSuffix);
             structuredName.setSortAs(snFamily, snGiven);
 
             vCard.setStructuredName(structuredName);
+
+            StringBuilder sb = new StringBuilder();
+
+            if (Validator.isNotNull(snPrefix)) {
+                sb.append(snPrefix);
+            }
+
+            if (Validator.isNotNull(snGiven)) {
+                if (Validator.isNotNull(sb.toString())) {
+                    sb.append(StringPool.SPACE);
+                }
+                sb.append(snGiven);
+            }
+
+            if (Validator.isNotNull(snAdditional)) {
+                if (Validator.isNotNull(sb.toString())) {
+                    sb.append(StringPool.SPACE);
+                }
+                sb.append(snAdditional);
+            }
+
+            if (Validator.isNotNull(snFamily)) {
+                if (Validator.isNotNull(sb.toString())) {
+                    sb.append(StringPool.SPACE);
+                }
+                sb.append(snFamily);
+            }
+            if (Validator.isNotNull(snSuffix)) {
+                if (Validator.isNotNull(sb.toString())) {
+                    sb.append(StringPool.COMMA);
+                    sb.append(StringPool.SPACE);
+                }
+                sb.append(snSuffix);
+            }
+
+            vCard.setFormattedName(sb.toString());
 
         }
 

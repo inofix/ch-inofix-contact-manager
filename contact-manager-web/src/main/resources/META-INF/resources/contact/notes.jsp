@@ -2,8 +2,8 @@
     edit_contact/edit_notes.jsp: Edit the vCard's notes of the contact.
     
     Created:    2015-05-11 18:48 by Christian Berndt
-    Modified:   2017-04-25 14:09 by Stefan Luebbers
-    Version:    1.0.8
+    Modified:   2017-06-24 13:14 by Christian Berndt
+    Version:    1.0.9
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -17,19 +17,18 @@
         contact_ = ContactServiceUtil.createContact();
     }
 
-    // TODO: check permissions
-    boolean hasUpdatePermission = true; 
+    boolean hasUpdatePermission = ContactPermission.contains(permissionChecker, contact_, ActionKeys.UPDATE);
+    
+    String namespace = liferayPortletResponse.getNamespace();
 %>
 
-<aui:fieldset label="notes" id="note">
+    <aui:fieldset cssClass="col-md-6" label="notes" id="<%= namespace + "notes" %>" markupView="<%= markupView %>">
 
     <%
-    List<NoteDTO> notes = contact_.getNotes();
-
-        for (NoteDTO note : notes) {
+        List<NoteDTO> notes = contact_.getNotes();
+    
+            for (NoteDTO note : notes) {
     %>
-    <aui:row>
-        <aui:col span="12">
             <div class="lfr-form-row">
                 <div class="row-fields">
                     <div class="sort-handle"></div>
@@ -44,18 +43,16 @@
                         helpMessage="note-help"/>
                 </div>
             </div>
-        </aui:col>
-    </aui:row>
     <%
         }
     %>
 </aui:fieldset>
 
-<%-- Configure auto-fields 
+<%-- Configure auto-fields --%>
 <aui:script use="liferay-auto-fields">
 
     var noteAutoFields = new Liferay.AutoFields({
-        contentBox : 'fieldset#<portlet:namespace />note',
+        contentBox : 'fieldset#<portlet:namespace />notes',
         namespace : '<portlet:namespace />',
         sortable : true,
         sortableHandle: '.sort-handle',
@@ -67,5 +64,3 @@
     }).render();
 
 </aui:script>
---%>
-

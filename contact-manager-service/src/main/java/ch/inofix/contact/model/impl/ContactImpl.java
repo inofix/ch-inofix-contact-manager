@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.liferay.portal.kernel.util.SetUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
 import aQute.bnd.annotation.ProviderType;
@@ -34,6 +35,7 @@ import ch.inofix.contact.dto.InterestDTO;
 import ch.inofix.contact.dto.LanguageDTO;
 import ch.inofix.contact.dto.NoteDTO;
 import ch.inofix.contact.dto.PhoneDTO;
+import ch.inofix.contact.dto.StructuredNameDTO;
 import ch.inofix.contact.dto.UriDTO;
 import ch.inofix.contact.dto.UrlDTO;
 import ezvcard.Ezvcard;
@@ -64,6 +66,7 @@ import ezvcard.property.Key;
 import ezvcard.property.Kind;
 import ezvcard.property.Language;
 import ezvcard.property.Logo;
+import ezvcard.property.Nickname;
 import ezvcard.property.Note;
 import ezvcard.property.Organization;
 import ezvcard.property.Photo;
@@ -89,8 +92,8 @@ import ezvcard.util.DataUri;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-07 22:17
- * @modified 2017-06-23 20:33
- * @version 1.2.3
+ * @modified 2017-06-24 14:49
+ * @version 1.2.4
  */
 @SuppressWarnings("serial")
 @ProviderType
@@ -816,6 +819,21 @@ public class ContactImpl extends ContactBaseImpl {
 
     }
 
+    public String getNickname() {
+
+        StringBuilder sb = new StringBuilder();
+        Nickname nickname = getVCard().getNickname();
+
+        if (nickname != null) {
+            List<String> values = nickname.getValues();
+            for (String value : values) {
+                sb.append(value);
+                sb.append(StringPool.SPACE);
+            }
+        }
+        return sb.toString();
+    }
+
     @Override
     public List<NoteDTO> getNotes() {
 
@@ -1051,6 +1069,65 @@ public class ContactImpl extends ContactBaseImpl {
 
     }
 
+    private StructuredNameDTO getStructuredName(StructuredName structuredName) {
+
+        StructuredNameDTO structuredNameDTO = new StructuredNameDTO();
+
+        if (structuredName != null) {
+
+            StringBuilder sb = new StringBuilder();
+
+            List<String> additionalNames = structuredName.getAdditionalNames();
+
+            if (additionalNames.size() > 0) {
+                for (String additionalName : additionalNames) {
+                    sb.append(additionalName);
+                    sb.append(StringPool.SPACE);
+                }
+            }
+
+            structuredNameDTO.setAdditional(sb.toString());
+            structuredNameDTO.setFamily(structuredName.getFamily());
+            structuredNameDTO.setGiven(structuredName.getGiven());
+
+            sb = new StringBuilder();
+
+            List<String> prefixes = structuredName.getPrefixes();
+
+            if (prefixes.size() > 0) {
+                for (String prefix : prefixes) {
+                    sb.append(prefix);
+                    sb.append(StringPool.SPACE);
+                }
+            }
+
+            structuredNameDTO.setPrefix(sb.toString());
+
+            sb = new StringBuilder();
+
+            List<String> suffixes = structuredName.getSuffixes();
+
+            if (suffixes.size() > 0) {
+                for (String suffix : suffixes) {
+                    sb.append(suffix);
+                    sb.append(StringPool.SPACE);
+                }
+            }
+
+            structuredNameDTO.setSuffix(sb.toString());
+
+        }
+
+        return structuredNameDTO;
+    }
+
+    @Override
+    public StructuredNameDTO getStructuredName() {
+
+        return getStructuredName(getVCard().getStructuredName());
+
+    }
+
     @Override
     public VCard getVCard() {
 
@@ -1085,6 +1162,7 @@ public class ContactImpl extends ContactBaseImpl {
         return str;
     }
 
+    @Override
     public String getUrl() {
 
         String url = null;
