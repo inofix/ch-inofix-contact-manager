@@ -3,8 +3,8 @@
     for the main view of the contact manager portlet.
 
     Created:     2013-10-07 14:41 by Christian Berndt
-    Modified:    2017-06-23 19:13 by Christian Berndt
-    Version:     1.1.9
+    Modified:    2017-06-24 15:48 by Christian Berndt
+    Version:     1.2.0
 --%>
 
 <%
@@ -15,6 +15,11 @@
     for (String column : columns) {
 %>
 
+<c:if test='<%="city".equals(column)%>'>
+    <liferay-ui:search-container-column-text name="city"
+        property="address.locality" orderable="true"
+        href="<%=detailURL%>" />
+</c:if>
 <c:if test='<%="company".equals(column)%>'>
     <liferay-ui:search-container-column-text property="company"
         orderable="true" href="<%=detailURL%>"/>
@@ -23,7 +28,11 @@
     <liferay-ui:search-container-column-text property="contactId"
         name="contact-id" orderable="true" href="<%=detailURL%>" />
 </c:if>
-
+<c:if test='<%="country".equals(column)%>'>
+    <liferay-ui:search-container-column-text name="country"
+        property="address.country" orderable="true"
+        href="<%=detailURL%>" />
+</c:if>
 <c:if test='<%="create-date".equals(column)%>'>
     <liferay-ui:search-container-column-date property="createDate"
         name="create-date" orderable="true" href="<%=detailURL%>" />
