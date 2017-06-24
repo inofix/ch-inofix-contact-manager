@@ -2,8 +2,8 @@
     edit_contact.jsp: edit a single contact. 
     
     Created:    2015-05-07 23:40 by Christian Berndt
-    Modified:   2017-06-23 21:25 by Christian Berndt
-    Version:    1.2.2
+    Modified:   2017-06-24 10:48 by Christian Berndt
+    Version:    1.2.3
 --%>
 
 <%@ include file="init.jsp"%>
@@ -17,7 +17,7 @@
         contact_ = ContactServiceUtil.createContact();
         renderResponse.setTitle(LanguageUtil.get(request, "new-contact"));
     } else {
-        renderResponse.setTitle(String.valueOf(contact_.getFullName()));
+        renderResponse.setTitle(String.valueOf(contact_.getName()));
     }
 
     String redirect = ParamUtil.getString(request, "redirect");
