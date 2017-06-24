@@ -2,8 +2,8 @@
     personal.jsp: Edit the contact's personal information. 
     
     Created:    2015-05-08 18:02 by Christian Berndt
-    Modified:   2017-06-23 23:54 by Christian Berndt
-    Version:    1.1.5
+    Modified:   2017-06-24 13:16 by Christian Berndt
+    Version:    1.1.6
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -18,8 +18,7 @@
 		contact_ = ContactServiceUtil.createContact();
 	}
 
-	// TODO: check permissions
-	boolean hasUpdatePermission = true;
+    boolean hasUpdatePermission = ContactPermission.contains(permissionChecker, contact_, ActionKeys.UPDATE);
     
     String namespace = liferayPortletResponse.getNamespace();
 %>
@@ -181,6 +180,7 @@
 
 <%-- Configure auto-fields --%>
 <aui:script use="liferay-auto-fields">
+
 	var urlAutoFields = new Liferay.AutoFields({
 		contentBox : 'fieldset#<portlet:namespace />webAddresses',
 		namespace : '<portlet:namespace />',

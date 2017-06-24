@@ -2,8 +2,8 @@
  * main.css: The contact-manager portlet's css configuration
  *
  * Created:     2015-05-08 15:51 by Christian Berndt
- * Modified:    2017-06-23 21:29 by Christian Berndt
- * Version:     1.2.2
+ * Modified:    2017-06-24 14:58 by Christian Berndt
+ * Version:     1.2.3
  *
  */
 @import "bourbon";
@@ -80,6 +80,27 @@
             .form-control {
                 width: 100px;
             }
+        }
+    }
+    
+    fieldset {
+    
+        fieldset {
+        
+            .panel-title {
+                padding: 15px 15px 5px; 
+            }
+            
+            &.address {
+                .row-fields { 
+                
+                    padding-bottom: 30px;
+                
+                    .form-group {
+                        margin-bottom: 20px;
+                    }
+                }        
+            }        
         }
     }
     

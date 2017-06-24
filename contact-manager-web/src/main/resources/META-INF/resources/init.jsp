@@ -2,8 +2,8 @@
     init.jsp: Common setup code for the contact manager portlet.
 
     Created:     2017-03-30 16:44 by Stefan Luebbers
-    Modified:    2017-06-23 14:44 by Christian Berndt
-    Version:     1.0.7
+    Modified:    2017-06-24 14:56 by Christian Berndt
+    Version:     1.0.8
 --%>
 
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -57,6 +57,7 @@
 <%@page import="com.liferay.portal.kernel.search.Sort"%>
 <%@page import="com.liferay.portal.kernel.search.SortFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.security.auth.PrincipalException"%>
+<%@page import="com.liferay.portal.kernel.security.permission.ActionKeys"%>
 <%@page import="com.liferay.portal.kernel.service.PortletLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.service.UserLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
