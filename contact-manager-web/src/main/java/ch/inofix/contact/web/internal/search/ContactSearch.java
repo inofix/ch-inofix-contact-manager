@@ -29,8 +29,8 @@ import ch.inofix.contact.model.Contact;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-24 22:01
- * @modified 2017-06-23 20:08
- * @version 1.1.0
+ * @modified 2017-06-24 15:38
+ * @version 1.1.1
  *
  */
 public class ContactSearch extends SearchContainer<Contact> {
@@ -53,7 +53,8 @@ public class ContactSearch extends SearchContainer<Contact> {
         headerNames.add("modified-date");
         headerNames.add("name");
         headerNames.add("phone");
-        headerNames.add("portrait");
+        // TODO: enable the portrait column
+        // headerNames.add("portrait");
         headerNames.add("url");
         headerNames.add("user-name");
 
