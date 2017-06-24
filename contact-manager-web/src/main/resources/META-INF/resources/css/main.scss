@@ -2,12 +2,23 @@
  * main.css: The contact-manager portlet's css configuration
  *
  * Created:     2015-05-08 15:51 by Christian Berndt
- * Modified:    2017-06-24 14:58 by Christian Berndt
- * Version:     1.2.3
+ * Modified:    2017-06-25 22:27 by Christian Berndt
+ * Version:     1.2.4
  *
  */
 @import "bourbon";
 @import "mixins";
+
+.dialog-with-footer {
+    
+    .button-holder {
+        
+        &.dialog-footer {
+            position: fixed !important;
+            bottom: 0 !important;
+        }
+    }
+}
 
 .item-remove {
     .taglib-text-icon {    
