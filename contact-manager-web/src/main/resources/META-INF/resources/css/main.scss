@@ -2,8 +2,8 @@
  * main.css: The contact-manager portlet's css configuration
  *
  * Created:     2015-05-08 15:51 by Christian Berndt
- * Modified:    2017-06-25 13:18 by Christian Berndt
- * Version:     1.2.5
+ * Modified:    2017-06-25 15:45 by Christian Berndt
+ * Version:     1.2.6
  *
  */
 @import "bourbon";
@@ -35,6 +35,24 @@
     }
 }
 
+.input-container {
+    
+    .icon-monospaced {
+        &.external {
+            height: 16px; 
+            line-height: 16px; 
+            width: 16px;
+        }
+    }
+    
+    .lexicon-icon {
+        &.lexicon-icon-shortcut {
+            height: 12px; 
+            width: 12px;        
+        }
+    }
+}
+
 .item-remove {
     .taglib-text-icon {    
         &:before {
@@ -57,10 +75,6 @@
 .portlet-contact-manager {
     
     .contact-search {
-    
-        .basic-search {
-            margin-right: 30px;
-        }
         
         .clear-message {
         
@@ -124,6 +138,18 @@
                 width: 100px;
             }
         }
+        
+        .taglib-search-toggle-advanced-wrapper {
+        
+            .taglib-search-toggle-advanced {
+                border-color: transparent;
+            }
+            
+            .taglib-search-toggle-advanced-content { 
+                padding: 0 15px;
+            }
+        }
+
     }
     
     fieldset {
