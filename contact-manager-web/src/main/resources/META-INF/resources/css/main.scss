@@ -2,12 +2,27 @@
  * main.css: The contact-manager portlet's css configuration
  *
  * Created:     2015-05-08 15:51 by Christian Berndt
- * Modified:    2017-06-25 22:27 by Christian Berndt
- * Version:     1.2.4
+ * Modified:    2017-06-25 13:18 by Christian Berndt
+ * Version:     1.2.5
  *
  */
 @import "bourbon";
 @import "mixins";
+
+.container {
+    
+    .container-fluid-1280 {
+        padding-left: 0; 
+        padding-right: 0; 
+    }
+    
+    .management-bar {
+        .container-fluid-1280 {
+            padding-left: 15px; 
+            padding-right: 15px; 
+        }    
+    }
+}
 
 .dialog-with-footer {
     
@@ -41,37 +56,54 @@
  
 .portlet-contact-manager {
     
-    .btn-structured-name {
-        display: inline-block;
-        margin-top: 25px; 
-        vertical-align: top; 
-    }
-    
     .contact-search {
     
         .basic-search {
             margin-right: 30px;
         }
-    
-        .btn-xs {
         
-            position: absolute; 
-            right: 0; 
-            top: 16px;
+        .clear-message {
         
-            .icon-monospaced {
+            display: inline-block;
+            padding-bottom: 13px;
+            padding-top: 13px;
             
-                height: 16px;
-                line-height: 16px;
-                width: 16px;
+            a {
+                color: #777;
                 
-                .lexicon-icon {
-                    height: 16px;
-                    line-height: 16px;
-                    width: 16px;
-                    padding: 4px;                
+                &:hover {
+                    color: #333;
+                    text-decoration: none; 
                 }
             }
+        
+            .btn {
+                border: 0;
+                background-color: transparent;
+                margin-top: -2px;
+                padding: 0;
+            } 
+            
+            .icon-monospaced {
+                height: 18px;
+                line-height: 18px;
+                width: 18px;
+            }  
+            
+            .lexicon-icon {
+                width: 16px;
+                height: 16px;
+                padding: 3px;
+                margin-right: 3px;
+                color: #fff;
+                text-align: center;
+                background-color: #777;
+                border-radius: 3px;  
+                
+                &:hover {
+                    background-color: #333;
+                }          
+            }     
         }
     
         fieldset {

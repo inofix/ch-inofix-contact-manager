@@ -2,8 +2,8 @@
     navigation.jsp: Default navigation of Inofix' contact-manager.
     
     Created:     2017-06-18 23:56 by Christian Berndt
-    Modified:    2017-06-19 23:19 by Christian Berndt
-    Version:     1.0.1
+    Modified:    2017-06-25 15:35 by Christian Berndt
+    Version:     1.0.2
 --%>
 
 <%@ include file="/init.jsp" %>
@@ -31,9 +31,12 @@
 
         <aui:form action="<%= searchURL.toString() %>" cssClass="contact-search" name="searchFm">
         
-            <liferay-frontend:management-bar-button cssClass="btn-xs" href='<%= portletURL.toString() %>' icon='times' label='clear' />
-        
-            <liferay-ui:search-form            
+            <div class="clear-message">
+                <liferay-frontend:management-bar-button href='<%= portletURL.toString() %>' icon='times' label='clear' />      
+                <aui:a cssClass="muted" href="<%= portletURL.toString() %>" label="clear-current-query-and-sorts"/>
+             </div>
+       
+            <liferay-ui:search-form                            
                 page="/search_bar.jsp"
                 servletContext="<%= application %>"/>
         </aui:form>

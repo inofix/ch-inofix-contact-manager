@@ -96,10 +96,10 @@ import ezvcard.property.Uid;
  * @author Stefan Luebbers
  * @author Christian Berndt
  * @created 2017-03-30 19:52
- * @modified 2017-06-23 20:35
- * @version 1.0.9
+ * @modified 2017-06-25 13:04
+ * @version 1.1.0
  */
-@Component(immediate = true, property = { "com.liferay.portlet.css-class-wrapper=portlet-contact-manager",
+@Component(immediate = true, property = { "com.liferay.portlet.css-class-wrapper=ifx-portlet portlet-contact-manager",
         "com.liferay.portlet.display-category=category.inofix",
         "com.liferay.portlet.footer-portlet-javascript=/js/main.js",
         "com.liferay.portlet.header-portlet-css=/css/main.css", "com.liferay.portlet.instanceable=false",
