@@ -75,10 +75,6 @@
 .portlet-contact-manager {
     
     .contact-search {
-    
-        .basic-search {
-            margin-right: 30px;
-        }
         
         .clear-message {
         
@@ -142,6 +138,18 @@
                 width: 100px;
             }
         }
+        
+        .taglib-search-toggle-advanced-wrapper {
+        
+            .taglib-search-toggle-advanced {
+                border-color: transparent;
+            }
+            
+            .taglib-search-toggle-advanced-content { 
+                padding: 0 15px;
+            }
+        }
+
     }
     
     fieldset {
