@@ -2,8 +2,8 @@
  * main.css: The contact-manager portlet's css configuration
  *
  * Created:     2015-05-08 15:51 by Christian Berndt
- * Modified:    2017-06-25 13:18 by Christian Berndt
- * Version:     1.2.5
+ * Modified:    2017-06-25 15:45 by Christian Berndt
+ * Version:     1.2.6
  *
  */
 @import "bourbon";
@@ -31,6 +31,24 @@
         &.dialog-footer {
             position: fixed !important;
             bottom: 0 !important;
+        }
+    }
+}
+
+.input-container {
+    
+    .icon-monospaced {
+        &.external {
+            height: 16px; 
+            line-height: 16px; 
+            width: 16px;
+        }
+    }
+    
+    .lexicon-icon {
+        &.lexicon-icon-shortcut {
+            height: 12px; 
+            width: 12px;        
         }
     }
 }
