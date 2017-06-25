@@ -2,8 +2,8 @@
     navigation.jsp: Default navigation of Inofix' contact-manager.
     
     Created:     2017-06-18 23:56 by Christian Berndt
-    Modified:    2017-06-25 15:35 by Christian Berndt
-    Version:     1.0.2
+    Modified:    2017-06-25 23:18 by Christian Berndt
+    Version:     1.0.3
 --%>
 
 <%@ include file="/init.jsp" %>
@@ -24,22 +24,21 @@
         <aui:nav-item href="<%= exportImportURL.toString()  %>" label="export-import" selected="<%= "export-import".equals(tabs1) %>" />
     </aui:nav>
 
-    <aui:nav-bar-search>
-        <liferay-portlet:renderURL varImpl="searchURL">
-            <portlet:param name="redirect" value="<%= currentURL %>" />
-        </liferay-portlet:renderURL>
+    <liferay-portlet:renderURL varImpl="searchURL">
+        <portlet:param name="redirect" value="<%= currentURL %>" />
+    </liferay-portlet:renderURL>
 
-        <aui:form action="<%= searchURL.toString() %>" cssClass="contact-search" name="searchFm">
+    <aui:form action="<%= searchURL.toString() %>" cssClass="contact-search" name="searchFm">
+    
+        <%-- TODO: re-enable clear-message
+        <div class="clear-message">
+            <liferay-frontend:management-bar-button href='<%= portletURL.toString() %>' icon='times' label='clear' />      
+            <aui:a cssClass="muted" href="<%= portletURL.toString() %>" label="clear-current-query-and-sorts"/>
+        </div>
+        --%>
         
-            <div class="clear-message">
-                <liferay-frontend:management-bar-button href='<%= portletURL.toString() %>' icon='times' label='clear' />      
-                <aui:a cssClass="muted" href="<%= portletURL.toString() %>" label="clear-current-query-and-sorts"/>
-             </div>
-       
-            <liferay-ui:search-form                            
-                page="/search_bar.jsp"
-                servletContext="<%= application %>"/>
-        </aui:form>
+        <liferay-util:include page="/search_bar.jsp" servletContext="<%= application %>"/>      
 
-    </aui:nav-bar-search>
+    </aui:form>
+
 </aui:nav-bar>
