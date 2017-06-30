@@ -1,7 +1,7 @@
 package ch.inofix.contact.dto;
 
 /**
- * 
+ *
  * @author Christian Berndt
  * @created 2015-05-16 17:05
  * @modified 2015-05-16 17:05

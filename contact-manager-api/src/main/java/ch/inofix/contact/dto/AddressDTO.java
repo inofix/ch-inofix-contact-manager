@@ -1,13 +1,17 @@
 package ch.inofix.contact.dto;
 
 /**
- * 
+ *
  * @author Christian Berndt
  * @created 2015-05-15 20:11
- * @modified 2015-05-15 20:11
- * @version 1.0.0
+ * @modified 2017-07-01 00:08
+ * @version 1.0.1
  */
 public class AddressDTO extends BaseDTO {
+
+    public AddressDTO() {
+        setType("work");
+    }
 
 	private String country = "";
 	private String label = "";

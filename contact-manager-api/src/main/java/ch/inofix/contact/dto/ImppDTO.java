@@ -4,10 +4,14 @@ package ch.inofix.contact.dto;
  *
  * @author Christian Berndt
  * @created 2015-05-15 18:42
- * @modified 2015-05-15 18:42
- * @version 1.0.0
+ * @modified 2017-07-01 00:05
+ * @version 1.0.1
  */
 public class ImppDTO extends BaseDTO {
+
+    public ImppDTO() {
+        setType("work");
+    }
 
     String protocol = "";
     String uri = "";
