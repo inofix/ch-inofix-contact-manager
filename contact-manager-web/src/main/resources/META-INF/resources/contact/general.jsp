@@ -2,8 +2,8 @@
     general.jsp: Edit the contact's basic contact information. 
     
     Created:    2015-05-08 18:02 by Christian Berndt
-    Modified:   2017-06-24 10:52 by Christian Berndt
-    Version:    1.1.6
+    Modified:   2017-06-30 23:50 by Christian Berndt
+    Version:    1.1.7
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -39,15 +39,15 @@
             ImppType.WORK.getValue() };
 
     // TODO: Make imppProtocols configurable
-    String[] imppProtocols = new String[] { "other", "aim", "jabber",
+    String[] imppProtocols = new String[] { "aim", "jabber",
             "yahoo", "gadu-gadu", "msn", "icq", "groupwise", "skype",
-            "twitter" };
+            "twitter", "other" };
 
     String[] kinds = new String[] { Kind.APPLICATION, Kind.DEVICE,
             Kind.GROUP, Kind.INDIVIDUAL, Kind.LOCATION, Kind.ORG };
 
     // TODO: Make the phoneTypes configurable
-    String[] phoneTypes = new String[] { "other",
+    String[] phoneTypes = new String[] { 
 //          TelephoneType.BBS.getValue(), 
 //          TelephoneType.CAR.getValue(),
             TelephoneType.CELL.getValue(),
@@ -62,7 +62,8 @@
             TelephoneType.TEXTPHONE.getValue(),
             TelephoneType.VIDEO.getValue(),
             TelephoneType.VOICE.getValue(),
-//          TelephoneType.WORK.getValue() 
+            TelephoneType.WORK.getValue(),
+            "other"
             };
 %>
 

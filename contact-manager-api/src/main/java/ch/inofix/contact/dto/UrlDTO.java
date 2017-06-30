@@ -1,22 +1,26 @@
 package ch.inofix.contact.dto;
 
 /**
- * 
+ *
  * @author Christian Berndt
  * @created 2015-05-16 16:05
- * @modified 2015-05-16 16:05
- * @version 1.0.0
+ * @modified 2017-07-01 00:03
+ * @version 1.0.1
  */
 public class UrlDTO extends BaseDTO {
-	
-	private String address = "";
 
-	public String getAddress() {
-		return address;
-	}
+    public UrlDTO() {
+        setType("work");
+    }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    private String address = "";
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
 }
