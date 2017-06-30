@@ -85,8 +85,8 @@ import ezvcard.util.DataUri;
  *
  * @author Christian Berndt
  * @created 2015-05-16 15:31
- * @modified 2017-06-24 11:41
- * @version 1.1.8
+ * @modified 2017-06-30 23:49
+ * @version 1.1.9
  *
  */
 public class PortletUtil {
@@ -210,9 +210,7 @@ public class PortletUtil {
                     AddressType type = AddressType.find(addressTypes[i]);
 
                     if (type != null) {
-
-                        // TODO
-                        // address.addType(type);
+                        address.getTypes().add(type);
                     }
 
                     vCard.addAddress(address);
@@ -310,8 +308,9 @@ public class PortletUtil {
                     String[] values = categoriesValues[i].split(",");
 
                     for (String value : values) {
-                        // TODO
-                        // categories.addValue(value.trim());
+
+                        categories.getValues().add(value.trim());
+
                     }
 
                     vCard.addCategories(categories);
@@ -364,8 +363,7 @@ public class PortletUtil {
                     email.setPref(pref);
 
                     if (type != null) {
-                        // TODO
-                        // email.addType(type);
+                        email.getTypes().add(type);
                     }
                     vCard.addEmail(email);
                 }
@@ -475,8 +473,7 @@ public class PortletUtil {
                     Impp impp = new Impp(uri);
                     if (type != null) {
 
-                        // TODO
-                        // impp.addType(type);
+                        impp.getTypes().add(type);
                     }
 
                     Integer pref = getPref(i);
@@ -767,8 +764,7 @@ public class PortletUtil {
                     Telephone phone = new Telephone(phoneNumbers[i]);
 
                     if (type != null) {
-                        // TODO
-                        // phone.addType(type);
+                        phone.getTypes().add(type);
                     }
 
                     Integer pref = getPref(i);

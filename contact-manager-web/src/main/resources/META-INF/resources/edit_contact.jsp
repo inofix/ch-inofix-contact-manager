@@ -12,13 +12,16 @@
 
 <%
     Contact contact_ = (Contact) request.getAttribute(ContactManagerWebKeys.CONTACT);
+    String title = LanguageUtil.get(request, "new-contact"); 
 
     if (contact_ == null) {
         contact_ = ContactServiceUtil.createContact();
-        renderResponse.setTitle(LanguageUtil.get(request, "new-contact"));
     } else {
-        renderResponse.setTitle(String.valueOf(contact_.getName()));
+        title = contact_.getName();
     }
+    
+    renderResponse.setTitle(title);
+
 
     String redirect = ParamUtil.getString(request, "redirect");
 
@@ -44,25 +47,22 @@
 
     <aui:form method="post" action="<%=updateContactURL%>" name="fm">
 
-        <aui:input name="backURL" type="hidden"
-            value="<%= backURL %>" />
-        <aui:input name="cmd" type="hidden" 
-            value="<%= Constants.UPDATE %>"/>
+        <aui:input name="backURL" type="hidden" value="<%= backURL %>" />
+        <aui:input name="cmd" type="hidden"
+            value="<%= Constants.UPDATE %>" />
         <aui:input name="contactId" type="hidden"
             value="<%=String.valueOf(contact_.getContactId())%>" />
-        <aui:input name="redirect" type="hidden"
-            value="<%= redirect %>" />
+        <aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 
         <div class="lfr-form-content">
-                    
+
             <liferay-ui:form-navigator
-                 id="<%=FormNavigatorConstants.FORM_NAVIGATOR_ID_CONTACT%>"
-                 markupView="<%= markupView %>"
-                 showButtons="<%=hasUpdatePermission%>"
-                 />
+                id="<%=FormNavigatorConstants.FORM_NAVIGATOR_ID_CONTACT%>"
+                markupView="<%= markupView %>"
+                showButtons="<%=hasUpdatePermission%>" />
 
         </div>
-       
+
     </aui:form>
 
 </div>
