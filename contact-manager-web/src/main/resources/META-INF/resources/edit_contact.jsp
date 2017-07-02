@@ -2,8 +2,8 @@
     edit_contact.jsp: edit a single contact. 
     
     Created:    2015-05-07 23:40 by Christian Berndt
-    Modified:   2017-06-24 14:56 by Christian Berndt
-    Version:    1.2.4
+    Modified:   2017-07-02 21:11 by Christian Berndt
+    Version:    1.2.5
 --%>
 
 <%@ include file="init.jsp"%>
@@ -12,6 +12,7 @@
 
 <%
     Contact contact_ = (Contact) request.getAttribute(ContactManagerWebKeys.CONTACT);
+
     String title = LanguageUtil.get(request, "new-contact"); 
 
     if (contact_ == null) {
@@ -19,9 +20,6 @@
     } else {
         title = contact_.getName();
     }
-    
-    renderResponse.setTitle(title);
-
 
     String redirect = ParamUtil.getString(request, "redirect");
 
@@ -29,6 +27,10 @@
 
     portletDisplay.setShowBackIcon(true);
     portletDisplay.setURLBack(redirect);
+    
+    renderResponse.setTitle(title);
+    
+    request.setAttribute("showTitle", "true");  // used by the inofix-theme
 
     boolean hasUpdatePermission = ContactPermission.contains(permissionChecker, contact_,
             ContactActionKeys.UPDATE);
