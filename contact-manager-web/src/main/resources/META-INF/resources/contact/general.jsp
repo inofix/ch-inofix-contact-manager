@@ -2,8 +2,8 @@
     general.jsp: Edit the contact's basic contact information. 
     
     Created:    2015-05-08 18:02 by Christian Berndt
-    Modified:   2017-06-30 23:50 by Christian Berndt
-    Version:    1.1.7
+    Modified:   2017-07-03 17:24 by Christian Berndt
+    Version:    1.1.8
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -20,11 +20,17 @@
 <%
     Contact contact_ = (Contact) request.getAttribute(ContactManagerWebKeys.CONTACT);
 
-    if (contact_ == null) {
-        contact_ = ContactServiceUtil.createContact();
-    }
+    boolean hasUpdatePermission = false;
 
-    boolean hasUpdatePermission = ContactPermission.contains(permissionChecker, contact_, ActionKeys.UPDATE);
+    if (contact_ == null) {
+
+        contact_ = ContactServiceUtil.createContact();
+        hasUpdatePermission = true;
+
+    } else {
+
+        hasUpdatePermission = ContactPermission.contains(permissionChecker, contact_, ActionKeys.UPDATE);
+    }
 
     String namespace = liferayPortletResponse.getNamespace();
 %>

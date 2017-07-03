@@ -2,8 +2,8 @@
     edit_contact/edit_notes.jsp: Edit the vCard's notes of the contact.
     
     Created:    2015-05-11 18:48 by Christian Berndt
-    Modified:   2017-06-24 13:14 by Christian Berndt
-    Version:    1.0.9
+    Modified:   2017-07-03 17:17 by Christian Berndt
+    Version:    1.1.0
 --%>
 
 <%@ include file="/init.jsp"%>
