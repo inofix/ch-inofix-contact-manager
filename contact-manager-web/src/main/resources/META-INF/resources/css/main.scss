@@ -2,8 +2,8 @@
  * main.css: The contact-manager portlet's css configuration
  *
  * Created:     2015-05-08 15:51 by Christian Berndt
- * Modified:    2017-06-25 15:45 by Christian Berndt
- * Version:     1.2.6
+ * Modified:    2017-07-03 18:20 by Christian Berndt
+ * Version:     1.2.7
  *
  */
 @import "bourbon";
@@ -186,6 +186,12 @@
     .row-fields { 
         .form-group {
             margin-bottom: 0;
+        }
+    }
+    
+    .searchcontainer-content {
+        .icon {
+            font-size: 24px; 
         }
     }
 }

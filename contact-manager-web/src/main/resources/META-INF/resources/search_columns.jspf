@@ -3,9 +3,11 @@
     for the main view of the contact manager portlet.
 
     Created:     2013-10-07 14:41 by Christian Berndt
-    Modified:    2017-06-24 15:48 by Christian Berndt
-    Version:     1.2.0
+    Modified:    2017-07-03 17:47 by Christian Berndt
+    Version:     1.2.1
 --%>
+
+<%@page import="ezvcard.property.Kind"%>
 
 <%
     String[] columns = (String[])request.getAttribute("view.jsp-columns");
@@ -52,6 +54,20 @@
 <c:if test='<%="name".equals(column)%>'>
     <liferay-ui:search-container-column-text property="name"
         name="name" orderable="true" href="<%=detailURL%>" />
+</c:if>
+<c:if test='<%="portrait".equals(column)%>'>       
+    <liferay-ui:search-container-column-text align="center"
+        orderable="false" href="<%=detailURL%>">
+        <c:if test="<%= Kind.GROUP.equals(contact_.getKind()) %>">
+            <span class="icon icon-group"></span>
+        </c:if>
+        <c:if test="<%= Kind.INDIVIDUAL.equals(contact_.getKind()) %>">        
+            <span class="icon icon-user"></span> 
+        </c:if>
+        <c:if test="<%= Kind.ORG.equals(contact_.getKind()) %>"> 
+            <span class="icon icon-building"></span>
+        </c:if>
+    </liferay-ui:search-container-column-text>
 </c:if>
 <c:if test='<%="phone".equals(column)%>'>
     <liferay-ui:search-container-column-text property="phone.number"
