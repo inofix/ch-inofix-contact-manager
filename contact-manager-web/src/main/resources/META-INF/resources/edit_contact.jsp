@@ -2,8 +2,8 @@
     edit_contact.jsp: edit a single contact. 
     
     Created:    2015-05-07 23:40 by Christian Berndt
-    Modified:   2017-07-02 21:11 by Christian Berndt
-    Version:    1.2.5
+    Modified:   2017-07-03 17:09 by Christian Berndt
+    Version:    1.2.6
 --%>
 
 <%@ include file="init.jsp"%>
@@ -13,12 +13,26 @@
 <%
     Contact contact_ = (Contact) request.getAttribute(ContactManagerWebKeys.CONTACT);
 
-    String title = LanguageUtil.get(request, "new-contact"); 
+    String title = LanguageUtil.get(request, "new-contact");
+
+    boolean hasUpdatePermission = false;
+    boolean hasViewPermission = false;
+    boolean hasDeletePermission = false;
+    boolean hasPermissionsPermission = false;
 
     if (contact_ == null) {
+        
         contact_ = ContactServiceUtil.createContact();
+        hasUpdatePermission = true;
+        
     } else {
+        
         title = contact_.getName();
+        hasUpdatePermission = ContactPermission.contains(permissionChecker, contact_, ContactActionKeys.UPDATE);
+        hasViewPermission = ContactPermission.contains(permissionChecker, contact_, ContactActionKeys.VIEW);
+        hasDeletePermission = ContactPermission.contains(permissionChecker, contact_, ContactActionKeys.DELETE);
+        hasPermissionsPermission = ContactPermission.contains(permissionChecker, contact_,
+                ContactActionKeys.PERMISSIONS);
     }
 
     String redirect = ParamUtil.getString(request, "redirect");
@@ -27,18 +41,10 @@
 
     portletDisplay.setShowBackIcon(true);
     portletDisplay.setURLBack(redirect);
-    
-    renderResponse.setTitle(title);
-    
-    request.setAttribute("showTitle", "true");  // used by the inofix-theme
 
-    boolean hasUpdatePermission = ContactPermission.contains(permissionChecker, contact_,
-            ContactActionKeys.UPDATE);
-    boolean hasViewPermission = ContactPermission.contains(permissionChecker, contact_, ContactActionKeys.VIEW);
-    boolean hasDeletePermission = ContactPermission.contains(permissionChecker, contact_,
-            ContactActionKeys.DELETE);
-    boolean hasPermissionsPermission = ContactPermission.contains(permissionChecker, contact_,
-            ContactActionKeys.PERMISSIONS);
+    renderResponse.setTitle(title);
+
+    request.setAttribute("showTitle", "true"); // used by the inofix-theme
 %>
 
 <div class="container-fluid-1280">

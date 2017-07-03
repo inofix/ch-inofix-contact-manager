@@ -2,8 +2,8 @@
     edit_mailing_address.jsp: Edit the contact's mailing addresses. 
     
     Created:    2015-05-11 18:30 by Christian Berndt
-    Modified:   2017-06-24 13:15 by Christian Berndt
-    Version:    1.0.9
+    Modified:   2017-07-03 17:16 by Christian Berndt
+    Version:    1.1.0
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -14,12 +14,18 @@
 <%
     Contact contact_ = (Contact) request.getAttribute(ContactManagerWebKeys.CONTACT);
 
+    boolean hasUpdatePermission = false;
+
     if (contact_ == null) {
+
         contact_ = ContactServiceUtil.createContact();
+        hasUpdatePermission = true;
+
+    } else {
+
+        hasUpdatePermission = ContactPermission.contains(permissionChecker, contact_, ActionKeys.UPDATE);
     }
 
-    boolean hasUpdatePermission = ContactPermission.contains(permissionChecker, contact_, ActionKeys.UPDATE);
-    
     String namespace = liferayPortletResponse.getNamespace();
 %>
 <%

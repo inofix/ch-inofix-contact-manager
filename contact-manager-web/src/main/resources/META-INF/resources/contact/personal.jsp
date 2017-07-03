@@ -2,8 +2,8 @@
     personal.jsp: Edit the contact's personal information. 
     
     Created:    2015-05-08 18:02 by Christian Berndt
-    Modified:   2017-06-24 13:16 by Christian Berndt
-    Version:    1.1.6
+    Modified:   2017-07-03 17:18 by Christian Berndt
+    Version:    1.1.7
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -14,12 +14,18 @@
 <%
     Contact contact_ = (Contact) request.getAttribute(ContactManagerWebKeys.CONTACT);
 
-	if (contact_ == null) {
-		contact_ = ContactServiceUtil.createContact();
-	}
+    boolean hasUpdatePermission = false;
 
-    boolean hasUpdatePermission = ContactPermission.contains(permissionChecker, contact_, ActionKeys.UPDATE);
-    
+    if (contact_ == null) {
+
+        contact_ = ContactServiceUtil.createContact();
+        hasUpdatePermission = true;
+
+    } else {
+
+        hasUpdatePermission = ContactPermission.contains(permissionChecker, contact_, ActionKeys.UPDATE);
+    }
+
     String namespace = liferayPortletResponse.getNamespace();
 %>
 

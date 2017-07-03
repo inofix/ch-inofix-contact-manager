@@ -2,8 +2,8 @@
     edit_miscellaneous.jsp: Edit the miscellaneous contact information. 
     
     Created:    2015-05-16 20:06 by Christian Berndt
-    Modified:   2017-06-24 13:47 by Christian Berndt
-    Version:    1.1.5
+    Modified:   2017-07-03 17:17 by Christian Berndt
+    Version:    1.1.6
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -28,12 +28,18 @@
 <%
     Contact contact_ = (Contact) request.getAttribute(ContactManagerWebKeys.CONTACT);
 
+    boolean hasUpdatePermission = false;
+
     if (contact_ == null) {
+
         contact_ = ContactServiceUtil.createContact();
+        hasUpdatePermission = true;
+
+    } else {
+
+        hasUpdatePermission = ContactPermission.contains(permissionChecker, contact_, ActionKeys.UPDATE);
     }
 
-    boolean hasUpdatePermission = ContactPermission.contains(permissionChecker, contact_, ActionKeys.UPDATE);
-    
     String namespace = liferayPortletResponse.getNamespace();
 %>
 
