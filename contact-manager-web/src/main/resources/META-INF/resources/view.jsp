@@ -17,12 +17,9 @@
 
 	if (Validator.isNotNull(contactManagerConfiguration)) {
 		columns = portletPreferences.getValues("columns", contactManagerConfiguration.columns());
-		maxHeight = Integer
-				.parseInt(portletPreferences.getValue("max-height", contactManagerConfiguration.maxHeight()));
-		viewByDefault = Boolean.parseBoolean(
-				portletPreferences.getValue("view-by-default", contactManagerConfiguration.viewByDefault()));
-		portraitDisplay = portletPreferences.getValue("portrait-display",
-				contactManagerConfiguration.portraitDisplay());
+		maxHeight = Integer.parseInt(portletPreferences.getValue("max-height", contactManagerConfiguration.maxHeight()));
+		viewByDefault = Boolean.parseBoolean(portletPreferences.getValue("view-by-default", contactManagerConfiguration.viewByDefault()));
+		portraitDisplay = portletPreferences.getValue("portrait-display", contactManagerConfiguration.portraitDisplay());
 	}
 
 	String backURL = ParamUtil.getString(request, "backURL");
