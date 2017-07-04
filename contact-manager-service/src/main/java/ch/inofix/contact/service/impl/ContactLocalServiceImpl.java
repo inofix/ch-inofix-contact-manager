@@ -34,6 +34,8 @@ import com.liferay.portal.kernel.backgroundtask.BackgroundTaskManagerUtil;
 import com.liferay.portal.kernel.exception.LocaleException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
@@ -65,6 +67,7 @@ import aQute.bnd.annotation.ProviderType;
 import ch.inofix.contact.background.task.ContactImportBackgroundTaskExecutor;
 import ch.inofix.contact.model.Contact;
 import ch.inofix.contact.service.base.ContactLocalServiceBaseImpl;
+import ch.inofix.contact.social.ContactActivityKeys;
 
 /**
  * The implementation of the contact local service.
@@ -83,8 +86,8 @@ import ch.inofix.contact.service.base.ContactLocalServiceBaseImpl;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2017-06-20 17:19
- * @modified 2017-06-23 13:39
- * @version 1.0.2
+ * @modified 2017-07-04 16:10
+ * @version 1.0.3
  * @see ContactLocalServiceBaseImpl
  * @see ch.inofix.contact.service.ContactLocalServiceUtil
  */
@@ -134,6 +137,7 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
         } else {
             addContactResources(contact, serviceContext.getModelPermissions());
         }
+
         // Asset
 
         updateAsset(userId, contact, serviceContext.getAssetCategoryIds(), serviceContext.getAssetTagNames(),
@@ -141,15 +145,12 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
 
         // Social
 
-        // TODO reactivate socialActivity
-        // JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject();
-        //
-        // extraDataJSONObject.put("title", contact.getFullName(true));
-        //
-        // socialActivityLocalService.addActivity(userId, groupId,
-        // Contact.class.getName(), contact.getContactId(),
-        // ContactActivityKeys.ADD_CONTACT,
-        // extraDataJSONObject.toString(), 0);
+        JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject();
+
+        extraDataJSONObject.put("title", contact.getName());
+
+        socialActivityLocalService.addActivity(userId, groupId, Contact.class.getName(), contactId,
+                ContactActivityKeys.ADD_CONTACT, extraDataJSONObject.toString(), 0);
 
         return contact;
     }
@@ -231,8 +232,6 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
         // Asset
 
         assetEntryLocalService.deleteEntry(Contact.class.getName(), contact.getContactId());
-
-        // TODO remove from socialActivityService?
 
         return contact;
     }
@@ -420,7 +419,8 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
         assetLinkLocalService.updateLinks(userId, assetEntry.getEntryId(), assetLinkEntryIds,
                 AssetLinkConstants.TYPE_RELATED);
 
-//        assetEntryLocalService.updateVisible(Contact.class.getName(), classPK, visible);
+        // assetEntryLocalService.updateVisible(Contact.class.getName(),
+        // classPK, visible);
 
     }
 
@@ -462,15 +462,12 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
 
         // Social
 
-        // TODO activate social
-        // JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject();
-        //
-        // extraDataJSONObject.put("title", contact.getFullName(true));
-        //
-        // socialActivityLocalService.addActivity(userId, groupId,
-        // Contact.class.getName(), contact.getContactId(),
-        // ContactActivityKeys.UPDATE_CONTACT,
-        // extraDataJSONObject.toString(), 0);
+        JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject();
+
+        extraDataJSONObject.put("title", contact.getName());
+
+        socialActivityLocalService.addActivity(userId, groupId, Contact.class.getName(), contact.getContactId(),
+                ContactActivityKeys.UPDATE_CONTACT, extraDataJSONObject.toString(), 0);
 
         return contact;
     }
