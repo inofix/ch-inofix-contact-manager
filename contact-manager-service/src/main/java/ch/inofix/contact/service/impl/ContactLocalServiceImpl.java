@@ -56,7 +56,6 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.permission.ModelPermissions;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.ContentTypes;
-//import com.liferay.portal.kernel.util.File;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -86,8 +85,8 @@ import ch.inofix.contact.social.ContactActivityKeys;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2017-06-20 17:19
- * @modified 2017-07-04 16:10
- * @version 1.0.3
+ * @modified 2017-07-04 17:15
+ * @version 1.0.4
  * @see ContactLocalServiceBaseImpl
  * @see ch.inofix.contact.service.ContactLocalServiceUtil
  */
@@ -431,29 +430,17 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
 
         // Contact
 
-        User user = userPersistence.findByPrimaryKey(userId);
-
         long groupId = serviceContext.getScopeGroupId();
 
         Contact contact = contactPersistence.findByPrimaryKey(contactId);
 
         // TODO: validate the vCard string
 
-        contact.setUuid(serviceContext.getUuid());
         contact.setGroupId(groupId);
-        contact.setCompanyId(user.getCompanyId());
-        contact.setUserId(user.getUserId());
-        contact.setUserName(user.getFullName());
         contact.setExpandoBridgeAttributes(serviceContext);
-
         contact.setCard(card);
-        contact.setUid(uid);
 
         contactPersistence.update(contact);
-
-        // Resources
-
-        resourceLocalService.addModelResources(contact, serviceContext);
 
         // Asset
 
