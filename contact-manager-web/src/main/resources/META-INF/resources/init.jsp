@@ -2,8 +2,8 @@
     init.jsp: Common setup code for the contact manager portlet.
 
     Created:     2017-03-30 16:44 by Stefan Luebbers
-    Modified:    2017-06-24 14:56 by Christian Berndt
-    Version:     1.0.8
+    Modified:    2017-07-09 15:09 by Christian Berndt
+    Version:     1.0.9
 --%>
 
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -90,6 +90,8 @@
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="javax.portlet.ResourceURL"%>
 
+<%@page import="ezvcard.property.Kind"%>
+
 <liferay-frontend:defineObjects />
 
 <liferay-theme:defineObjects />
@@ -103,6 +105,10 @@
     Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZone);
 
     String markupView = "lexicon";
+    
+    String[] snFields = new String[] { "structuredName.prefix",
+            "structuredName.given", "structuredName.additional",
+            "structuredName.family", "structuredName.suffix" };
 
     String tabs1 = ParamUtil.getString(request, "tabs1", "contacts");
     String tabs2 = ParamUtil.getString(request, "tabs2", "export");

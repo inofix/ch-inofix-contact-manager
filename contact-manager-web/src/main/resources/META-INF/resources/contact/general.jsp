@@ -2,8 +2,8 @@
     general.jsp: Edit the contact's basic contact information. 
     
     Created:    2015-05-08 18:02 by Christian Berndt
-    Modified:   2017-07-09 14:13 by Christian Berndt
-    Version:    1.2.0
+    Modified:   2017-07-09 15:09 by Christian Berndt
+    Version:    1.2.1
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -15,7 +15,6 @@
 
 <%@page import="ezvcard.parameter.ImppType"%>
 <%@page import="ezvcard.parameter.TelephoneType"%>
-<%@page import="ezvcard.property.Kind"%>
 
 <%
     Contact contact_ = (Contact) request.getAttribute(ContactManagerWebKeys.CONTACT);
@@ -95,26 +94,44 @@
 
     <aui:fieldset cssClass="col-md-6" label="name" id="<%= namespace + "name" %>" markupView="<%= markupView %>">
     
-        <aui:input name="formattedName" bean="<%=contact_%>"
-            helpMessage="formatted-name-help"
-            disabled="<%= true %>" />
-            
-        <%
-            String[] snFields = new String[] { "structuredName.prefix",
-                    "structuredName.given", "structuredName.additional",
-                    "structuredName.family", "structuredName.suffix" };
+        <c:choose>
+            <c:when test="<%= Kind.ORG.equals(contact_.getKind()) %>">
+                
+                <aui:input name="company" bean="<%=contact_%>"
+                    helpMessage="company-help"
+                    disabled="<%=!hasUpdatePermission%>" />
         
-            for (String snField : snFields) {
-        %>
-        <aui:input helpMessage='<%= snField + "-help" %>'
-            name="<%=snField%>" bean="<%=contact_%>"
-            disabled="<%= !hasUpdatePermission %>"/>
-        <%
-            }
-        %>
+                <aui:input name="department" bean="<%=contact_%>"
+                    helpMessage="department-help"
+                    disabled="<%=!hasUpdatePermission%>" />
+        
+                <aui:input name="office" bean="<%=contact_%>"
+                    helpMessage="office-help"
+                    disabled="<%=!hasUpdatePermission%>" />
+                 
+            </c:when>
+            <c:otherwise>
     
-        <aui:input name="nickname" bean="<%=contact_%>"
-            helpMessage="nickname-help" disabled="<%= !hasUpdatePermission %>" />
+                <aui:input name="formattedName" bean="<%=contact_%>"
+                    helpMessage="formatted-name-help"
+                    disabled="<%= true %>" />
+                    
+                <%                
+                    for (String snField : snFields) {
+                %>
+                <aui:input helpMessage='<%= snField + "-help" %>'
+                    name="<%=snField%>" bean="<%=contact_%>"
+                    disabled="<%= !hasUpdatePermission %>"/>
+                <%
+                    }
+                %>
+            
+                <aui:input name="nickname" bean="<%=contact_%>"
+                    helpMessage="nickname-help" disabled="<%= !hasUpdatePermission %>" />
+            
+            </c:otherwise>
+        </c:choose>
+
     </aui:fieldset>
     
     <aui:fieldset cssClass="col-md-6" label="email" helpMessage="email.address-help" id="<%= namespace + "email" %>" markupView="<%= markupView %>">
