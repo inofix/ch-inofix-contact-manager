@@ -2,8 +2,8 @@
     general.jsp: Edit the contact's basic contact information. 
     
     Created:    2015-05-08 18:02 by Christian Berndt
-    Modified:   2017-07-03 17:24 by Christian Berndt
-    Version:    1.1.8
+    Modified:   2017-07-09 13:21 by Christian Berndt
+    Version:    1.1.9
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -33,6 +33,7 @@
     }
 
     String namespace = liferayPortletResponse.getNamespace();
+    namespace = ""; // not required in 7.0.2 but in 7.0.3?
 %>
 
 <%

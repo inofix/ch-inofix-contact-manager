@@ -2,8 +2,8 @@
     edit_contact/edit_notes.jsp: Edit the vCard's notes of the contact.
     
     Created:    2015-05-11 18:48 by Christian Berndt
-    Modified:   2017-07-03 17:17 by Christian Berndt
-    Version:    1.1.0
+    Modified:   2017-07-09 13:22 by Christian Berndt
+    Version:    1.1.1
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -20,6 +20,7 @@
     boolean hasUpdatePermission = ContactPermission.contains(permissionChecker, contact_, ActionKeys.UPDATE);
     
     String namespace = liferayPortletResponse.getNamespace();
+    namespace = ""; // not required in 7.0.2 but in 7.0.3?
 %>
 
     <aui:fieldset cssClass="col-md-6" label="notes" id="<%= namespace + "notes" %>" markupView="<%= markupView %>">

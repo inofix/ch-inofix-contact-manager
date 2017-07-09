@@ -2,8 +2,8 @@
     edit_miscellaneous.jsp: Edit the miscellaneous contact information. 
     
     Created:    2015-05-16 20:06 by Christian Berndt
-    Modified:   2017-07-03 17:17 by Christian Berndt
-    Version:    1.1.6
+    Modified:   2017-07-09 13:22 by Christian Berndt
+    Version:    1.1.7
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -41,6 +41,7 @@
     }
 
     String namespace = liferayPortletResponse.getNamespace();
+    namespace = ""; // not required in 7.0.2 but in 7.0.3?
 %>
 
 <%

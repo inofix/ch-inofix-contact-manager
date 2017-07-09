@@ -96,8 +96,8 @@ import ezvcard.property.Uid;
  * @author Stefan Luebbers
  * @author Christian Berndt
  * @created 2017-03-30 19:52
- * @modified 2017-07-03 17:41
- * @version 1.1.1
+ * @modified 2017-07-09 13:03
+ * @version 1.1.2
  */
 @Component(immediate = true, property = { "com.liferay.portlet.css-class-wrapper=ifx-portlet portlet-contact-manager",
         "com.liferay.portlet.display-category=category.inofix",
@@ -556,14 +556,19 @@ public class ContactManagerPortlet extends MVCPortlet {
     protected void importContacts(ActionRequest actionRequest, String fileName, InputStream inputStream)
             throws Exception {
 
-        _log.info("importContacts");
-
         long groupId = ParamUtil.getLong(actionRequest, "groupId");
 
         ExportImportConfiguration exportImportConfiguration = getExportImportConfiguration(actionRequest);
 
         exportImportConfiguration.setName("Contacts");
         exportImportConfiguration.setGroupId(groupId);
+
+        Map<String, Serializable> settingsMap = new HashMap<>();
+        settingsMap.put("targetGroupId", groupId);
+
+        String settings = JSONFactoryUtil.serialize(settingsMap);
+
+        exportImportConfiguration.setSettings(settings);
 
         _contactService.importContactsInBackground(exportImportConfiguration, inputStream);
 

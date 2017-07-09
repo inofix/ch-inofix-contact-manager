@@ -2,8 +2,8 @@
     edit_mailing_address.jsp: Edit the contact's mailing addresses. 
     
     Created:    2015-05-11 18:30 by Christian Berndt
-    Modified:   2017-07-03 17:16 by Christian Berndt
-    Version:    1.1.0
+    Modified:   2017-07-09 13:21 by Christian Berndt
+    Version:    1.1.1
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -27,6 +27,7 @@
     }
 
     String namespace = liferayPortletResponse.getNamespace();
+    namespace = ""; // not required in 7.0.2 but in 7.0.3?
 %>
 <%
 	// TODO: make the list of address-types configurable
