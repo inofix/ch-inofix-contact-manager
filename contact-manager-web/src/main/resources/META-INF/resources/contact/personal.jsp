@@ -2,8 +2,8 @@
     personal.jsp: Edit the contact's personal information. 
     
     Created:    2015-05-08 18:02 by Christian Berndt
-    Modified:   2017-07-09 14:18 by Christian Berndt
-    Version:    1.1.9
+    Modified:   2017-07-09 15:09 by Christian Berndt
+    Version:    1.2.0
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -35,30 +35,56 @@
 %>
 
 <aui:row>
+        
+    <c:choose>
+        <c:when test="<%=Kind.ORG.equals(contact_.getKind())%>">
 
-    <aui:fieldset cssClass="fieldset col-md-6" label="job"
-        markupView="<%=markupView%>">
+            <%
+                // in org-mode, reset any structured name data
+                for (String snField : snFields) {
+            %>
+            <aui:input bean="<%=contact_%>"
+                disabled="<%=!hasUpdatePermission%>"
+                name="<%=snField%>" type="hidden" value="" />
+            <%
+                }
+            %>
 
-        <aui:input name="title" bean="<%=contact_%>"
-            helpMessage="title-help"
-            disabled="<%=!hasUpdatePermission%>" />
+            <aui:input disabled="<%=!hasUpdatePermission%>"
+                name="nickname" bean="<%=contact_%>" type="hidden"
+                value="" />
 
-        <aui:input name="role" bean="<%=contact_%>"
-            helpMessage="role-help" disabled="<%=!hasUpdatePermission%>" />
+        </c:when>
+        <c:otherwise>
+            
+            <aui:fieldset cssClass="fieldset col-md-6" label="job"
+                markupView="<%=markupView%>">
+            
+                <aui:input name="title" bean="<%=contact_%>"
+                    helpMessage="title-help"
+                    disabled="<%=!hasUpdatePermission%>" />
+        
+                <aui:input name="role" bean="<%=contact_%>"
+                    helpMessage="role-help" disabled="<%=!hasUpdatePermission%>" />
+                    
+                <aui:input name="company" bean="<%=contact_%>"
+                    helpMessage="company-help"
+                    disabled="<%=!hasUpdatePermission%>" />
+        
+                <aui:input name="department" bean="<%=contact_%>"
+                    helpMessage="department-help"
+                    disabled="<%=!hasUpdatePermission%>" />
+        
+                <aui:input name="office" bean="<%=contact_%>"
+                    helpMessage="office-help"
+                    disabled="<%=!hasUpdatePermission%>" /> 
+                                            
+            </aui:fieldset>
+    
+        </c:otherwise>
+        
+    </c:choose>
 
-        <aui:input name="company" bean="<%=contact_%>"
-            helpMessage="company-help"
-            disabled="<%=!hasUpdatePermission%>" />
-
-        <aui:input name="department" bean="<%=contact_%>"
-            helpMessage="department-help"
-            disabled="<%=!hasUpdatePermission%>" />
-
-        <aui:input name="office" bean="<%=contact_%>"
-            helpMessage="office-help"
-            disabled="<%=!hasUpdatePermission%>" />
-
-    </aui:fieldset>
 
 
     <aui:fieldset cssClass="col-md-6" label="web-addresses" id="<%= namespace + "webAddresses" %>" markupView="<%= markupView %>">
