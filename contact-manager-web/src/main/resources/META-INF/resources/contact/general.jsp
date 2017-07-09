@@ -2,8 +2,8 @@
     general.jsp: Edit the contact's basic contact information. 
     
     Created:    2015-05-08 18:02 by Christian Berndt
-    Modified:   2017-07-09 13:21 by Christian Berndt
-    Version:    1.1.9
+    Modified:   2017-07-09 14:13 by Christian Berndt
+    Version:    1.2.0
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -75,10 +75,10 @@
 %>
 
 <aui:row>
-    <aui:fieldset cssClass="col-md-6" markupView="<%= markupView %>">
+    <aui:fieldset cssClass="col-md-6 kind" markupView="<%= markupView %>">
     
-        <aui:select helpMessage="kind-help" inlineField="true" inlineLabel="true" name="kind" title="kind-help" label=""
-            disabled="<%= !hasUpdatePermission %>">
+        <aui:select helpMessage="kind-help" inlineField="true" name="kind" title="kind-help"
+            disabled="<%= !hasUpdatePermission %>" onChange="<%= liferayPortletResponse.getNamespace() + "submitForm()" %>">
             <%
                 for (String kind : kinds) {
             %>
@@ -307,4 +307,13 @@
         }
     }).render();
 
+</aui:script>
+
+<aui:script>
+    function <portlet:namespace />submitForm() {
+    
+        var form = AUI.$(document.<portlet:namespace />fm);
+    
+        submitForm(form);
+    }
 </aui:script>
