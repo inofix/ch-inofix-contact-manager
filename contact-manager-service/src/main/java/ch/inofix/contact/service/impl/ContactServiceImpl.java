@@ -57,8 +57,8 @@ import ch.inofix.contact.service.permission.ContactPermission;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-07 23:50
- * @modified 2017-07-05 13:10
- * @version 1.0.8
+ * @modified 2017-07-09 13:03
+ * @version 1.0.9
  * @see ContactServiceBaseImpl
  * @see ch.inofix.contact.service.ContactServiceUtil
  */
@@ -151,10 +151,7 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
 
         Map<String, Serializable> settingsMap = exportImportConfiguration.getSettingsMap();
 
-        // TODO: fix targetGroupId lookup in contacts import
         long targetGroupId = MapUtil.getLong(settingsMap, "targetGroupId");
-
-        _log.info("targetGroupId = " + targetGroupId);
 
         ContactManagerPermission.check(getPermissionChecker(), targetGroupId, ContactActionKeys.IMPORT_CONTACTS);
 
