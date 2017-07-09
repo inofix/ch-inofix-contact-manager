@@ -2,8 +2,8 @@
     personal.jsp: Edit the contact's personal information. 
     
     Created:    2015-05-08 18:02 by Christian Berndt
-    Modified:   2017-07-09 13:22 by Christian Berndt
-    Version:    1.1.8
+    Modified:   2017-07-09 14:18 by Christian Berndt
+    Version:    1.1.9
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -109,7 +109,7 @@
                     <aui:input name="calendar.uri"
                         inlineField="true" inlineLabel="left"
                         value="<%=calendar.getUri()%>"
-                        label="calendar-request-uri"
+                        label=""
                         disabled="<%=!hasUpdatePermission%>"
                         helpMessage="calendar-request.uri-help" />
                 </div>
@@ -132,7 +132,7 @@
                     <aui:input name="freeBusyUrl.url"
                         inlineLabel="left"
                         value="<%=freeBusyUrl.getAddress()%>"
-                        label="free-busy-url"
+                        label=""
                         disabled="<%=!hasUpdatePermission%>"
                         helpMessage="free-busy.url-help" />
 
@@ -156,7 +156,7 @@
                     <aui:input name="calendar.uri"
                         inlineField="true" inlineLabel="left"
                         value="<%=calendarUri.getUri()%>"
-                        label="calendar-uri"
+                        label=""
                         disabled="<%=!hasUpdatePermission%>"
                         helpMessage="calendar.uri-help" />
                 </div>
