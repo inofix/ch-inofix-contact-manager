@@ -64,7 +64,6 @@ public class ContactAssetRenderer extends BaseJSPAssetRenderer<Contact> implemen
     @Override
     public String getJspPath(HttpServletRequest request, String template) {
         if (template.equals(TEMPLATE_ABSTRACT) || template.equals(TEMPLATE_FULL_CONTENT)) {
-            // TODO: add jsp-tempates
             return "/asset/" + template + ".jsp";
         } else {
             return null;
