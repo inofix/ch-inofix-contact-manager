@@ -2,8 +2,8 @@
     contact/vcard.jsp: Edit the vCard String of the contact.
     
     Created:    2015-05-08 15:42 by Christian Berndt
-    Modified:   2017-07-03 17:18 by Christian Berndt
-    Version:    1.0.6
+    Modified:   2017-07-09 13:22 by Christian Berndt
+    Version:    1.0.7
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -24,6 +24,7 @@
     }
 
     String namespace = liferayPortletResponse.getNamespace();
+    namespace = ""; // not required in 7.0.2 but in 7.0.3?
 %>
 
 <aui:row>
