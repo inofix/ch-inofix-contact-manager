@@ -5,8 +5,8 @@
     - etc.
     
     Created:    2015-06-25 18:50 by Christian Berndt
-    Modified:   2017-07-09 13:21 by Christian Berndt
-    Version:    1.0.7
+    Modified:   2017-07-25 22:25 by Christian Berndt
+    Version:    1.0.8
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -23,7 +23,6 @@
     boolean hasUpdatePermission = ContactPermission.contains(permissionChecker, contact_, ActionKeys.UPDATE);
     
     String namespace = liferayPortletResponse.getNamespace();
-    namespace = ""; // not required in 7.0.2 but in 7.0.3?
 %>
 
 <aui:row>

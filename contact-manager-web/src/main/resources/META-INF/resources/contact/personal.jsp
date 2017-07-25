@@ -2,8 +2,8 @@
     personal.jsp: Edit the contact's personal information. 
     
     Created:    2015-05-08 18:02 by Christian Berndt
-    Modified:   2017-07-09 15:09 by Christian Berndt
-    Version:    1.2.0
+    Modified:   2017-07-25 22:27 by Christian Berndt
+    Version:    1.2.1
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -27,7 +27,6 @@
     }
 
     String namespace = liferayPortletResponse.getNamespace();
-    namespace = ""; // not required in 7.0.2 but in 7.0.3?
 %>
 
 <%
