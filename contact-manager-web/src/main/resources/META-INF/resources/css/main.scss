@@ -2,8 +2,8 @@
  * main.css: The contact-manager portlet's css configuration
  *
  * Created:     2015-05-08 15:51 by Christian Berndt
- * Modified:    2017-07-03 18:20 by Christian Berndt
- * Version:     1.2.7
+ * Modified:    2017-07-25 23:23 by Christian Berndt
+ * Version:     1.2.8
  *
  */
 @import "bourbon";
@@ -76,11 +76,14 @@
     
     .contact-search {
         
+        text-align: right; 
+        
         .clear-message {
         
             display: inline-block;
-            padding-bottom: 13px;
-            padding-top: 13px;
+            padding-bottom: 17px;
+            padding-top: 17px;
+            padding-right: 15px;
             
             a {
                 color: #777;
@@ -96,7 +99,7 @@
                 background-color: transparent;
                 margin-top: -2px;
                 padding: 0;
-            } 
+            }
             
             .icon-monospaced {
                 height: 18px;
