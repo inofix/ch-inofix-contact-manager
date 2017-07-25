@@ -2,8 +2,8 @@
     navigation.jsp: Default navigation of Inofix' contact-manager.
     
     Created:     2017-06-18 23:56 by Christian Berndt
-    Modified:    2017-06-25 23:18 by Christian Berndt
-    Version:     1.0.3
+    Modified:    2017-07-25 23:21 by Christian Berndt
+    Version:     1.0.4
 --%>
 
 <%@ include file="/init.jsp" %>
@@ -15,6 +15,8 @@
     PortletURL exportImportURL = renderResponse.createRenderURL();
     exportImportURL.setParameter("tabs1", "export-import"); 
     exportImportURL.setParameter("tabs2", "import"); 
+    
+    long formDateTime = ParamUtil.getLong(request, "formDate"); 
 %>
 
 <aui:nav-bar cssClass="collapse-basic-search" markupView="<%= markupView %>">
@@ -30,12 +32,12 @@
 
     <aui:form action="<%= searchURL.toString() %>" cssClass="contact-search" name="searchFm">
     
-        <%-- TODO: re-enable clear-message
-        <div class="clear-message">
-            <liferay-frontend:management-bar-button href='<%= portletURL.toString() %>' icon='times' label='clear' />      
-            <aui:a cssClass="muted" href="<%= portletURL.toString() %>" label="clear-current-query-and-sorts"/>
-        </div>
-        --%>
+        <c:if test="<%= formDateTime > 0 %>">           
+            <div class="clear-message">
+                <liferay-frontend:management-bar-button href='<%= portletURL.toString() %>' icon='times' label='clear' />      
+                <aui:a cssClass="muted" href="<%= portletURL.toString() %>" label="clear-current-query-and-sorts"/>
+            </div>
+        </c:if> 
         
         <liferay-util:include page="/search_bar.jsp" servletContext="<%= application %>"/>      
 
