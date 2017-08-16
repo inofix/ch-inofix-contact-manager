@@ -7,6 +7,4 @@ Export-Package: \
 	ch.inofix.contact.service,\
 	ch.inofix.contact.service.persistence,\
 	ch.inofix.contact.constants,\
-	ch.inofix.contact.search,\
 	ch.inofix.contact.dto
-    
