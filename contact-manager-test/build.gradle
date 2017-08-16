@@ -82,6 +82,10 @@ deployTestLibs {
 //    rename new RenameDependencyClosure(project, configurations.testLibs.name)
 }
 
+jar {
+    onlyIf { !sourceSets.main.allSource.files.isEmpty() }
+}
+
 testIntegration {
     dependsOn deployTestLibs
 }
