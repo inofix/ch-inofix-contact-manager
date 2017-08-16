@@ -28,7 +28,7 @@ task unzipBundle(type: Copy) {
     dependsOn downloadBundle
 
     from(zipTree(bundles))
-    into "../bundles/"
+    into "bundles"
 }
 
 task initBundle() {
