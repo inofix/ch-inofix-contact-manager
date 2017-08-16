@@ -1,6 +1,7 @@
 buildscript {
     dependencies {
         classpath group: "com.liferay", name: "com.liferay.gradle.plugins.defaults", version: "1.1.1"
+        classpath group: "de.undercouch", name: "gradle-download-task", version: "3.1.1"
     }
 
     repositories {
@@ -12,3 +13,17 @@ configure(subprojects.findAll {!it.childProjects}) {
     apply plugin: "com.liferay.defaults.plugin"
 }
 
+def bundles = "bundles.zip"
+
+import de.undercouch.gradle.tasks.download.Download
+
+task downloadBundle(type: Download) {
+    src 'http://downloads.sourceforge.net/project/lportal/Liferay%20Portal/7.0.3%20GA4/liferay-ce-portal-tomcat-7.0-ga4-20170613175008905.zip'
+    dest  file(bundles)
+    overwrite false
+//    enabled !(file(liferay.liferayHome).exists())
+}
+
+task initBundle() {
+    dependsOn downloadBundle
+}
