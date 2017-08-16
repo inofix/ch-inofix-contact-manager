@@ -28,9 +28,15 @@ task unzipBundle(type: Copy) {
     dependsOn downloadBundle
 
     from(zipTree(bundles))
-    into "../bundles/"
+    into "tmp" 
+
 }
 
-task initBundle() {
+task initBundle(type: Copy) {
+
     dependsOn unzipBundle 
+
+    from("tmp/liferay-ce-portal-7.0-ga4")
+    into("../bundles")
+
 }
