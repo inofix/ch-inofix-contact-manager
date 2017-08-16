@@ -67,7 +67,7 @@ public class BasicPortletFunctionalTest {
 
 //		process.waitFor();
 
-		final File jarFile = new File("./contact-manager-api/build/libs/ch.inofix.contact.api-1.0.0.jar");
+		final File jarFile = new File("../contact-manager-api/build/libs/ch.inofix.contact.api-1.0.0.jar");
 	//	final File jarFile = new File(
 	//		tempDir.getAbsolutePath() +
 	//			"/com.liferay.arquillian.sample-1.0.0.jar");
