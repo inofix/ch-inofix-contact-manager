@@ -39,6 +39,7 @@ dependencies {
 //    compileOnly group: "org.osgi", name: "osgi.cmpn", version: "6.0.0"
 //    compileOnly group: "org.osgi", name: "osgi.core", version: "6.0.0"
 
+    testIntegrationCompile group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "2.5.0"
     testIntegrationCompile (group: "com.liferay.arquillian", name: "com.liferay.arquillian.arquillian-container-liferay", version: "1.0.6") {
         exclude group: "org.slf4j", module: "slf4j-log4j12"
     }
