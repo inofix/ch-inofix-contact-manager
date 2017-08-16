@@ -1,0 +1,19 @@
+dist: trusty
+
+sudo: required
+
+addons:
+  firefox: "44.0"
+
+language: java
+
+jdk:
+  - oraclejdk8
+
+install: true
+
+script:
+  - ./gradlew clean buildService testIntegration
+
+after_script:
+  - ruby ./scripts/publish-gh-pages.rb
