@@ -9,6 +9,8 @@ buildscript {
     }
 }
 
+// apply plugin: "com.liferay.defaults.plugin"
+
 configure(subprojects.findAll {!it.childProjects}) {
     apply plugin: "com.liferay.defaults.plugin"
 }
@@ -17,9 +19,16 @@ def bundles = "bundles.zip"
 
 import de.undercouch.gradle.tasks.download.Download
 
+//task cleanup() {
+//    delete "tmp"
+//    delete  bundles
+//    delete "../bundles"
+//}
+
 task downloadBundle(type: Download) {
+
     src 'http://downloads.sourceforge.net/project/lportal/Liferay%20Portal/7.0.3%20GA4/liferay-ce-portal-tomcat-7.0-ga4-20170613175008905.zip'
-    dest  file(bundles)
+    dest file (bundles)
     overwrite false
 }
 
@@ -40,3 +49,4 @@ task initBundle(type: Copy) {
     into("../bundles")
 
 }
+

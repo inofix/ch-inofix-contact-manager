@@ -87,6 +87,11 @@ jar {
 }
 
 testIntegration {
+
     dependsOn deployTestLibs
+    dependsOn ":modules:ch-inofix-contact-manager:contact-manager-api:deploy" 
+    dependsOn ":modules:ch-inofix-contact-manager:contact-manager-service:deploy" 
+    dependsOn ":modules:ch-inofix-contact-manager:contact-manager-web:deploy" 
+
 }
 
