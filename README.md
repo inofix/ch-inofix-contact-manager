@@ -1,6 +1,8 @@
 # ch-inofix-contact-manager
-A vCard based contact manager for the Liferay Portal.
 
+<a href="https://travis-ci.org/inofix/ch-inofix-contact-manager" target="_blank"><img src="https://travis-ci.org/inofix/ch-inofix-manager.svg?branch=master"/></a>
+
+A vCard based contact manager for the Liferay Portal.
 
 ## How To Build
 1. Install blade: `curl https://raw.githubusercontent.com/liferay/liferay-blade-cli/master/installers/local | sh`
