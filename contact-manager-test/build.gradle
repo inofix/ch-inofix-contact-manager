@@ -40,11 +40,12 @@ dependencies {
 //    compileOnly group: "org.osgi", name: "osgi.core", version: "6.0.0"
 
     testIntegrationCompile group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "2.5.0"
-    testIntegrationCompile (group: "com.liferay.arquillian", name: "com.liferay.arquillian.arquillian-container-liferay", version: "1.0.6") {
+    testIntegrationCompile (group: "com.liferay.arquillian", name: "com.liferay.arquillian.arquillian-container-liferay", version: "1.0.4") {
+//    testIntegrationCompile (group: "com.liferay.arquillian", name: "com.liferay.arquillian.arquillian-container-liferay", version: "1.0.6") {
         exclude group: "org.slf4j", module: "slf4j-log4j12"
     }
     testIntegrationCompile group: "org.slf4j", name: "slf4j-api", version: "1.7.+"
-    testIntegrationCompile group: "org.slf4j", name: "slf4j-simple", version: "1.7.+"
+//    testIntegrationCompile group: "org.slf4j", name: "slf4j-simple", version: "1.7.+"
 //    testIntegrationCompile group: "org.slf4j", name: "slf4j-log4j12", version: "1.7.+"
 
     testIntegrationCompile group: "junit", name: "junit", version: "4.12"
