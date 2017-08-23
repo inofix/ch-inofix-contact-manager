@@ -1,22 +1,25 @@
 buildscript {
     dependencies {
-        classpath group: "com.liferay", name: "com.liferay.gradle.plugins.defaults", version: "1.1.1"
+        classpath group: "com.liferay", name: "com.liferay.gradle.plugins.defaults", version: "5.0.22"
+//      classpath group: "com.liferay", name: "com.liferay.gradle.plugins.defaults", version: "latest.release"
         classpath group: "de.undercouch", name: "gradle-download-task", version: "3.1.1"
     }
 
     repositories {
-        mavenCentral()
+        mavenLocal()
+
+        maven {
+            url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+        }
     }
 }
 
-// apply plugin: "com.liferay.defaults.plugin"
-
-configure(subprojects.findAll {!it.childProjects}) {
-
-    if (parent.name == rootProject.name) {
-        apply plugin: "com.liferay.defaults.plugin"
-    }
+if (parent == null) {
+    apply plugin: "com.liferay.root.defaults.plugin"
+} else {
+    apply plugin: "com.liferay.defaults.plugin"
 }
+
 
 def bundles = "bundles.zip"
 
