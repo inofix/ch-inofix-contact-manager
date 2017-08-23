@@ -21,4 +21,5 @@ buildService {
     apiDir = "../contact-manager-api/src/main/java"
     osgiModule = true
     propsUtil = "ch.inofix.contact.service.util.PropsUtil"
+    testDir = "../contact-manager-test/src/testIntegration/java"
 }
