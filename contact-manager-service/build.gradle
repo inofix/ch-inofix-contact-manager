@@ -19,7 +19,7 @@ dependencies {
 
 buildService {
     apiDir = "../contact-manager-api/src/main/java"
-//    osgiModule = true
-    propsUtil = "ch.inofix.contact.service.util.ServiceProps"
     testDir = "../contact-manager-test/src/testIntegration/java"
 }
+
+group = "ch.inofix.contact"
