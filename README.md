@@ -1,6 +1,6 @@
 # ch-inofix-contact-manager
 
-<a href="https://travis-ci.org/inofix/ch-inofix-contact-manager" target="_blank"><img src="https://travis-ci.org/inofix/ch-inofix-manager.svg?branch=master"/></a>
+<a href="https://travis-ci.org/inofix/ch-inofix-contact-manager" target="_blank"><img src="https://travis-ci.org/inofix/ch-inofix-contact-manager.svg?branch=master"/></a>
 
 A vCard based contact manager for the Liferay Portal.
 
