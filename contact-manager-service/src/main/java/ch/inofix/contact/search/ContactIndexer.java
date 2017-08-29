@@ -108,28 +108,29 @@ public class ContactIndexer extends BaseIndexer<Contact> {
 
         // Set document field values (in alphabetical order)
 
-        document.addTextSortable("city", contact.getAddress().getLocality());
-        document.addTextSortable("company", contact.getCompany());
+        // TODO: re-enable when ez-vcard dependency has been fixed
+//        document.addTextSortable("city", contact.getAddress().getLocality());
+//        document.addTextSortable("company", contact.getCompany());
         document.addNumberSortable("contactId", contact.getContactId());
         document.addText(Field.CONTENT, contact.getCard());
-        document.addTextSortable("country", contact.getAddress().getCountry());
+//        document.addTextSortable("country", contact.getAddress().getCountry());
         document.addDateSortable(Field.CREATE_DATE, contact.getCreateDate());
         document.addText(Field.DESCRIPTION, "TODO: contact description");
-        document.addTextSortable("email", contact.getEmail().getAddress());
+//        document.addTextSortable("email", contact.getEmail().getAddress());
         // TODO: add default fax
-        document.addTextSortable("fullName", contact.getFullName(false));
+//        document.addTextSortable("fullName", contact.getFullName(false));
         // document.addKeyword(Field.GROUP_ID,
         // getSiteGroupId(contact.getGroupId()));
         // TODO add default impp
         document.addDateSortable("modifiedDate", contact.getModifiedDate());
-        document.addTextSortable(Field.NAME, contact.getName());
-        document.addTextSortable("phone", contact.getPhone().getNumber());
+//        document.addTextSortable(Field.NAME, contact.getName());
+//        document.addTextSortable("phone", contact.getPhone().getNumber());
         document.addNumber(Field.STATUS, contact.getStatus());
         // document.addKeyword(Field.SCOPE_GROUP_ID, contact.getGroupId());
-        document.addText(Field.TITLE, contact.getName());
-        document.addTextSortable("url", contact.getUrl());
+//        document.addText(Field.TITLE, contact.getName());
+//        document.addTextSortable("url", contact.getUrl());
         document.addKeyword("vCardUID", contact.getUid());
-        document.addTextSortable("x-salutation", contact.getSalutation());
+//        document.addTextSortable("x-salutation", contact.getSalutation());
 
         return document;
     }
