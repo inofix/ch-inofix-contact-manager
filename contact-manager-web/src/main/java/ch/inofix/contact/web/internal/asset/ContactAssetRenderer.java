@@ -93,7 +93,8 @@ public class ContactAssetRenderer extends BaseJSPAssetRenderer<Contact> implemen
     @Override
     public String getTitle(Locale locale) {
 
-        return _contact.getName();
+        return "TODO: _contact.getName()";
+        // return _contact.getName();
 
     }
 
