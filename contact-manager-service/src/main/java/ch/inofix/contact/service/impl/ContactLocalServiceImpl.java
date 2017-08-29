@@ -146,7 +146,8 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
 
         JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject();
 
-        extraDataJSONObject.put("title", contact.getName());
+        // TODO
+//        extraDataJSONObject.put("title", contact.getName());
 
         socialActivityLocalService.addActivity(userId, groupId, Contact.class.getName(), contactId,
                 ContactActivityKeys.ADD_CONTACT, extraDataJSONObject.toString(), 0);
@@ -413,7 +414,9 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
         AssetEntry assetEntry = assetEntryLocalService.updateEntry(userId, contact.getGroupId(),
                 contact.getCreateDate(), contact.getModifiedDate(), className, classPK, contact.getUuid(), 0,
                 assetCategoryIds, assetTagNames, true, visible, null, null, publishDate, null, ContentTypes.TEXT_HTML,
-                contact.getName(), description, summary, null, null, 0, 0, priority);
+                // contact.getName(), 
+                "TODO: contact.getName()",
+                description, summary, null, null, 0, 0, priority);
 
         assetLinkLocalService.updateLinks(userId, assetEntry.getEntryId(), assetLinkEntryIds,
                 AssetLinkConstants.TYPE_RELATED);
@@ -451,7 +454,7 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
 
         JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject();
 
-        extraDataJSONObject.put("title", contact.getName());
+//        extraDataJSONObject.put("title", contact.getName());
 
         socialActivityLocalService.addActivity(userId, groupId, Contact.class.getName(), contact.getContactId(),
                 ContactActivityKeys.UPDATE_CONTACT, extraDataJSONObject.toString(), 0);
