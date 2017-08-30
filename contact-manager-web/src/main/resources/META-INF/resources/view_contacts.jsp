@@ -78,8 +78,10 @@
             
             <c:when test='<%= displayStyle.equals("icon") %>'>
                 <liferay-ui:app-view-entry
+                    assetCategoryClassName="<%= Contact.class.getName() %>"
+                    assetCategoryClassPK="<%= contact_.getContactId() %>"
                     displayStyle="<%= displayStyle %>"
-                    showCheckbox="true"
+                    showCheckbox="false"
                     title="<%= contact_.getName() %>"                    
                 />          
             </c:when>
