@@ -85,10 +85,10 @@ import ch.inofix.contact.web.configuration.ContactManagerConfiguration;
 import ch.inofix.contact.web.configuration.ExportImportConfigurationConstants;
 import ch.inofix.contact.web.internal.constants.ContactManagerWebKeys;
 import ch.inofix.contact.web.internal.portlet.util.PortletUtil;
-//import ezvcard.Ezvcard;
-//import ezvcard.VCard;
-//import ezvcard.VCardVersion;
-//import ezvcard.property.Uid;
+import ezvcard.Ezvcard;
+import ezvcard.VCard;
+import ezvcard.VCardVersion;
+import ezvcard.property.Uid;
 
 /**
  * View Controller of Inofix' contact-manager.
@@ -637,10 +637,10 @@ public class ContactManagerPortlet extends MVCPortlet {
 
         } else {
 
-//            VCard vCard = new VCard();
-//            vCard.setUid(Uid.random());
-//            uid = vCard.getUid().getValue();
-//            card = Ezvcard.write(vCard).version(VCardVersion.V4_0).go();
+            VCard vCard = new VCard();
+            vCard.setUid(Uid.random());
+            uid = vCard.getUid().getValue();
+            card = Ezvcard.write(vCard).version(VCardVersion.V4_0).go();
 
         }
 
@@ -668,43 +668,42 @@ public class ContactManagerPortlet extends MVCPortlet {
 
         // Update the vCard with the request parameters
 
-//        try {
+		try {
 
-        	// TODO
-//            VCard vCard = Ezvcard.parse(card).first();
-//            vCard = PortletUtil.getVCard(request, vCard, map);
-//            card = Ezvcard.write(vCard).version(VCardVersion.V4_0).go();
+            VCard vCard = Ezvcard.parse(card).first();
+            vCard = PortletUtil.getVCard(request, vCard, map);
+            card = Ezvcard.write(vCard).version(VCardVersion.V4_0).go();
 
-//        } catch (ImageFileFormatException iffe) {
-//
-//            SessionErrors.add(actionRequest, "the-image-file-format-is-not-supported");
-//
-//            // Store the unmodified contact as a request attribute
-//
-//            uploadPortletRequest.setAttribute(ContactManagerWebKeys.CONTACT, contact);
-//
-//            return;
-//
-//        } catch (KeyFileFormatException kffe) {
-//
-//            SessionErrors.add(actionRequest, "the-key-file-format-is-not-supported");
-//
-//            // Store the unmodified contact as a request attribute
-//
-//            uploadPortletRequest.setAttribute(ContactManagerWebKeys.CONTACT, contact);
-//
-//            return;
-//
-//        } catch (SoundFileFormatException sffe) {
-//
-//            SessionErrors.add(actionRequest, "the-sound-file-format-is-not-supported");
-//
-//            // Store the unmodified contact as a request attribute
-//
-//            uploadPortletRequest.setAttribute(ContactManagerWebKeys.CONTACT, contact);
-//
-//            return;
-//        }
+        } catch (ImageFileFormatException iffe) {
+
+            SessionErrors.add(actionRequest, "the-image-file-format-is-not-supported");
+
+            // Store the unmodified contact as a request attribute
+
+            uploadPortletRequest.setAttribute(ContactManagerWebKeys.CONTACT, contact);
+
+            return;
+
+        } catch (KeyFileFormatException kffe) {
+
+            SessionErrors.add(actionRequest, "the-key-file-format-is-not-supported");
+
+            // Store the unmodified contact as a request attribute
+
+            uploadPortletRequest.setAttribute(ContactManagerWebKeys.CONTACT, contact);
+
+            return;
+
+        } catch (SoundFileFormatException sffe) {
+
+            SessionErrors.add(actionRequest, "the-sound-file-format-is-not-supported");
+
+            // Store the unmodified contact as a request attribute
+
+            uploadPortletRequest.setAttribute(ContactManagerWebKeys.CONTACT, contact);
+
+            return;
+        }
 
         if (contactId <= 0) {
 
