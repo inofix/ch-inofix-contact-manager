@@ -2,8 +2,8 @@
     view_contacts.jsp: search-container of Inofix' contact-manager.
     
     Created:     2017-06-19 16:02 by Christian Berndt
-    Modified:    2017-06-25 13:36 by Christian Berndt
-    Version:     1.0.1
+    Modified:    2017-08-30 21:50 by Christian Berndt
+    Version:     1.0.2
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -63,11 +63,38 @@
                 detailURL = viewURL.toString();
             }
         %>
+            
+        <c:choose>
+            <c:when test='<%= displayStyle.equals("descriptive") %>'>
+            
+                <liferay-ui:search-container-column-jsp
+                    colspan="2"
+                    path="/view_contacts_descriptive.jsp"
+                />
                 
-        <%@ include file="/search_columns.jspf"%>
-
-        <liferay-ui:search-container-column-jsp align="right" cssClass="entry-action"
-            path="/contact_action.jsp" valign="top"/>
+                <liferay-ui:search-container-column-jsp align="right" cssClass="entry-action"
+                    path="/contact_action.jsp" valign="top"/>            
+            </c:when>
+            
+            <c:when test='<%= displayStyle.equals("icon") %>'>
+                <liferay-ui:app-view-entry
+                    assetCategoryClassName="<%= Contact.class.getName() %>"
+                    assetCategoryClassPK="<%= contact_.getContactId() %>"
+                    displayStyle="<%= displayStyle %>"
+                    showCheckbox="false"
+                    title="<%= contact_.getName() %>"                    
+                />          
+            </c:when>
+            
+            <c:otherwise>
+            
+                <%@ include file="/search_columns.jspf"%>
+                
+                <liferay-ui:search-container-column-jsp align="right" cssClass="entry-action"
+                    path="/contact_action.jsp" valign="top"/> 
+                                       
+            </c:otherwise>
+        </c:choose>
     
     </liferay-ui:search-container-row>
 
