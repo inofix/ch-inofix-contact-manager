@@ -17,7 +17,7 @@ before_script:
   - mv standalone-settings.gradle settings.gradle 
 
 script:
-  - ./gradlew clean initBundle buildService testIntegration
+  - ./gradlew initBundle buildService testIntegration
 
 after_script:
   - ruby ./scripts/publish-gh-pages.rb
