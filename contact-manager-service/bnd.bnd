@@ -7,7 +7,8 @@ Export-Package:\
 	ch.inofix.contact.model.impl,\
     ch.inofix.contact.search,\
 	ch.inofix.contact.service.permission,\
-    ch.inofix.contact.service.util
+    ch.inofix.contact.service.util,\
+    ezvcard.*
 Include-Resource: \
     @ez-vcard-0.10.3.jar,\
     @jackson-annotations-2.6.1.jar,\
