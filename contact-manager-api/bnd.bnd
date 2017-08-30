@@ -8,3 +8,11 @@ Export-Package: \
 	ch.inofix.contact.service.persistence,\
 	ch.inofix.contact.constants,\
 	ch.inofix.contact.dto
+	ezvcard
+Include-Resource: \
+    @ez-vcard-0.10.3.jar,\
+    @jackson-annotations-2.6.1.jar,\
+    @jackson-core-2.6.1.jar,\
+    @jackson-databind-2.6.1.jar,\
+    @jsoup-1.8.3.jar,\
+    @lib/vinnie_2.0.0.jar

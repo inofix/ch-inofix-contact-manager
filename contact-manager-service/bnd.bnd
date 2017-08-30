@@ -8,6 +8,12 @@ Export-Package:\
     ch.inofix.contact.search,\
 	ch.inofix.contact.service.permission,\
     ch.inofix.contact.service.util
+Include-Resource: \
+    @ez-vcard-0.10.3.jar,\
+    @jackson-annotations-2.6.1.jar,\
+    @jackson-core-2.6.1.jar,\
+    @jackson-databind-2.6.1.jar,\
+    @jsoup-1.8.3.jar,\
+    @lib/vinnie_2.0.0.jar
 Liferay-Require-SchemaVersion: 1.0.0
 Liferay-Service: true
-// Include-Resource: @commons-lang3-3.5.jar

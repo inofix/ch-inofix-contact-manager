@@ -1,22 +1,12 @@
 dependencies {
 	compileOnly group: "biz.aQute.bnd", name: "biz.aQute.bndlib", version: "3.1.0"
-//    compileOnly group: "com.googlecode.ez-vcard", name: "ez-vcard", version: "0.10.2"
+    compileOnly group: 'com.github.mangstadt', name: 'vinnie', version: '2.0.0'
+    compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.6.1'    
+    compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.6.1'
+    compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.6.1'    
+    compileOnly group: "com.googlecode.ez-vcard", name: "ez-vcard", version: "0.10.3"
 	compileOnly group: "com.liferay", name: "com.liferay.osgi.util", version: "3.0.0"
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "2.0.0"
+    compileOnly group: 'org.jsoup', name: 'jsoup', version: '1.8.3'
 	compileOnly group: "org.osgi", name: "org.osgi.core", version: "6.0.0"
 }
-
-// dependencies {
-//    compileOnly group: "biz.aQute.bnd", name: "biz.aQute.bndlib", version: "3.1.0"
-//    compileOnly group: 'com.github.mangstadt', name: 'vinnie', version: '2.0.0'
-//    compileOnly group: "com.googlecode.ez-vcard", name: "ez-vcard", version: "0.10.2"
-//    compileOnly group: "com.liferay", name: "com.liferay.osgi.util", version: "3.0.0"
-//    compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "2.6.0"
-//    compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.6.1'    
-//    compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.6.1'
-//    compileOnly group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.6.1'
-//    compileOnly group: "com.liferay", name: "com.liferay.osgi.util", version: "3.0.0"
-//    compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "2.6.0"
-//    compileOnly group: "org.osgi", name: "org.osgi.core", version: "5.0.0"
-//    compileOnly group: 'org.jsoup', name: 'jsoup', version: '1.8.3'
-// }
