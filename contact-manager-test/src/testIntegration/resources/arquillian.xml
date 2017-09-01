@@ -16,7 +16,4 @@
 		<property name="includes">ch.inofix.contact.*</property>
 	</extension>
 
-	<engine>
-		<property name="deploymentExportPath">build/deployments</property>
-	</engine>
 </arquillian>
