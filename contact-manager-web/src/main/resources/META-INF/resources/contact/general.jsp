@@ -2,8 +2,8 @@
     general.jsp: Edit the contact's basic contact information. 
     
     Created:    2015-05-08 18:02 by Christian Berndt
-    Modified:   2017-07-25 22:25 by Christian Berndt
-    Version:    1.2.2
+    Modified:   2017-09-10 19:28 by Christian Berndt
+    Version:    1.2.3
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -12,6 +12,8 @@
 <%@page import="ch.inofix.contact.dto.EmailDTO"%>
 <%@page import="ch.inofix.contact.dto.ImppDTO"%>
 <%@page import="ch.inofix.contact.dto.PhoneDTO"%>
+
+<%@page import="com.liferay.portal.kernel.util.CamelCaseUtil"%>
 
 <%@page import="ezvcard.parameter.ImppType"%>
 <%@page import="ezvcard.parameter.TelephoneType"%>
@@ -118,7 +120,7 @@
                 <%                
                     for (String snField : snFields) {
                 %>
-                <aui:input helpMessage='<%= snField + "-help" %>'
+                <aui:input helpMessage='<%= CamelCaseUtil.fromCamelCase(snField) + "-help" %>'
                     name="<%=snField%>" bean="<%=contact_%>"
                     disabled="<%= !hasUpdatePermission %>"/>
                 <%
