@@ -85,8 +85,8 @@ import ch.inofix.contact.social.ContactActivityKeys;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2017-06-20 17:19
- * @modified 2017-07-04 17:15
- * @version 1.0.4
+ * @modified 2017-09-14 10:12
+ * @version 1.0.5
  * @see ContactLocalServiceBaseImpl
  * @see ch.inofix.contact.service.ContactLocalServiceUtil
  */
@@ -460,21 +460,6 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
                 ContactActivityKeys.UPDATE_CONTACT, extraDataJSONObject.toString(), 0);
 
         return contact;
-    }
-
-    @Override
-    public void updateContactResources(Contact contact, ModelPermissions modelPermissions) throws PortalException {
-
-        resourceLocalService.updateResources(contact.getCompanyId(), contact.getGroupId(), Contact.class.getName(),
-                contact.getContactId(), modelPermissions);
-    }
-
-    @Override
-    public void updateContactResources(Contact contact, String[] groupPermissions, String[] guestPermissions)
-            throws PortalException {
-
-        resourceLocalService.updateResources(contact.getCompanyId(), contact.getGroupId(), Contact.class.getName(),
-                contact.getContactId(), groupPermissions, guestPermissions);
     }
 
     protected SearchContext buildSearchContext(long userId, long groupId, long ownerUserId, String company,
