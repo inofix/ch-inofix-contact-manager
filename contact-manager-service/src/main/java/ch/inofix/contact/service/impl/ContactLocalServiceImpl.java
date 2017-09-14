@@ -53,7 +53,6 @@ import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.service.permission.ModelPermissions;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FileUtil;
@@ -85,8 +84,8 @@ import ch.inofix.contact.social.ContactActivityKeys;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2017-06-20 17:19
- * @modified 2017-09-14 10:12
- * @version 1.0.5
+ * @modified 2017-09-14 10:41
+ * @version 1.0.6
  * @see ContactLocalServiceBaseImpl
  * @see ch.inofix.contact.service.ContactLocalServiceUtil
  */
@@ -130,12 +129,7 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
 
         // Resources
 
-        if (serviceContext.isAddGroupPermissions() || serviceContext.isAddGuestPermissions()) {
-            addContactResources(contact, serviceContext.isAddGroupPermissions(),
-                    serviceContext.isAddGuestPermissions());
-        } else {
-            addContactResources(contact, serviceContext.getModelPermissions());
-        }
+        resourceLocalService.addModelResources(contact, serviceContext);
 
         // Asset
 
@@ -147,7 +141,7 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
         JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject();
 
         // TODO
-//        extraDataJSONObject.put("title", contact.getName());
+        // extraDataJSONObject.put("title", contact.getName());
 
         socialActivityLocalService.addActivity(userId, groupId, Contact.class.getName(), contactId,
                 ContactActivityKeys.ADD_CONTACT, extraDataJSONObject.toString(), 0);
@@ -155,39 +149,9 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
         return contact;
     }
 
+    @Indexable(type = IndexableType.DELETE)
     @Override
-    public void addContactResources(Contact contact, boolean addGroupPermissions, boolean addGuestPermissions)
-            throws PortalException {
-
-        resourceLocalService.addResources(contact.getCompanyId(), contact.getGroupId(), contact.getUserId(),
-                Contact.class.getName(), contact.getContactId(), false, addGroupPermissions, addGuestPermissions);
-    }
-
-    @Override
-    public void addContactResources(Contact contact, ModelPermissions modelPermissions) throws PortalException {
-
-        resourceLocalService.addModelResources(contact.getCompanyId(), contact.getGroupId(), contact.getUserId(),
-                Contact.class.getName(), contact.getContactId(), modelPermissions);
-    }
-
-    @Override
-    public void addContactResources(long contactId, boolean addGroupPermissions, boolean addGuestPermissions)
-            throws PortalException {
-
-        Contact contact = contactPersistence.findByPrimaryKey(contactId);
-
-        addContactResources(contact, addGroupPermissions, addGuestPermissions);
-    }
-
-    @Override
-    public void addContactResources(long contactId, ModelPermissions modelPermissions) throws PortalException {
-
-        Contact contact = contactPersistence.findByPrimaryKey(contactId);
-
-        addContactResources(contact, modelPermissions);
-    }
-
-    @Override
+    @SystemEvent(type = SystemEventConstants.TYPE_DELETE)
     public Contact deleteContact(long contactId) throws PortalException {
 
         Contact contact = contactPersistence.findByPrimaryKey(contactId);
@@ -414,9 +378,8 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
         AssetEntry assetEntry = assetEntryLocalService.updateEntry(userId, contact.getGroupId(),
                 contact.getCreateDate(), contact.getModifiedDate(), className, classPK, contact.getUuid(), 0,
                 assetCategoryIds, assetTagNames, true, visible, null, null, publishDate, null, ContentTypes.TEXT_HTML,
-                // contact.getName(), 
-                "TODO: contact.getName()",
-                description, summary, null, null, 0, 0, priority);
+                // contact.getName(),
+                "TODO: contact.getName()", description, summary, null, null, 0, 0, priority);
 
         assetLinkLocalService.updateLinks(userId, assetEntry.getEntryId(), assetLinkEntryIds,
                 AssetLinkConstants.TYPE_RELATED);
@@ -454,7 +417,7 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
 
         JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject();
 
-//        extraDataJSONObject.put("title", contact.getName());
+        // extraDataJSONObject.put("title", contact.getName());
 
         socialActivityLocalService.addActivity(userId, groupId, Contact.class.getName(), contact.getContactId(),
                 ContactActivityKeys.UPDATE_CONTACT, extraDataJSONObject.toString(), 0);
