@@ -29,8 +29,8 @@ import ch.inofix.contact.service.permission.ContactManagerPermission;
  *
  * @author Christian Berndt
  * @created 2017-04-18 15:54
- * @modified 2017-04-18 15:54
- * @version 1.0.0
+ * @modified 2017-09-16 23:22
+ * @version 1.0.1
  *
  */
 @Component(immediate = true, property = {
@@ -87,6 +87,10 @@ public class ContactManagerPortletDataHandler extends BasePortletDataHandler {
 
         ActionableDynamicQuery actionableDynamicQuery = _contactLocalService
                 .getExportActionableDynamicQuery(portletDataContext);
+        
+        long groupId = portletDataContext.getScopeGroupId();
+
+        actionableDynamicQuery.setGroupId(groupId);
 
         actionableDynamicQuery.performActions();
 
@@ -120,6 +124,10 @@ public class ContactManagerPortletDataHandler extends BasePortletDataHandler {
 
         ActionableDynamicQuery actionableDynamicQuery = _contactLocalService
                 .getExportActionableDynamicQuery(portletDataContext);
+        
+        long groupId = portletDataContext.getScopeGroupId();
+
+        actionableDynamicQuery.setGroupId(groupId);
 
         actionableDynamicQuery.performCount();
     }
