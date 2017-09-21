@@ -3,8 +3,8 @@
     of Inofix' contact-manager.
     
     Created:     2017-08-30 21:47 by Christian Berndt
-    Modified:    2017-08-30 21:47 by Christian Berndt
-    Version:     1.0.0
+    Modified:    2017-09-21 19:11 by Christian Berndt
+    Version:     1.0.1
 --%>
 
 <%@ include file="/init.jsp" %>
@@ -23,18 +23,34 @@
     Date modifiedDate = contact_.getModifiedDate();
 
     String modifiedDateDescription = LanguageUtil.getTimeDescription(request, System.currentTimeMillis() - modifiedDate.getTime(), true);
-
 %>
-
-<h5 class="text-default">
-    <liferay-ui:message arguments="<%= new String[] {HtmlUtil.escape(contact_.getName()), modifiedDateDescription} %>" key="x-modified-x-ago" />
-</h5>
 
 <h4>
     <aui:a href="<%= rowURL.toString() %>">
         <%= contact_.getName() %>
     </aui:a>
 </h4>
+
+<c:if test="<%= Validator.isNotNull(contact_.getEmail().getAddress())  %>">
+    <div class="email">
+        <span class="icon-envelope"></span>
+        <a href="mailto:<%= contact_.getEmail().getAddress() %>"><%= contact_.getEmail().getAddress() %></a>
+    </div>
+</c:if>
+
+<c:if test="<%= Validator.isNotNull(contact_.getPhone().getNumber())  %>">
+    <div class="phone">
+        <span class="icon-phone"></span>
+        <%= contact_.getPhone().getNumber() %>
+    </div>
+</c:if>
+
+<c:if test="<%= Validator.isNotNull(contact_.getUrl())  %>">
+    <div class="url">
+        <span class="icon-globe"></span>
+        <a href="<%= contact_.getUrl() %>" target="_blank"><%= contact_.getUrl() %></a>
+    </div>
+</c:if>
 
 <h5 class="text-default">
     <aui:workflow-status markupView="<%= markupView %>" showIcon="<%= false %>" showLabel="<%= false %>" status="<%= contact_.getStatus() %>" />
