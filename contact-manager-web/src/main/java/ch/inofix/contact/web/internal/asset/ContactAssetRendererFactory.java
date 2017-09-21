@@ -39,8 +39,11 @@ import ch.inofix.contact.service.permission.ContactPermission;
  * @version 1.0.4
  *
  */
-@Component(immediate = true, property = {
-        "javax.portlet.name=" + PortletKeys.CONTACT_MANAGER }, service = AssetRendererFactory.class)
+@Component(
+	immediate = true, 
+	property = {"javax.portlet.name=" + PortletKeys.CONTACT_MANAGER }, 
+	service = AssetRendererFactory.class
+)
 public class ContactAssetRendererFactory extends BaseAssetRendererFactory<Contact> {
 
     public static final String TYPE = "contact";
