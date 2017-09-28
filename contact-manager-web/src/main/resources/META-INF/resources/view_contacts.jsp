@@ -2,8 +2,8 @@
     view_contacts.jsp: search-container of Inofix' contact-manager.
     
     Created:     2017-06-19 16:02 by Christian Berndt
-    Modified:    2017-08-30 21:50 by Christian Berndt
-    Version:     1.0.2
+    Modified:    2017-09-28 17:11 by Christian Berndt
+    Version:     1.0.3
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -88,6 +88,12 @@
             
             <c:otherwise>
             
+                <liferay-ui:search-container-column-user
+                    cssClass="user-icon-lg"
+                    showDetails="<%= false %>"
+                    userId="<%= contact_.getUserId() %>"
+                />
+
                 <%@ include file="/search_columns.jspf"%>
                 
                 <liferay-ui:search-container-column-jsp align="right" cssClass="entry-action"
