@@ -2,8 +2,8 @@
     contact_action.jsp: The action menu of the contact manager's default view.
     
     Created:    2017-04-11 16:00 by Stefan Luebbers
-    Modified:   2017-06-22 19:19 by Christian Berndt
-    Version:    1.0.3
+    Modified:   2017-10-12 21:45 by Christian Berndt
+    Version:    1.0.4
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -42,7 +42,7 @@
 
     <c:if test="<%=hasViewPermission%>">
 
-        <portlet:resourceURL var="downloadVCardURL" id="serveVCard">
+        <portlet:resourceURL var="downloadVCardURL" id="download">
             <portlet:param name="contactId"
                 value="<%= String.valueOf(contact_.getContactId()) %>" /> 
         </portlet:resourceURL>

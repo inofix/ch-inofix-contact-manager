@@ -54,6 +54,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.JSONPortletResponseUtil;
 import com.liferay.portal.kernel.portlet.PortletConfigFactoryUtil;
+import com.liferay.portal.kernel.portlet.PortletResponseUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
@@ -65,6 +66,7 @@ import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.upload.UploadRequestSizeException;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -96,17 +98,24 @@ import ezvcard.property.Uid;
  * @author Stefan Luebbers
  * @author Christian Berndt
  * @created 2017-03-30 19:52
- * @modified 2017-07-09 13:03
+ * @modified 2017-10-12 21:37
  * @version 1.1.2
  */
-@Component(immediate = true, property = { "com.liferay.portlet.css-class-wrapper=ifx-portlet portlet-contact-manager",
+@Component(immediate = true, property = { 
+        "com.liferay.portlet.css-class-wrapper=ifx-portlet portlet-contact-manager",
         "com.liferay.portlet.display-category=category.inofix",
         "com.liferay.portlet.footer-portlet-javascript=/js/main.js",
-        "com.liferay.portlet.header-portlet-css=/css/main.css", "com.liferay.portlet.instanceable=false",
-        "javax.portlet.display-name=Contact Manager", "javax.portlet.init-param.template-path=/",
-        "javax.portlet.init-param.view-template=/view.jsp", "javax.portlet.resource-bundle=content.Language",
-        "javax.portlet.security-role-ref=power-user,user" }, service = Portlet.class)
-
+        "com.liferay.portlet.header-portlet-css=/css/main.css", 
+        "com.liferay.portlet.instanceable=false",
+        "javax.portlet.display-name=Contact Manager", 
+        "javax.portlet.init-param.template-path=/",
+        "javax.portlet.init-param.view-template=/view.jsp",
+        "javax.portlet.name=" + PortletKeys.CONTACT_MANAGER,        
+        "javax.portlet.resource-bundle=content.Language",
+        "javax.portlet.security-role-ref=power-user,user" 
+    }, 
+    service = Portlet.class
+)
 public class ContactManagerPortlet extends MVCPortlet {
 
     @Override
@@ -222,9 +231,7 @@ public class ContactManagerPortlet extends MVCPortlet {
 
             if (resourceID.equals("download")) {
 
-                // TODO
-                throw new UnsupportedOperationException();
-                // download(resourceRequest, resourceResponse);
+                 download(resourceRequest, resourceResponse);
 
             } else if (resourceID.equals("exportContacts")) {
 
@@ -416,6 +423,21 @@ public class ContactManagerPortlet extends MVCPortlet {
         Contact contact = _contactService.getContact(contactId);
 
         portletRequest.setAttribute(ContactManagerWebKeys.CONTACT, contact);
+    }
+    
+    protected void download(ResourceRequest resourceRequest,
+            ResourceResponse resourceResponse) throws PortalException, IOException {
+
+        long contactId = ParamUtil.getLong(resourceRequest, "contactId");
+
+        Contact contact = _contactService.getContact(contactId);
+
+        String card = contact.getCard();
+        String name = contact.getFullName(true);
+
+        PortletResponseUtil.sendFile(resourceRequest, resourceResponse, name
+                + ".vcf", card.getBytes(), ContentTypes.TEXT_PLAIN_UTF8);
+
     }
 
     protected String getEditContactURL(ActionRequest actionRequest, ActionResponse actionResponse, Contact contact)
