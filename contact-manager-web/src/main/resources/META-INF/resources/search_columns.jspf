@@ -3,15 +3,9 @@
     for the main view of the contact manager portlet.
 
     Created:     2013-10-07 14:41 by Christian Berndt
-    Modified:    2017-07-03 17:47 by Christian Berndt
-    Version:     1.2.1
+    Modified:    2017-10-28 18:29 by Christian Berndt
+    Version:     1.2.2
 --%>
-
-<%@page import="ezvcard.property.Kind"%>
-
-<%
-    String[] columns = (String[])request.getAttribute("view.jsp-columns");
-%>
 
 <%
     for (String column : columns) {

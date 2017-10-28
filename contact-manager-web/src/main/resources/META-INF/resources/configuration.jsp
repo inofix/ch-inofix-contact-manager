@@ -2,26 +2,13 @@
     configuration.jsp: configuration of the contact manager portlet.
     
     Created:    2017-04-12 17:05 by Stefan Lübbers
-    Modified:   2017-06-19 16:19 by Christian Berndt
-    Version:    1.0.2
+    Modified:   2017-10-28 18:23 by Christian Berndt
+    Version:    1.0.3
 --%>
 
 <%@ include file="/init.jsp"%>
 
 <%
-    String[] columns = new String[0];
-    String maxHeight = "70";
-    String portraitDisplay = "circle";
-    String viewByDefault = "false";
-    
-    if (Validator.isNotNull(contactManagerConfiguration)) {
-        columns = portletPreferences.getValues("columns", contactManagerConfiguration.columns());
-        markupView = portletPreferences.getValue("markup-view", contactManagerConfiguration.markupView());
-        maxHeight = portletPreferences.getValue("max-height", contactManagerConfiguration.maxHeight());
-        portraitDisplay = portletPreferences.getValue("portrait-display", contactManagerConfiguration.portraitDisplay());
-        viewByDefault = portletPreferences.getValue("view-by-default", contactManagerConfiguration.viewByDefault());
-    }
-    
     PortletURL portletURL = renderResponse.createRenderURL();
     
     ContactSearch searchContainer = new ContactSearch(liferayPortletRequest, portletURL);
@@ -84,18 +71,19 @@
                 
                 <aui:input checked="<%="lexicon".equals(markupView)%>"
                     helpMessage="markup-view-help" label="use-lexicon"
-                    name="markup-view" type="checkbox" value="lexicon" />
+                    name="preferences--markupView--" type="checkbox" value="lexicon" />
 
                 <aui:fieldset>
                     <aui:field-wrapper label="view-by-default-label"
                         helpMessage="view-by-default-help"
                         inlineField="false">
-                        <aui:input name="view-by-default" type="radio"
-                            value="true"
+                        
+                        <aui:input name="preferences--viewByDefault--"
+                            type="radio" value="true"
                             checked="<%=Validator.equals(viewByDefault, "true")%>"
                             label="Yes" inlineField="true" />
 
-                        <aui:input name="<%="view-by-default"%>"
+                        <aui:input name="preferences--viewByDefault--"
                             type="radio" value="false"
                             checked="<%=Validator.equals(viewByDefault, "false")%>"
                             label="No" inlineField="true" />
@@ -109,7 +97,7 @@
                     <%
                         //TODO add editable portrait values
                     %>
-                    <aui:input name="max-height" value="<%=maxHeight%>"
+                    <aui:input name="preferences--maxHeight--" value="<%=maxHeight%>"
                         inlineField="true" />
                 </aui:fieldset>
                 <%--
