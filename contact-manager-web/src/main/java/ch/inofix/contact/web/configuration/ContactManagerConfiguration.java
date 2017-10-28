@@ -7,12 +7,14 @@ import aQute.bnd.annotation.metatype.Meta;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2017-03-30 19:56
- * @modified 2017-08-16 21:22
- * @version 1.0.1
+ * @modified 2017-10-28 18:13
+ * @version 1.0.2
  *
  */
-@Meta.OCD(id = "ch.inofix.contact.web.configuration.ContactManagerConfiguration", localization = "content/Language", name = "contact.configuration.name")
-
+@Meta.OCD(
+    id = "ch.inofix.contact.web.configuration.ContactManagerConfiguration", 
+    localization = "content/Language", name = "contact.configuration.name"
+)
 public interface ContactManagerConfiguration {
 
     @Meta.AD(deflt = "full-name|email|phone|modified-date", required = false)

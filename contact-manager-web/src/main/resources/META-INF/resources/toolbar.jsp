@@ -2,18 +2,13 @@
     toolbar.jsp: The toolbar of the contact-manager portlet
     
     Created:    2015-07-03 19:00 by Christian Berndt
-    Modified:   2017-06-22 19:12 by Christian Berndt
-    Version:    1.0.4
+    Modified:   2017-10-28 18:28 by Christian Berndt
+    Version:    1.0.5
  --%>
 
 <%@ include file="init.jsp"%>
 
-<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
-<%@page import="com.liferay.trash.kernel.util.TrashUtil"%>
-
 <%
-    String[] columns = (String[])request.getAttribute("view.jsp-columns");
-
     String orderByCol = ParamUtil.getString(request, "orderByCol", "modified-date");
 
     String orderByType = ParamUtil.getString(request, "orderByType", "desc");

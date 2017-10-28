@@ -2,26 +2,13 @@
     view.jsp: Default view of the contact manager portlet.
     
     Created:     2017-03-30 16:44 by Stefan Luebbers
-    Modified:    2017-06-22 16:47 by Christian Berndt
-    Version:     1.0.6
+    Modified:    2017-10-28 18:30 by Christian Berndt
+    Version:     1.0.7
 --%>
 
 <%@ include file="/init.jsp"%>
 
 <%
-    String[] columns = new String[]{"full-name", "create-date", "modified-date"};
-
-	int maxHeight = 70;
-	boolean viewByDefault = false;
-	String portraitDisplay = "circle";
-
-	if (Validator.isNotNull(contactManagerConfiguration)) {
-		columns = portletPreferences.getValues("columns", contactManagerConfiguration.columns());
-		maxHeight = Integer.parseInt(portletPreferences.getValue("max-height", contactManagerConfiguration.maxHeight()));
-		viewByDefault = Boolean.parseBoolean(portletPreferences.getValue("view-by-default", contactManagerConfiguration.viewByDefault()));
-		portraitDisplay = portletPreferences.getValue("portrait-display", contactManagerConfiguration.portraitDisplay());
-	}
-
 	String backURL = ParamUtil.getString(request, "backURL");
 	String displayStyle = ParamUtil.getString(request, "displayStyle", "list");
 	String keywords = ParamUtil.getString(request, "keywords");
@@ -63,11 +50,8 @@
 	searchContainer.setTotal(hits.getLength());
 
 	request.setAttribute("view.jsp-columns", columns);
-
 	request.setAttribute("view.jsp-displayStyle", displayStyle);
-
 	request.setAttribute("view.jsp-searchContainer", searchContainer);
-
 	request.setAttribute("view.jsp-total", hits.getLength());
 %>
 
@@ -216,8 +200,3 @@
 
     </c:otherwise>
 </c:choose>
-
-<%
-    // TODO
-%>
-<!--     <ifx-util:build-info/> -->

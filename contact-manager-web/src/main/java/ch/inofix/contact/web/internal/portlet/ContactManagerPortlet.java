@@ -41,6 +41,7 @@ import com.liferay.exportimport.kernel.model.ExportImportConfiguration;
 import com.liferay.exportimport.kernel.service.ExportImportConfigurationLocalService;
 import com.liferay.exportimport.kernel.service.ExportImportService;
 import com.liferay.exportimport.kernel.staging.StagingUtil;
+import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskManagerUtil;
 import com.liferay.portal.kernel.exception.LayoutPrototypeException;
 import com.liferay.portal.kernel.exception.LocaleException;
@@ -74,7 +75,6 @@ import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
-import aQute.bnd.annotation.metatype.Configurable;
 import ch.inofix.contact.constants.PortletKeys;
 import ch.inofix.contact.exception.ImageFileFormatException;
 import ch.inofix.contact.exception.KeyFileFormatException;
@@ -98,10 +98,13 @@ import ezvcard.property.Uid;
  * @author Stefan Luebbers
  * @author Christian Berndt
  * @created 2017-03-30 19:52
- * @modified 2017-10-12 21:37
- * @version 1.1.2
+ * @modified 2017-10-28 18:15
+ * @version 1.1.3
  */
-@Component(immediate = true, property = { 
+@Component(
+    configurationPid = "ch.inofix.contact.web.configuration.ContactManagerConfiguration", 
+    immediate = true, 
+    property = { 
         "com.liferay.portlet.css-class-wrapper=ifx-portlet portlet-contact-manager",
         "com.liferay.portlet.display-category=category.inofix",
         "com.liferay.portlet.footer-portlet-javascript=/js/main.js",
@@ -253,7 +256,10 @@ public class ContactManagerPortlet extends MVCPortlet {
     @Activate
     @Modified
     protected void activate(Map<Object, Object> properties) {
-        _contactManagerConfiguration = Configurable.createConfigurable(ContactManagerConfiguration.class, properties);
+
+        _contactManagerConfiguration = ConfigurableUtil.createConfigurable(
+                ContactManagerConfiguration.class, properties);
+        
     }
 
     protected void addTempFileEntry(ActionRequest actionRequest, String folderName) throws Exception {

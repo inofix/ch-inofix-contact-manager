@@ -2,8 +2,8 @@
     init.jsp: Common setup code for the contact manager portlet.
 
     Created:     2017-03-30 16:44 by Stefan Luebbers
-    Modified:    2017-07-09 15:09 by Christian Berndt
-    Version:     1.0.9
+    Modified:    2017-10-28 18:59 by Christian Berndt
+    Version:     1.1.0
 --%>
 
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -40,6 +40,7 @@
 <%@page import="com.liferay.portal.kernel.exception.PortalException"%>
 <%@page import="com.liferay.portal.kernel.exception.SystemException"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.model.Group"%>
 <%@page import="com.liferay.portal.kernel.model.Portlet"%>
 <%@page import="com.liferay.portal.kernel.model.User"%>
@@ -79,6 +80,9 @@
 <%@page import="com.liferay.portal.kernel.util.Validator"%>
 <%@page import="com.liferay.portal.kernel.util.WebKeys"%>
 <%@page import="com.liferay.portal.kernel.workflow.WorkflowConstants"%>
+<%@page import="com.liferay.trash.kernel.util.TrashUtil"%>
+
+<%@page import="ezvcard.property.Kind"%>
 
 <%@page import="java.text.Format"%>
 <%@page import="java.util.ArrayList"%>
@@ -101,24 +105,31 @@
 <%
     PortalPreferences portalPreferences = PortletPreferencesFactoryUtil.getPortalPreferences(request);
 
+    String[] columns = portletPreferences.getValues("columns", new String[] { "portrait", "name", "city", "country", "url", "user-name", "modified-date" });
     Format dateFormatDate = FastDateFormatFactoryUtil.getDate(locale, timeZone);
     Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZone);
+    String markupView = portletPreferences.getValue("markupView", "lexicon");
+    String maxHeight = portletPreferences.getValue("maxHeight", "70");
+    String portraitDisplay = portletPreferences.getValue("portraitDisplay", "circle");
 
-    String markupView = "lexicon";
-    
-    String[] snFields = new String[] { "structuredName.prefix",
-            "structuredName.given", "structuredName.additional",
-            "structuredName.family", "structuredName.suffix" };
+    String[] snFields = new String[] { "structuredName.prefix", "structuredName.given",
+            "structuredName.additional", "structuredName.family", "structuredName.suffix" };
 
     String tabs1 = ParamUtil.getString(request, "tabs1", "contacts");
     String tabs2 = ParamUtil.getString(request, "tabs2", "export");
+
+    String viewByDefault = portletPreferences.getValue("viewByDefault", "false");
 
     ContactManagerConfiguration contactManagerConfiguration = (ContactManagerConfiguration) request
             .getAttribute(ContactManagerConfiguration.class.getName());
 
     if (Validator.isNotNull(contactManagerConfiguration)) {
 
-        markupView = portletPreferences.getValue("markup-view", contactManagerConfiguration.markupView());
+        columns = portletPreferences.getValues("columns", contactManagerConfiguration.columns());
+        markupView = portletPreferences.getValue("markupView", contactManagerConfiguration.markupView());
+        maxHeight = portletPreferences.getValue("maxHeight", contactManagerConfiguration.maxHeight());
+        portraitDisplay = portletPreferences.getValue("portraitDisplay", contactManagerConfiguration.portraitDisplay());
+        viewByDefault = portletPreferences.getValue("viewByDefault", contactManagerConfiguration.viewByDefault());
 
         // because of current checkbox configuration
         if ("false".equals(markupView)) {
