@@ -2,14 +2,11 @@
     edit_mailing_address.jsp: Edit the contact's mailing addresses. 
     
     Created:    2015-05-11 18:30 by Christian Berndt
-    Modified:   2017-07-25 22:26 by Christian Berndt
-    Version:    1.1.2
+    Modified:   2017-10-30 18:56 by Christian Berndt
+    Version:    1.1.3
 --%>
 
 <%@ include file="/init.jsp"%>
-
-<%@page import="ezvcard.parameter.AddressType"%>
-<%@page import="ch.inofix.contact.dto.AddressDTO"%>
 
 <%
     Contact contact_ = (Contact) request.getAttribute(ContactManagerWebKeys.CONTACT);
@@ -27,8 +24,7 @@
     }
 
     String namespace = liferayPortletResponse.getNamespace();
-%>
-<%
+
 	// TODO: make the list of address-types configurable
 	String[] addressTypes = new String[] { "other",
 			// AddressType.DOM.getValue(),       // Not longer supported in v.4.0

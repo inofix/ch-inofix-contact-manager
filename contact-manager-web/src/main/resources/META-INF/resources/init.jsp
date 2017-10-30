@@ -2,8 +2,8 @@
     init.jsp: Common setup code for the contact manager portlet.
 
     Created:     2017-03-30 16:44 by Stefan Luebbers
-    Modified:    2017-10-28 18:59 by Christian Berndt
-    Version:     1.1.0
+    Modified:    2017-10-30 18:29 by Christian Berndt
+    Version:     1.1.1
 --%>
 
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -20,6 +20,19 @@
 <%@page import="ch.inofix.contact.background.task.ContactImportBackgroundTaskExecutor"%>
 <%@page import="ch.inofix.contact.constants.ContactActionKeys"%>
 <%@page import="ch.inofix.contact.constants.PortletKeys"%>
+<%@page import="ch.inofix.contact.dto.AddressDTO"%>
+<%@page import="ch.inofix.contact.dto.CategoriesDTO"%>
+<%@page import="ch.inofix.contact.dto.EmailDTO"%>
+<%@page import="ch.inofix.contact.dto.ExpertiseDTO"%>
+<%@page import="ch.inofix.contact.dto.FileDTO" %>
+<%@page import="ch.inofix.contact.dto.HobbyDTO"%>
+<%@page import="ch.inofix.contact.dto.ImppDTO"%>
+<%@page import="ch.inofix.contact.dto.InterestDTO"%>
+<%@page import="ch.inofix.contact.dto.LanguageDTO"%>
+<%@page import="ch.inofix.contact.dto.NoteDTO"%>
+<%@page import="ch.inofix.contact.dto.PhoneDTO"%>
+<%@page import="ch.inofix.contact.dto.UrlDTO"%>
+<%@page import="ch.inofix.contact.dto.UriDTO"%>
 <%@page import="ch.inofix.contact.model.Contact"%>
 <%@page import="ch.inofix.contact.service.permission.ContactManagerPermission"%>
 <%@page import="ch.inofix.contact.service.permission.ContactPermission"%>
@@ -61,6 +74,7 @@
 <%@page import="com.liferay.portal.kernel.security.permission.ActionKeys"%>
 <%@page import="com.liferay.portal.kernel.service.PortletLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.service.UserLocalServiceUtil"%>
+<%@page import="com.liferay.portal.kernel.util.CamelCaseUtil"%>
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
 <%@page import="com.liferay.portal.kernel.util.DateUtil"%>
 <%@page import="com.liferay.portal.kernel.util.FastDateFormatFactoryUtil"%>
@@ -82,13 +96,26 @@
 <%@page import="com.liferay.portal.kernel.workflow.WorkflowConstants"%>
 <%@page import="com.liferay.trash.kernel.util.TrashUtil"%>
 
+<%@page import="ezvcard.parameter.AddressType"%>
+<%@page import="ezvcard.parameter.ImppType"%>
+<%@page import="ezvcard.parameter.TelephoneType"%>
+<%@page import="ezvcard.parameter.ExpertiseLevel"%>
+<%@page import="ezvcard.parameter.HobbyLevel"%>
+<%@page import="ezvcard.parameter.InterestLevel"%>
+<%@page import="ezvcard.property.Gender"%>
 <%@page import="ezvcard.property.Kind"%>
 
 <%@page import="java.text.Format"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Arrays"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Locale"%>
+<%@page import="java.util.TimeZone"%>
+<%@page import="java.util.TreeSet"%>
 <%@page import="java.util.Set"%>
+<%@page import="java.util.SortedSet"%>
 
 <%@page import="javax.portlet.PortletPreferences"%>
 <%@page import="javax.portlet.PortletURL"%>

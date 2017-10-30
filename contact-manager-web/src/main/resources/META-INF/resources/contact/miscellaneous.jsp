@@ -2,28 +2,11 @@
     edit_miscellaneous.jsp: Edit the miscellaneous contact information. 
     
     Created:    2015-05-16 20:06 by Christian Berndt
-    Modified:   2017-07-25 22:26 by Christian Berndt
-    Version:    1.1.8
+    Modified:   2017-10-30 19:13 by Christian Berndt
+    Version:    1.1.9
 --%>
 
 <%@ include file="/init.jsp"%>
-
-<%@page import="java.util.Map"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.TreeSet"%>
-<%@page import="java.util.SortedSet"%>
-<%@page import="java.util.Locale"%>
-<%@page import="java.util.TimeZone"%>
-
-<%@page import="ch.inofix.contact.dto.ExpertiseDTO"%>
-<%@page import="ezvcard.property.Gender"%>
-<%@page import="ch.inofix.contact.dto.HobbyDTO"%>
-<%@page import="ch.inofix.contact.dto.InterestDTO"%>
-<%@page import="ch.inofix.contact.dto.LanguageDTO"%>
-
-<%@page import="ezvcard.parameter.ExpertiseLevel"%>
-<%@page import="ezvcard.parameter.HobbyLevel"%>
-<%@page import="ezvcard.parameter.InterestLevel"%>
 
 <%
     Contact contact_ = (Contact) request.getAttribute(ContactManagerWebKeys.CONTACT);
@@ -41,9 +24,7 @@
     }
 
     String namespace = liferayPortletResponse.getNamespace();
-%>
 
-<%
     String currentTimeZone = themeDisplay.getTimeZone().getID();
 
     if (Validator.isNotNull(contact_.getTimezone())) {

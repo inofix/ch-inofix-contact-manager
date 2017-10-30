@@ -2,14 +2,11 @@
     personal.jsp: Edit the contact's personal information. 
     
     Created:    2015-05-08 18:02 by Christian Berndt
-    Modified:   2017-07-25 22:27 by Christian Berndt
-    Version:    1.2.1
+    Modified:   2017-10-30 19:05 by Christian Berndt
+    Version:    1.2.2
 --%>
 
 <%@ include file="/init.jsp"%>
-
-<%@ page import="ch.inofix.contact.dto.UrlDTO"%>
-<%@ page import="ch.inofix.contact.dto.UriDTO"%>
 
 <%
     Contact contact_ = (Contact) request.getAttribute(ContactManagerWebKeys.CONTACT);

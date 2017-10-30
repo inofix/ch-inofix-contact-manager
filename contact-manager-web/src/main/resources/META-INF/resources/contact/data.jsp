@@ -5,13 +5,11 @@
     - etc.
     
     Created:    2015-06-25 18:50 by Christian Berndt
-    Modified:   2017-07-25 22:25 by Christian Berndt
-    Version:    1.0.8
+    Modified:   2017-10-30 18:57 by Christian Berndt
+    Version:    1.0.9
 --%>
 
 <%@ include file="/init.jsp"%>
-
-<%@ page import="ch.inofix.contact.dto.FileDTO" %>
 
 <%
     Contact contact_ = (Contact) request.getAttribute(ContactManagerWebKeys.CONTACT);
