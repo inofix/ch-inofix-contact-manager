@@ -2,13 +2,11 @@
     edit_contact/edit_notes.jsp: Edit the vCard's notes of the contact.
     
     Created:    2015-05-11 18:48 by Christian Berndt
-    Modified:   2017-07-25 22:26 by Christian Berndt
-    Version:    1.1.2
+    Modified:   2017-10-30 19:04 by Christian Berndt
+    Version:    1.1.3
 --%>
 
 <%@ include file="/init.jsp"%>
-
-<%@page import="ch.inofix.contact.dto.NoteDTO"%>
 
 <%
     Contact contact_ = (Contact) request.getAttribute(ContactManagerWebKeys.CONTACT);

@@ -2,21 +2,11 @@
     general.jsp: Edit the contact's basic contact information. 
     
     Created:    2015-05-08 18:02 by Christian Berndt
-    Modified:   2017-10-12 22:53 by Christian Berndt
-    Version:    1.2.4
+    Modified:   2017-10-30 19:00 by Christian Berndt
+    Version:    1.2.5
 --%>
 
 <%@ include file="/init.jsp"%>
-
-<%@page import="ch.inofix.contact.dto.CategoriesDTO"%>
-<%@page import="ch.inofix.contact.dto.EmailDTO"%>
-<%@page import="ch.inofix.contact.dto.ImppDTO"%>
-<%@page import="ch.inofix.contact.dto.PhoneDTO"%>
-
-<%@page import="com.liferay.portal.kernel.util.CamelCaseUtil"%>
-
-<%@page import="ezvcard.parameter.ImppType"%>
-<%@page import="ezvcard.parameter.TelephoneType"%>
 
 <%
     Contact contact_ = (Contact) request.getAttribute(ContactManagerWebKeys.CONTACT);
