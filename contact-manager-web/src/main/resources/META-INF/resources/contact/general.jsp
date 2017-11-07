@@ -2,8 +2,8 @@
     general.jsp: Edit the contact's basic contact information. 
     
     Created:    2015-05-08 18:02 by Christian Berndt
-    Modified:   2017-10-30 19:00 by Christian Berndt
-    Version:    1.2.5
+    Modified:   2017-11-06 23:55 by Christian Berndt
+    Version:    1.2.6
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -12,11 +12,14 @@
     Contact contact_ = (Contact) request.getAttribute(ContactManagerWebKeys.CONTACT);
 
     boolean hasUpdatePermission = false;
+    boolean isDownloadDisabled = false;
 
     if (contact_ == null) {
 
         contact_ = ContactServiceUtil.createContact();
         hasUpdatePermission = true;
+        isDownloadDisabled = true;
+
 
     } else {
 
@@ -79,12 +82,15 @@
             %>
         </aui:select>
 
+
         <portlet:resourceURL var="downloadVCardURL" id="download">
             <portlet:param name="contactId"
                 value="<%=String.valueOf(contact_.getContactId())%>" />
         </portlet:resourceURL>
 
-        <aui:button cssClass="btn-download pull-right" href="<%=downloadVCardURL%>" icon="icon-download"
+        <aui:button cssClass="btn-download pull-right"
+            disabled="<%=isDownloadDisabled%>"
+            href="<%=downloadVCardURL%>" icon="icon-download"
             value="download" />
 
     </aui:fieldset>
