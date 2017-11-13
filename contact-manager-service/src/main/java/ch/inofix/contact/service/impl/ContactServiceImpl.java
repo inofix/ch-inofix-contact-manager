@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.liferay.exportimport.kernel.model.ExportImportConfiguration;
+import com.liferay.portal.kernel.backgroundtask.BackgroundTaskManagerUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -57,8 +58,8 @@ import ch.inofix.contact.service.permission.ContactPermission;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-07 23:50
- * @modified 2017-07-09 13:03
- * @version 1.0.9
+ * @modified 2017-11-14 00:14
+ * @version 1.1.0
  * @see ContactServiceBaseImpl
  * @see ch.inofix.contact.service.ContactServiceUtil
  */
@@ -105,6 +106,15 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
         ContactManagerPermission.check(getPermissionChecker(), groupId, ContactActionKeys.DELETE_GROUP_CONTACTS);
 
         return contactLocalService.deleteGroupContacts(groupId);
+    }
+    
+    @Override
+    public void deleteBackgroundTask(long groupId, long backgroundTaskId) throws PortalException {
+
+        ContactManagerPermission.check(getPermissionChecker(), groupId, ContactActionKeys.EXPORT_IMPORT_CONTACTS);
+
+        BackgroundTaskManagerUtil.deleteBackgroundTask(backgroundTaskId);
+
     }
 
     @Override
