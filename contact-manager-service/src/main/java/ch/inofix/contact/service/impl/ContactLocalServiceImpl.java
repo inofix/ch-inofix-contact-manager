@@ -84,8 +84,8 @@ import ch.inofix.contact.social.ContactActivityKeys;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2017-06-20 17:19
- * @modified 2017-09-14 10:41
- * @version 1.0.6
+ * @modified 2017-11-14 00:33
+ * @version 1.0.7
  * @see ContactLocalServiceBaseImpl
  * @see ch.inofix.contact.service.ContactLocalServiceUtil
  */
@@ -290,14 +290,13 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
 
     @Override
     public long importContactsInBackground(long userId, ExportImportConfiguration exportImportConfiguration,
-            InputStream inputStream) throws PortalException {
+            InputStream inputStream, String extension) throws PortalException {
 
         File file = null;
 
         try {
 
-            // TODO: use format of uploaded file or .vcf
-            file = FileUtil.createTempFile("lar");
+            file = FileUtil.createTempFile(extension);
 
             FileUtil.write(file, inputStream);
 
