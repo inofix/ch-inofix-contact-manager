@@ -8,8 +8,8 @@
 
 <%@ include file="/init.jsp" %>
 
-<c:if test="<%=ContactManagerPermission.contains(permissionChecker, scopeGroupId,
-                        ContactActionKeys.ADD_CONTACT)%>">
+<c:if test="<%=ContactManagerPortletPermission.contains(permissionChecker, scopeGroupId,
+                        ContactManagerActionKeys.ADD_CONTACT)%>">
 
     <liferay-frontend:add-menu>
 

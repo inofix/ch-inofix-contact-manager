@@ -35,10 +35,10 @@ import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.TempFileEntryUtil;
 
 import aQute.bnd.annotation.ProviderType;
-import ch.inofix.contact.constants.ContactActionKeys;
+import ch.inofix.contact.constants.ContactManagerActionKeys;
 import ch.inofix.contact.model.Contact;
 import ch.inofix.contact.service.base.ContactServiceBaseImpl;
-import ch.inofix.contact.service.permission.ContactManagerPermission;
+import ch.inofix.contact.service.permission.ContactManagerPortletPermission;
 import ch.inofix.contact.service.permission.ContactPermission;
 
 /**
@@ -75,8 +75,8 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
     @Override
     public Contact addContact(String card, String uid, ServiceContext serviceContext) throws PortalException {
 
-        ContactManagerPermission.check(getPermissionChecker(), serviceContext.getScopeGroupId(),
-                ContactActionKeys.ADD_CONTACT);
+        ContactManagerPortletPermission.check(getPermissionChecker(), serviceContext.getScopeGroupId(),
+                ContactManagerActionKeys.ADD_CONTACT);
 
         return contactLocalService.addContact(getUserId(), card, uid, serviceContext);
 
@@ -86,7 +86,7 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
     public FileEntry addTempFileEntry(long groupId, String folderName, String fileName, InputStream inputStream,
             String mimeType) throws PortalException {
 
-        ContactManagerPermission.check(getPermissionChecker(), groupId, ContactActionKeys.EXPORT_IMPORT_CONTACTS);
+        ContactManagerPortletPermission.check(getPermissionChecker(), groupId, ContactManagerActionKeys.EXPORT_IMPORT_CONTACTS);
 
         return TempFileEntryUtil.addTempFileEntry(groupId, getUserId(),
                 DigesterUtil.digestHex(Digester.SHA_256, folderName), fileName, inputStream, mimeType);
@@ -103,7 +103,7 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
     @Override
     public List<Contact> deleteGroupContacts(long groupId) throws PortalException {
 
-        ContactManagerPermission.check(getPermissionChecker(), groupId, ContactActionKeys.DELETE_GROUP_CONTACTS);
+        ContactManagerPortletPermission.check(getPermissionChecker(), groupId, ContactManagerActionKeys.DELETE_GROUP_CONTACTS);
 
         return contactLocalService.deleteGroupContacts(groupId);
     }
@@ -111,7 +111,7 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
     @Override
     public void deleteBackgroundTask(long groupId, long backgroundTaskId) throws PortalException {
 
-        ContactManagerPermission.check(getPermissionChecker(), groupId, ContactActionKeys.EXPORT_IMPORT_CONTACTS);
+        ContactManagerPortletPermission.check(getPermissionChecker(), groupId, ContactManagerActionKeys.EXPORT_IMPORT_CONTACTS);
 
         BackgroundTaskManagerUtil.deleteBackgroundTask(backgroundTaskId);
 
@@ -120,7 +120,7 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
     @Override
     public Contact deleteContact(long contactId) throws PortalException {
 
-        ContactPermission.check(getPermissionChecker(), contactId, ContactActionKeys.DELETE);
+        ContactPermission.check(getPermissionChecker(), contactId, ContactManagerActionKeys.DELETE);
 
         Contact contact = contactLocalService.deleteContact(contactId);
 
@@ -131,7 +131,7 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
     @Override
     public void deleteTempFileEntry(long groupId, String folderName, String fileName) throws PortalException {
 
-        ContactManagerPermission.check(getPermissionChecker(), groupId, ContactActionKeys.EXPORT_IMPORT_CONTACTS);
+        ContactManagerPortletPermission.check(getPermissionChecker(), groupId, ContactManagerActionKeys.EXPORT_IMPORT_CONTACTS);
 
         TempFileEntryUtil.deleteTempFileEntry(groupId, getUserId(),
                 DigesterUtil.digestHex(Digester.SHA_256, folderName), fileName);
@@ -140,7 +140,7 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
     @Override
     public Contact getContact(long contactId) throws PortalException {
 
-        ContactPermission.check(getPermissionChecker(), contactId, ContactActionKeys.VIEW);
+        ContactPermission.check(getPermissionChecker(), contactId, ContactManagerActionKeys.VIEW);
 
         return contactLocalService.getContact(contactId);
 
@@ -149,7 +149,7 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
     @Override
     public String[] getTempFileNames(long groupId, String folderName) throws PortalException {
 
-        ContactManagerPermission.check(getPermissionChecker(), groupId, ContactActionKeys.EXPORT_IMPORT_CONTACTS);
+        ContactManagerPortletPermission.check(getPermissionChecker(), groupId, ContactManagerActionKeys.EXPORT_IMPORT_CONTACTS);
 
         return TempFileEntryUtil.getTempFileNames(groupId, getUserId(),
                 DigesterUtil.digestHex(Digester.SHA_256, folderName));
@@ -163,7 +163,7 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
 
         long targetGroupId = MapUtil.getLong(settingsMap, "targetGroupId");
 
-        ContactManagerPermission.check(getPermissionChecker(), targetGroupId, ContactActionKeys.IMPORT_CONTACTS);
+        ContactManagerPortletPermission.check(getPermissionChecker(), targetGroupId, ContactManagerActionKeys.IMPORT_CONTACTS);
 
         return contactLocalService.importContactsInBackground(getUserId(), exportImportConfiguration, inputStream,
                 extension);
@@ -189,7 +189,7 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
     public Contact updateContact(long contactId, String card, String uid, ServiceContext serviceContext)
             throws PortalException {
 
-        ContactPermission.check(getPermissionChecker(), contactId, ContactActionKeys.UPDATE);
+        ContactPermission.check(getPermissionChecker(), contactId, ContactManagerActionKeys.UPDATE);
 
         return contactLocalService.updateContact(getUserId(), contactId, card, uid, serviceContext);
 

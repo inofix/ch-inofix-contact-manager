@@ -47,8 +47,8 @@ import ch.inofix.contact.web.configuration.ExportImportConfigurationConstants;
  * @author Stefan Luebbers
  * @author Christian Berndt
  * @created 2017-03-30 19:52
- * @modified 2017-10-28 18:15
- * @version 1.1.3
+ * @modified 2017-11-14 15:45
+ * @version 1.1.4
  */
 @Component(
     configurationPid = "ch.inofix.contact.web.configuration.ContactManagerConfiguration", 
@@ -202,14 +202,14 @@ public class ContactManagerPortlet extends MVCPortlet {
 //        }
 //    }
 
-    @Activate
-    @Modified
-    protected void activate(Map<Object, Object> properties) {
-
-        _contactManagerConfiguration = ConfigurableUtil.createConfigurable(
-                ContactManagerConfiguration.class, properties);
-        
-    }
+//    @Activate
+//    @Modified
+//    protected void activate(Map<Object, Object> properties) {
+//
+//        _contactManagerConfiguration = ConfigurableUtil.createConfigurable(
+//                ContactManagerConfiguration.class, properties);
+//        
+//    }
 
 //    protected void addTempFileEntry(ActionRequest actionRequest, String folderName) throws Exception {
 //
@@ -304,23 +304,23 @@ public class ContactManagerPortlet extends MVCPortlet {
 //        actionResponse.setRenderParameter("tabs2", tabs2);
 //    }
 
-    protected void deleteContacts(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-
-        _log.info("deleteContacts");
-
-        long contactId = ParamUtil.getLong(actionRequest, "contactId");
-
-        long[] contactIds = ParamUtil.getLongValues(actionRequest, "deleteContactIds");
-
-        if (contactId > 0) {
-            contactIds = new long[] { contactId };
-        }
-
-        for (long id : contactIds) {
-            _contactService.deleteContact(id);
-        }
-
-    }
+//    protected void deleteContacts(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+//
+//        _log.info("deleteContacts");
+//
+//        long contactId = ParamUtil.getLong(actionRequest, "contactId");
+//
+//        long[] contactIds = ParamUtil.getLongValues(actionRequest, "deleteContactIds");
+//
+//        if (contactId > 0) {
+//            contactIds = new long[] { contactId };
+//        }
+//
+//        for (long id : contactIds) {
+//            _contactService.deleteContact(id);
+//        }
+//
+//    }
 
 //    protected void deleteTempFileEntry(ActionRequest actionRequest, ActionResponse actionResponse, String folderName)
 //            throws Exception {
@@ -380,20 +380,20 @@ public class ContactManagerPortlet extends MVCPortlet {
 //        portletRequest.setAttribute(ContactManagerWebKeys.CONTACT, contact);
 //    }
 //    
-    protected void download(ResourceRequest resourceRequest,
-            ResourceResponse resourceResponse) throws PortalException, IOException {
-
-        long contactId = ParamUtil.getLong(resourceRequest, "contactId");
-
-        Contact contact = _contactService.getContact(contactId);
-
-        String card = contact.getCard();
-        String name = contact.getFullName(true);
-
-        PortletResponseUtil.sendFile(resourceRequest, resourceResponse, name
-                + ".vcf", card.getBytes(), ContentTypes.TEXT_PLAIN_UTF8);
-
-    }
+//    protected void download(ResourceRequest resourceRequest,
+//            ResourceResponse resourceResponse) throws PortalException, IOException {
+//
+//        long contactId = ParamUtil.getLong(resourceRequest, "contactId");
+//
+//        Contact contact = _contactService.getContact(contactId);
+//
+//        String card = contact.getCard();
+//        String name = contact.getFullName(true);
+//
+//        PortletResponseUtil.sendFile(resourceRequest, resourceResponse, name
+//                + ".vcf", card.getBytes(), ContentTypes.TEXT_PLAIN_UTF8);
+//
+//    }
 //
 //    protected String getEditContactURL(ActionRequest actionRequest, ActionResponse actionResponse, Contact contact)
 //            throws Exception {
@@ -426,49 +426,49 @@ public class ContactManagerPortlet extends MVCPortlet {
      * from ExportLayoutsMVCAction
      *
      */
-    protected ExportImportConfiguration getExportImportConfiguration(ActionRequest actionRequest) throws Exception {
-
-        _log.info("getExportImportConfiguration");
-
-        Map<String, Serializable> exportContactsSettingsMap = null;
-
-        long exportImportConfigurationId = ParamUtil.getLong(actionRequest, "exportImportConfigurationId");
-
-        if (exportImportConfigurationId > 0) {
-            ExportImportConfiguration exportImportConfiguration = _exportImportConfigurationLocalService
-                    .fetchExportImportConfiguration(exportImportConfigurationId);
-
-            if (exportImportConfiguration != null) {
-                exportContactsSettingsMap = exportImportConfiguration.getSettingsMap();
-            }
-        }
-
-        ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-
-        if (exportContactsSettingsMap == null) {
-
-            String fileName = ParamUtil.getString(actionRequest, "exportFileName");
-
-            if (Validator.isNull(fileName)) {
-                fileName = LanguageUtil.get(actionRequest.getLocale(), "task-records");
-            }
-
-            exportContactsSettingsMap = ExportImportContactsConfigurationSettingsMapFactory
-                    .buildExportContactsSettingsMap(themeDisplay.getUserId(), themeDisplay.getPlid(),
-                            themeDisplay.getScopeGroupId(), PortletKeys.CONTACT_MANAGER,
-                            actionRequest.getParameterMap(), themeDisplay.getLocale(), themeDisplay.getTimeZone(),
-                            fileName);
-        }
-
-        String taskName = ParamUtil.getString(actionRequest, "name");
-
-        if (Validator.isNull(taskName)) {
-            taskName = "Contacts";
-        }
-
-        return _exportImportConfigurationLocalService.addDraftExportImportConfiguration(themeDisplay.getUserId(),
-                taskName, ExportImportConfigurationConstants.TYPE_EXPORT_CONTACTS, exportContactsSettingsMap);
-    }
+//    protected ExportImportConfiguration getExportImportConfiguration(ActionRequest actionRequest) throws Exception {
+//
+//        _log.info("getExportImportConfiguration");
+//
+//        Map<String, Serializable> exportContactsSettingsMap = null;
+//
+//        long exportImportConfigurationId = ParamUtil.getLong(actionRequest, "exportImportConfigurationId");
+//
+//        if (exportImportConfigurationId > 0) {
+//            ExportImportConfiguration exportImportConfiguration = _exportImportConfigurationLocalService
+//                    .fetchExportImportConfiguration(exportImportConfigurationId);
+//
+//            if (exportImportConfiguration != null) {
+//                exportContactsSettingsMap = exportImportConfiguration.getSettingsMap();
+//            }
+//        }
+//
+//        ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+//
+//        if (exportContactsSettingsMap == null) {
+//
+//            String fileName = ParamUtil.getString(actionRequest, "exportFileName");
+//
+//            if (Validator.isNull(fileName)) {
+//                fileName = LanguageUtil.get(actionRequest.getLocale(), "task-records");
+//            }
+//
+//            exportContactsSettingsMap = ExportImportContactsConfigurationSettingsMapFactory
+//                    .buildExportContactsSettingsMap(themeDisplay.getUserId(), themeDisplay.getPlid(),
+//                            themeDisplay.getScopeGroupId(), PortletKeys.CONTACT_MANAGER,
+//                            actionRequest.getParameterMap(), themeDisplay.getLocale(), themeDisplay.getTimeZone(),
+//                            fileName);
+//        }
+//
+//        String taskName = ParamUtil.getString(actionRequest, "name");
+//
+//        if (Validator.isNull(taskName)) {
+//            taskName = "Contacts";
+//        }
+//
+//        return _exportImportConfigurationLocalService.addDraftExportImportConfiguration(themeDisplay.getUserId(),
+//                taskName, ExportImportConfigurationConstants.TYPE_EXPORT_CONTACTS, exportContactsSettingsMap);
+//    }
 
     /**
      * from com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCResourceCommand
@@ -476,12 +476,12 @@ public class ContactManagerPortlet extends MVCPortlet {
      * @param resourceRequest
      * @return
      */
-    protected PortletConfig getPortletConfig(ResourceRequest resourceRequest) {
-
-        String portletId = PortalUtil.getPortletId(resourceRequest);
-
-        return PortletConfigFactoryUtil.get(portletId);
-    }
+//    protected PortletConfig getPortletConfig(ResourceRequest resourceRequest) {
+//
+//        String portletId = PortalUtil.getPortletId(resourceRequest);
+//
+//        return PortletConfigFactoryUtil.get(portletId);
+//    }
 
     /**
      * from com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCResourceCommand
@@ -490,14 +490,14 @@ public class ContactManagerPortlet extends MVCPortlet {
      * @param path
      * @return
      */
-    protected PortletRequestDispatcher getPortletRequestDispatcher(ResourceRequest resourceRequest, String path) {
-
-        PortletConfig portletConfig = getPortletConfig(resourceRequest);
-
-        PortletContext portletContext = portletConfig.getPortletContext();
-
-        return portletContext.getRequestDispatcher(path);
-    }
+//    protected PortletRequestDispatcher getPortletRequestDispatcher(ResourceRequest resourceRequest, String path) {
+//
+//        PortletConfig portletConfig = getPortletConfig(resourceRequest);
+//
+//        PortletContext portletContext = portletConfig.getPortletContext();
+//
+//        return portletContext.getRequestDispatcher(path);
+//    }
 
     /**
      * Disable the get- / sendRedirect feature of LiferayPortlet.
@@ -570,21 +570,21 @@ public class ContactManagerPortlet extends MVCPortlet {
 //        portletRequestDispatcher.include(resourceRequest, resourceResponse);
 //    }
 
-    @Reference
-    protected void setContactService(ContactService contactService) {
-        this._contactService = contactService;
-    }
+//    @Reference
+//    protected void setContactService(ContactService contactService) {
+//        this._contactService = contactService;
+//    }
 //
 //    @Reference
 //    protected void setDLFileEntryLocalService(DLFileEntryLocalService dlFileEntryLocalService) {
 //        this._dlFileEntryLocalService = dlFileEntryLocalService;
 //    }
 
-    @Reference(unbind = "-")
-    protected void setExportImportConfigurationLocalService(
-            ExportImportConfigurationLocalService exportImportConfigurationLocalService) {
-        _exportImportConfigurationLocalService = exportImportConfigurationLocalService;
-    }
+//    @Reference(unbind = "-")
+//    protected void setExportImportConfigurationLocalService(
+//            ExportImportConfigurationLocalService exportImportConfigurationLocalService) {
+//        _exportImportConfigurationLocalService = exportImportConfigurationLocalService;
+//    }
 //
 //    @Reference(unbind = "-")
 //    protected void setExportImportService(ExportImportService exportImportService) {
@@ -758,12 +758,12 @@ public class ContactManagerPortlet extends MVCPortlet {
 //        return _exportImportService.validateImportLayoutsFile(exportImportConfiguration, inputStream);
 //    }
 
-    private ContactService _contactService;
+//    private ContactService _contactService;
 //    private DLFileEntryLocalService _dlFileEntryLocalService;
-    private ExportImportConfigurationLocalService _exportImportConfigurationLocalService;
+//    private ExportImportConfigurationLocalService _exportImportConfigurationLocalService;
 //    private ExportImportService _exportImportService;
 
-    private volatile ContactManagerConfiguration _contactManagerConfiguration;
+//    private volatile ContactManagerConfiguration _contactManagerConfiguration;
 
     private static final Log _log = LogFactoryUtil.getLog(ContactManagerPortlet.class.getName());
 

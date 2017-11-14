@@ -2,21 +2,11 @@
     import_contacts_resources.jsp: configure the contacts import.
     
     Created:    2017-06-20 18:42 by Christian Berndt
-    Modified:   2017-06-20 18:42 by Christian Berndt
-    Version:    1.0.0
+    Modified:   2017-11-14 17:08 by Christian Berndt
+    Version:    1.0.1
 --%>
 
 <%@ include file="/init.jsp" %>
-
-<%@page import="com.liferay.exportimport.kernel.exception.LARTypeException"%>
-<%@page import="com.liferay.exportimport.kernel.exception.LARFileSizeException"%>
-<%@page import="com.liferay.exportimport.kernel.exception.LARFileException"%>
-<%@page import="com.liferay.exportimport.kernel.lar.ManifestSummary"%>
-<%@page import="com.liferay.exportimport.kernel.lar.PortletDataHandlerKeys"%>
-<%@page import="com.liferay.portal.kernel.service.GroupLocalServiceUtil"%>
-<%@page import="com.liferay.portal.kernel.util.PrefsPropsUtil"%>
-<%@page import="com.liferay.portal.kernel.util.PropsKeys"%>
-<%@page import="com.liferay.portal.kernel.util.TextFormatter"%>
 
 <%
     long groupId = ParamUtil.getLong(request, "groupId");
@@ -31,7 +21,6 @@
 
     FileEntry fileEntry = ExportImportHelperUtil.getTempFileEntry(groupId, themeDisplay.getUserId(),
             ExportImportHelper.TEMP_FOLDER_NAME);
-
 %>
 
 <liferay-ui:error exception="<%= LARFileException.class %>" message="please-specify-a-lar-file-to-import" />
@@ -43,7 +32,7 @@
 <liferay-ui:error exception="<%= LARTypeException.class %>">
 
     <%
-    LARTypeException lte = (LARTypeException)errorException;
+        LARTypeException lte = (LARTypeException)errorException;
     %>
 
     <liferay-ui:message arguments="<%= lte.getMessage() %>" key="please-import-a-lar-file-of-the-correct-type-x" />
@@ -51,7 +40,7 @@
 
 <% // TODO: what else can go wrong? see import_layouts_resources.jsp %>
 
-<portlet:actionURL var="importContactsURL">
+<portlet:actionURL name="importContacts" var="importContactsURL">
     <portlet:param name="<%= Constants.CMD %>" value="<%= Constants.IMPORT %>" />
     <portlet:param name="groupId" value="<%= String.valueOf(groupId) %>" />
     <portlet:param name="mvcPath" value="/view.jsp"/>
@@ -62,7 +51,8 @@
 <aui:form action="<%= importContactsURL %>" cssClass="lfr-export-dialog" method="post" name="fm1">
 
     <portlet:renderURL var="portletURL">
-        <portlet:param name="groupId" value="<%= String.valueOf(groupId) %>" />
+        <portlet:param name="tabs1" value="export-import"/>
+        <portlet:param name="tabs2" value="import"/>
     </portlet:renderURL>
 
     <aui:input name="redirect" type="hidden" value="<%= portletURL.toString() %>" />

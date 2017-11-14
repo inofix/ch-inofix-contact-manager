@@ -2,8 +2,8 @@
     view.jsp: the import view of the contact-manager.
     
     Created:    2017-06-19 23:16 by Christian Berndt
-    Modified:   2017-06-19 23:16 by Christian Berndt
-    Version:    1.0.0
+    Modified:   2017-11-14 17:47 by Christian Berndt
+    Version:    1.0.1
 --%>
 
 <%@ include file="/init.jsp" %>
@@ -20,7 +20,7 @@
 %>
 
 <c:choose>
-    <c:when test="<%=!ContactManagerPermission.contains(permissionChecker, scopeGroupId, ContactActionKeys.EXPORT_IMPORT_CONTACTS)%>">
+    <c:when test="<%=!ContactManagerPortletPermission.contains(permissionChecker, scopeGroupId, ContactManagerActionKeys.EXPORT_IMPORT_CONTACTS)%>">
         <div class="alert alert-info">
             <liferay-ui:message key="you-do-not-have-permission-to-access-the-requested-resource" />
         </div>

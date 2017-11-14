@@ -23,7 +23,7 @@ import com.liferay.portal.kernel.xml.Element;
 import ch.inofix.contact.constants.PortletKeys;
 import ch.inofix.contact.model.Contact;
 import ch.inofix.contact.service.ContactLocalService;
-import ch.inofix.contact.service.permission.ContactManagerPermission;
+import ch.inofix.contact.service.permission.ContactManagerPortletPermission;
 
 /**
  *
@@ -81,7 +81,7 @@ public class ContactManagerPortletDataHandler extends BasePortletDataHandler {
             return getExportDataRootElementString(rootElement);
         }
 
-        portletDataContext.addPortletPermissions(ContactManagerPermission.RESOURCE_NAME);
+        portletDataContext.addPortletPermissions(ContactManagerPortletPermission.RESOURCE_NAME);
 
         rootElement.addAttribute("group-id", String.valueOf(portletDataContext.getScopeGroupId()));
 
@@ -105,7 +105,7 @@ public class ContactManagerPortletDataHandler extends BasePortletDataHandler {
             return null;
         }
 
-        portletDataContext.importPortletPermissions(ContactManagerPermission.RESOURCE_NAME);
+        portletDataContext.importPortletPermissions(ContactManagerPortletPermission.RESOURCE_NAME);
 
         Element entriesElement = portletDataContext.getImportDataGroupElement(Contact.class);
 
