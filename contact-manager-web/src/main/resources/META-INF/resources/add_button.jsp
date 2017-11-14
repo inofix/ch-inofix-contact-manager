@@ -2,11 +2,10 @@
     add_button.jsp: add a new contact 
     
     Created:    2017-06-19 16:34 by Christian Berndt
-    Modified:   2017-06-19 16:34 by Christian Berndt
-    Version:    1.0.0
+    Modified:   2017-11-14 15:24 by Christian Berndt
+    Version:    1.0.1
 --%>
 
-<%@page import="ch.inofix.contact.service.permission.ContactManagerPermission"%>
 <%@ include file="/init.jsp" %>
 
 <c:if test="<%=ContactManagerPermission.contains(permissionChecker, scopeGroupId,
