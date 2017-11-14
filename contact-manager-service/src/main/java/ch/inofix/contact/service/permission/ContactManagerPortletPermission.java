@@ -15,7 +15,7 @@ import ch.inofix.contact.constants.PortletKeys;
  * @version 1.0.1
  *
  */
-public class ContactManagerPermission extends BaseResourcePermissionChecker {
+public class ContactManagerPortletPermission extends BaseResourcePermissionChecker {
 
     public static final String RESOURCE_NAME = "ch.inofix.contact";
 

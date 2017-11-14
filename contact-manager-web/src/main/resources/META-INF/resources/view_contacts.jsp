@@ -2,13 +2,11 @@
     view_contacts.jsp: search-container of Inofix' contact-manager.
     
     Created:     2017-06-19 16:02 by Christian Berndt
-    Modified:    2017-09-28 17:11 by Christian Berndt
-    Version:     1.0.3
+    Modified:    2017-11-14 15:34 by Christian Berndt
+    Version:     1.0.4
 --%>
 
 <%@ include file="/init.jsp"%>
-
-<%@page import="ch.inofix.contact.web.internal.search.EntriesChecker"%>
 
 <%
     ContactSearch searchContainer = (ContactSearch) request.getAttribute("view.jsp-searchContainer");
@@ -32,17 +30,16 @@
         modelVar="contact_" keyProperty="contactId">
 
         <portlet:renderURL var="editURL">
+            <portlet:param name="contactId" value="<%=String.valueOf(contact_.getContactId())%>" />
+            <portlet:param name="mvcRenderCommandName" value="editContact" />
+<%--             <portlet:param name="mvcPath" value="/edit_contact.jsp" /> --%>
             <portlet:param name="redirect" value="<%=currentURL%>" />
-            <portlet:param name="contactId"
-                value="<%=String.valueOf(contact_.getContactId())%>" />
-            <portlet:param name="mvcPath" value="/edit_contact.jsp" />
         </portlet:renderURL>
 
         <portlet:renderURL var="viewURL">
+            <portlet:param name="contactId" value="<%=String.valueOf(contact_.getContactId())%>" />
+            <portlet:param name="mvcRenderCommandName" value="editContact" />
             <portlet:param name="redirect" value="<%=currentURL%>" />
-            <portlet:param name="contactId"
-                value="<%=String.valueOf(contact_.getContactId())%>" />
-            <portlet:param name="mvcPath" value="/edit_contact.jsp" />
         </portlet:renderURL>
 
         <%
@@ -50,10 +47,10 @@
             request.setAttribute("viewURL", viewURL.toString());
 
             boolean hasUpdatePermission = ContactPermission.contains(permissionChecker,
-                    contact_.getContactId(), ContactActionKeys.UPDATE);
+                    contact_.getContactId(), ContactManagerActionKeys.UPDATE);
 
             boolean hasViewPermission = ContactPermission.contains(permissionChecker,
-                    contact_.getContactId(), ContactActionKeys.VIEW);
+                    contact_.getContactId(), ContactManagerActionKeys.VIEW);
             
             String detailURL = null;
 

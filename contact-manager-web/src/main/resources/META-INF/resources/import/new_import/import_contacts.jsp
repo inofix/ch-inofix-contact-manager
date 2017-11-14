@@ -2,13 +2,11 @@
     import_contacts.jsp: configure the contacts import.
     
     Created:    2017-06-19 23:44 by Christian Berndt
-    Modified:   2017-06-20 18:33 by Christian Berndt
-    Version:    1.0.1
+    Modified:   2017-11-14 17:02 by Christian Berndt
+    Version:    1.0.2
 --%>
 
 <%@ include file="/init.jsp" %>
-
-<%@page import="javax.portlet.PortletRequest"%>
 
 <%
     long groupId = ParamUtil.getLong(request, "groupId");

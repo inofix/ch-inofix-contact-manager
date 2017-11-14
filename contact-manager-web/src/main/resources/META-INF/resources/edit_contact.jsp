@@ -2,15 +2,15 @@
     edit_contact.jsp: edit a single contact. 
     
     Created:    2015-05-07 23:40 by Christian Berndt
-    Modified:   2017-07-03 17:09 by Christian Berndt
-    Version:    1.2.6
+    Modified:   2017-11-14 15:27 by Christian Berndt
+    Version:    1.2.7
 --%>
 
 <%@ include file="init.jsp"%>
 
-<%@page import="ch.inofix.contact.web.servlet.taglib.ui.FormNavigatorConstants"%>
-
 <%
+    String cmd = Constants.ADD; 
+
     Contact contact_ = (Contact) request.getAttribute(ContactManagerWebKeys.CONTACT);
 
     String title = LanguageUtil.get(request, "new-contact");
@@ -27,12 +27,13 @@
         
     } else {
         
+        cmd = Constants.UPDATE;    
         title = contact_.getName();
-        hasUpdatePermission = ContactPermission.contains(permissionChecker, contact_, ContactActionKeys.UPDATE);
-        hasViewPermission = ContactPermission.contains(permissionChecker, contact_, ContactActionKeys.VIEW);
-        hasDeletePermission = ContactPermission.contains(permissionChecker, contact_, ContactActionKeys.DELETE);
+        hasUpdatePermission = ContactPermission.contains(permissionChecker, contact_, ContactManagerActionKeys.UPDATE);
+        hasViewPermission = ContactPermission.contains(permissionChecker, contact_, ContactManagerActionKeys.VIEW);
+        hasDeletePermission = ContactPermission.contains(permissionChecker, contact_, ContactManagerActionKeys.DELETE);
         hasPermissionsPermission = ContactPermission.contains(permissionChecker, contact_,
-                ContactActionKeys.PERMISSIONS);
+                ContactManagerActionKeys.PERMISSIONS);
     }
 
     String redirect = ParamUtil.getString(request, "redirect");
@@ -49,24 +50,26 @@
 
 <div class="container-fluid-1280">
 
-    <portlet:actionURL var="updateContactURL">
-        <portlet:param name="mvcPath" value="/edit_contact.jsp" />
+    <portlet:actionURL name="editContact" var="updateContactURL">
+        <portlet:param name="mvcRenderCommandName" value="editContact" />
     </portlet:actionURL>
 
     <aui:form method="post" action="<%=updateContactURL%>" name="fm">
 
-        <aui:input name="backURL" type="hidden" value="<%= backURL %>" />
-        <aui:input name="cmd" type="hidden"
-            value="<%= Constants.UPDATE %>" />
+        <aui:input name="<%=Constants.CMD%>" type="hidden"
+            value="<%=cmd%>" />
+
         <aui:input name="contactId" type="hidden"
             value="<%=String.valueOf(contact_.getContactId())%>" />
-        <aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+
+        <aui:input name="redirect" type="hidden" 
+            value="<%=redirect%>" />
 
         <div class="lfr-form-content">
 
             <liferay-ui:form-navigator
                 id="<%=FormNavigatorConstants.FORM_NAVIGATOR_ID_CONTACT%>"
-                markupView="<%= markupView %>"
+                markupView="<%=markupView%>"
                 showButtons="<%=hasUpdatePermission%>" />
 
         </div>

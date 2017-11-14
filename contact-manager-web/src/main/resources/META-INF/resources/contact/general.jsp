@@ -2,8 +2,8 @@
     general.jsp: Edit the contact's basic contact information. 
     
     Created:    2015-05-08 18:02 by Christian Berndt
-    Modified:   2017-11-06 23:55 by Christian Berndt
-    Version:    1.2.6
+    Modified:   2017-11-14 16:31 by Christian Berndt
+    Version:    1.2.7
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -82,10 +82,9 @@
             %>
         </aui:select>
 
-
-        <portlet:resourceURL var="downloadVCardURL" id="download">
-            <portlet:param name="contactId"
-                value="<%=String.valueOf(contact_.getContactId())%>" />
+        <portlet:resourceURL var="downloadVCardURL" id="exportContacts">
+            <portlet:param name="<%= Constants.CMD %>" value="download" />
+            <portlet:param name="contactId" value="<%=String.valueOf(contact_.getContactId())%>" />
         </portlet:resourceURL>
 
         <aui:button cssClass="btn-download pull-right"

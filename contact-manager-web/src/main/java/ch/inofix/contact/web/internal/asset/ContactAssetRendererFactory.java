@@ -24,11 +24,11 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
-import ch.inofix.contact.constants.ContactActionKeys;
+import ch.inofix.contact.constants.ContactManagerActionKeys;
 import ch.inofix.contact.constants.PortletKeys;
 import ch.inofix.contact.model.Contact;
 import ch.inofix.contact.service.ContactLocalService;
-import ch.inofix.contact.service.permission.ContactManagerPermission;
+import ch.inofix.contact.service.permission.ContactManagerPortletPermission;
 import ch.inofix.contact.service.permission.ContactPermission;
 
 /**
@@ -121,7 +121,7 @@ public class ContactAssetRendererFactory extends BaseAssetRendererFactory<Contac
     public boolean hasAddPermission(PermissionChecker permissionChecker, long groupId, long classTypeId)
             throws Exception {
 
-        return ContactManagerPermission.contains(permissionChecker, groupId, ContactActionKeys.ADD_CONTACT);
+        return ContactManagerPortletPermission.contains(permissionChecker, groupId, ContactManagerActionKeys.ADD_CONTACT);
     }
 
     @Override

@@ -2,13 +2,11 @@
     contact_action.jsp: The action menu of the contact manager's default view.
     
     Created:    2017-04-11 16:00 by Stefan Luebbers
-    Modified:   2017-10-12 21:45 by Christian Berndt
-    Version:    1.0.4
+    Modified:   2017-11-14 15:50 by Christian Berndt
+    Version:    1.0.5
 --%>
 
 <%@ include file="/init.jsp"%>
-
-<%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
 
 <%
     ResultRow row = (ResultRow) request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
@@ -22,13 +20,13 @@
     viewURL = HttpUtil.setParameter(viewURL, renderResponse.getNamespace() + "contactId", contact_.getContactId()); 
 
     boolean hasUpdatePermission = ContactPermission.contains(permissionChecker, contact_,
-            ContactActionKeys.UPDATE);
+            ContactManagerActionKeys.UPDATE);
     boolean hasViewPermission = ContactPermission.contains(permissionChecker, contact_,
-            ContactActionKeys.VIEW);
+            ContactManagerActionKeys.VIEW);
     boolean hasDeletePermission = ContactPermission.contains(permissionChecker, contact_,
-            ContactActionKeys.DELETE);
+            ContactManagerActionKeys.DELETE);
     boolean hasPermissionsPermission = ContactPermission.contains(permissionChecker, contact_, 
-            ContactActionKeys.PERMISSIONS);
+            ContactManagerActionKeys.PERMISSIONS);
 %>
 
 <liferay-ui:icon-menu showWhenSingleIcon="true">
@@ -42,11 +40,11 @@
 
     <c:if test="<%=hasViewPermission%>">
 
-        <portlet:resourceURL var="downloadVCardURL" id="download">
-            <portlet:param name="contactId"
-                value="<%= String.valueOf(contact_.getContactId()) %>" /> 
+        <portlet:resourceURL var="downloadVCardURL" id="exportContacts">
+            <portlet:param name="<%= Constants.CMD %>" value="download" />
+            <portlet:param name="contactId" value="<%=String.valueOf(contact_.getContactId())%>" />
         </portlet:resourceURL>
-
+        
         <liferay-ui:icon iconCssClass="icon-download" message="download" 
             url="<%=downloadVCardURL%>" />
 
@@ -61,11 +59,10 @@
 
     <c:if test="<%=hasDeletePermission%>">
 
-        <portlet:actionURL var="deleteURL">
+        <portlet:actionURL name="editContact" var="deleteURL">
             <portlet:param name="cmd" value="<%= Constants.DELETE %>"/>
+            <portlet:param name="contactId" value="<%=String.valueOf(contact_.getContactId())%>" />
             <portlet:param name="redirect" value="<%=currentURL%>" />
-            <portlet:param name="contactId"
-                value="<%=String.valueOf(contact_.getContactId())%>" />
         </portlet:actionURL>
 
         <liferay-ui:icon-delete message="delete" url="<%=deleteURL%>" />

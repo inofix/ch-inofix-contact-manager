@@ -11,7 +11,7 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
  * @version 1.0.3
  *
  */
-public class ContactActionKeys extends ActionKeys {
+public class ContactManagerActionKeys extends ActionKeys {
 
     public static final String ADD_CONTACT = "ADD_CONTACT";
     public static final String DELETE_GROUP_CONTACTS = "DELETE_GROUP_CONTACTS";

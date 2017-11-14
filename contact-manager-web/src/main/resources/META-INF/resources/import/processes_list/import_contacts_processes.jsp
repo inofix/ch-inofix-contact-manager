@@ -2,24 +2,11 @@
     import_contacts_processes.jsp: list of import processes
     
     Created:    2017-06-19 23:32 by Christian Berndt
-    Modified:   2017-06-22 20:56 by Christian Berndt
-    Version:    1.0.2
+    Modified:   2017-11-14 16:53 by Christian Berndt
+    Version:    1.0.3
 --%>
 
 <%@ include file="/init.jsp" %>
-
-<%@page import="java.util.Date"%>
-
-<%@page import="com.liferay.portal.kernel.security.permission.ResourceActionsUtil"%>
-<%@page import="com.liferay.portal.kernel.backgroundtask.BackgroundTaskConstants"%>
-<%@page import="com.liferay.portal.kernel.backgroundtask.BackgroundTaskStatusRegistryUtil"%>
-<%@page import="com.liferay.portal.kernel.backgroundtask.BackgroundTaskStatus"%>
-
-<%@page import="com.liferay.portal.kernel.dao.search.EmptyOnClickRowChecker"%>
-<%@page import="com.liferay.background.task.kernel.util.comparator.BackgroundTaskComparatorFactoryUtil"%>
-<%@page import="com.liferay.portal.kernel.portletfilerepository.PortletFileRepositoryUtil"%>
-<%@page import="com.liferay.portal.kernel.util.OrderByComparator"%>
-<%@page import="com.liferay.portal.kernel.util.StringBundler"%>
 
 <%
     long groupId = ParamUtil.getLong(request, "groupId");
@@ -41,9 +28,7 @@
     OrderByComparator<BackgroundTask> orderByComparator = BackgroundTaskComparatorFactoryUtil.getBackgroundTaskOrderByComparator(orderByCol, orderByType);
 %>
 
-<portlet:actionURL var="deleteBackgroundTasksURL">
-    <portlet:param name="redirect" value="<%= currentURL.toString() %>" />
-</portlet:actionURL>
+<portlet:actionURL name="importContacts" var="deleteBackgroundTasksURL"/>
 
 <aui:form action="<%= deleteBackgroundTasksURL %>" method="get" name="fm">
 
