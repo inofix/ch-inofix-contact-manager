@@ -101,7 +101,7 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
     }
 
     @Override
-    public List<Contact> deleteAllContacts(long groupId) throws PortalException {
+    public List<Contact> deleteGroupContacts(long groupId) throws PortalException {
 
         ContactManagerPermission.check(getPermissionChecker(), groupId, ContactActionKeys.DELETE_GROUP_CONTACTS);
 
@@ -156,8 +156,8 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
     }
 
     @Override
-    public long importContactsInBackground(ExportImportConfiguration exportImportConfiguration, InputStream inputStream)
-            throws PortalException {
+    public long importContactsInBackground(ExportImportConfiguration exportImportConfiguration, InputStream inputStream,
+            String extension) throws PortalException {
 
         Map<String, Serializable> settingsMap = exportImportConfiguration.getSettingsMap();
 
@@ -165,7 +165,8 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
 
         ContactManagerPermission.check(getPermissionChecker(), targetGroupId, ContactActionKeys.IMPORT_CONTACTS);
 
-        return contactLocalService.importContactsInBackground(getUserId(), exportImportConfiguration, inputStream);
+        return contactLocalService.importContactsInBackground(getUserId(), exportImportConfiguration, inputStream,
+                extension);
     }
 
     @Override
