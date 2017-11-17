@@ -2,8 +2,8 @@
     add_button.jsp: create a new import process
     
     Created:    2017-06-21 16:42 by Christian Berndt
-    Modified:   2017-06-21 16:42 by Christian Berndt
-    Version:    1.0.0
+    Modified:   2017-11-17 16:08 by Christian Berndt
+    Version:    1.0.1
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -17,6 +17,7 @@
     <portlet:renderURL var="addExportProcessURL">
         <portlet:param name="groupId" value="<%=String.valueOf(scopeGroupId)%>" />
         <portlet:param name="mvcPath" value="/export/new_export/export_contacts.jsp" />
+        <portlet:param name="redirect" value="<%= currentURL %>"/>
         <portlet:param name="tabs1" value="export-import" />
     </portlet:renderURL>
 

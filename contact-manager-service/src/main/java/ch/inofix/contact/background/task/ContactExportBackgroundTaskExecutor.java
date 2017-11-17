@@ -1,21 +1,28 @@
 package ch.inofix.contact.background.task;
 
+import java.io.File;
+
 import com.liferay.exportimport.kernel.model.ExportImportConfiguration;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTask;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskExecutor;
+import com.liferay.portal.kernel.backgroundtask.BackgroundTaskManagerUtil;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskResult;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
 
+import ch.inofix.contact.service.ContactLocalServiceUtil;
+
 /**
  * @author Christian Berndt
  * @created 2017-06-19 00:09
- * @modified 2017-06-19 00:09
- * @version 1.0.0
+ * @modified 2017-11-14 23:13
+ * @version 1.0.1
  */
 public class ContactExportBackgroundTaskExecutor extends BaseExportImportBackgroundTaskExecutor {
 
@@ -27,13 +34,13 @@ public class ContactExportBackgroundTaskExecutor extends BaseExportImportBackgro
 
     @Override
     public BackgroundTaskExecutor clone() {
-        ContactExportBackgroundTaskExecutor taskRecordExportBackgroundTaskExecutor = new ContactExportBackgroundTaskExecutor();
+        ContactExportBackgroundTaskExecutor contactExportBackgroundTaskExecutor = new ContactExportBackgroundTaskExecutor();
 
-        taskRecordExportBackgroundTaskExecutor
+        contactExportBackgroundTaskExecutor
                 .setBackgroundTaskStatusMessageTranslator(getBackgroundTaskStatusMessageTranslator());
-        taskRecordExportBackgroundTaskExecutor.setIsolationLevel(getIsolationLevel());
+        contactExportBackgroundTaskExecutor.setIsolationLevel(getIsolationLevel());
 
-        return taskRecordExportBackgroundTaskExecutor;
+        return contactExportBackgroundTaskExecutor;
     }
 
     @Override
@@ -50,12 +57,13 @@ public class ContactExportBackgroundTaskExecutor extends BaseExportImportBackgro
         sb.append(Time.getTimestamp());
         sb.append(".zip");
 
-        // TODO
-//        File xmlFile = ContactLocalServiceUtil.exportContactsAsFile(exportImportConfiguration);
+        File xmlFile = ContactLocalServiceUtil.exportContactsAsFile(exportImportConfiguration);
 
-//        BackgroundTaskManagerUtil.addBackgroundTaskAttachment(userId, backgroundTask.getBackgroundTaskId(),
-//                sb.toString(), xmlFile);
+        BackgroundTaskManagerUtil.addBackgroundTaskAttachment(userId, backgroundTask.getBackgroundTaskId(),
+                sb.toString(), xmlFile);
 
         return BackgroundTaskResult.SUCCESS;
     }
+    
+    private static final Log _log = LogFactoryUtil.getLog(ContactExportBackgroundTaskExecutor.class.getName()); 
 }

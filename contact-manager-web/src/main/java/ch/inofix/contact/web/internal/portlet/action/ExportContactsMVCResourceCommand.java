@@ -2,6 +2,7 @@ package ch.inofix.contact.web.internal.portlet.action;
 
 import java.io.IOException;
 
+import javax.portlet.PortletRequestDispatcher;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
@@ -24,8 +25,8 @@ import ch.inofix.contact.service.ContactService;
  * 
  * @author Christian Berndt
  * @created 2017-11-14 16:05
- * @modified 2017-11-14 16:05
- * @version 1.0.0
+ * @modified 2017-11-17 18:38
+ * @version 1.0.1
  *
  */
 @Component(
@@ -48,6 +49,14 @@ public class ExportContactsMVCResourceCommand extends BaseMVCResourceCommand {
 
             download(resourceRequest, resourceResponse);
 
+        }
+
+        else {
+            
+            PortletRequestDispatcher portletRequestDispatcher = getPortletRequestDispatcher(resourceRequest,
+                    "/export/processes_list/view.jsp");
+
+            portletRequestDispatcher.include(resourceRequest, resourceResponse);
         }
     }
 
