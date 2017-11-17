@@ -23,8 +23,6 @@ import java.util.Map;
 import com.liferay.exportimport.kernel.model.ExportImportConfiguration;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskManagerUtil;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Sort;
@@ -58,8 +56,8 @@ import ch.inofix.contact.service.permission.ContactPermission;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-07 23:50
- * @modified 2017-11-14 00:14
- * @version 1.1.0
+ * @modified 2017-11-14 22:20
+ * @version 1.1.1
  * @see ContactServiceBaseImpl
  * @see ch.inofix.contact.service.ContactServiceUtil
  */
@@ -136,6 +134,17 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
         TempFileEntryUtil.deleteTempFileEntry(groupId, getUserId(),
                 DigesterUtil.digestHex(Digester.SHA_256, folderName), fileName);
     }
+    
+    @Override
+    public long exportContactsAsFileInBackground(long userId, ExportImportConfiguration exportImportConfiguration)
+            throws PortalException {
+
+        ContactManagerPortletPermission.check(getPermissionChecker(), exportImportConfiguration.getGroupId(),
+                ContactManagerActionKeys.EXPORT_CONTACTS);
+
+        return contactLocalService.exportContactsAsFileInBackground(userId, exportImportConfiguration);
+
+    }
 
     @Override
     public Contact getContact(long contactId) throws PortalException {
@@ -194,6 +203,4 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
         return contactLocalService.updateContact(getUserId(), contactId, card, uid, serviceContext);
 
     }
-
-    private static Log _log = LogFactoryUtil.getLog(ContactServiceImpl.class.getName());
 }

@@ -2,8 +2,8 @@
     export_import.jsp: Export and import contacts
     
     Created:    2017-06-19 16:08 by Christian Berndt
-    Modified:   2017-11-14 17:46 by Christian Berndt
-    Version:    1.0.1
+    Modified:   2017-11-17 18:39 by Christian Berndt
+    Version:    1.0.2
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -29,7 +29,6 @@
             markupView="<%= markupView %>">
             <aui:nav cssClass="navbar-nav">
 
-                <%-- 
                 <%
                     portletURL.setParameter("tabs2", "export");
                 %>
@@ -38,8 +37,6 @@
                     label="export"
                     selected='<%= tabs2.equals("export") %>' />
                     
-                --%>
-
                 <%
                     portletURL.setParameter("tabs2", "import");
                 %>
@@ -64,11 +61,9 @@
             <liferay-util:include page="/export_import_error.jsp" servletContext="<%= application %>" />
 
             <c:choose>
-                <%-- 
                 <c:when test='<%= tabs2.equals("export") %>'>
                     <liferay-util:include page="/export/view.jsp" servletContext="<%= application %>" />
                 </c:when>
-                --%>
                 <c:when test='<%= tabs2.equals("import") %>'>
                     <liferay-util:include page="/import/view.jsp" servletContext="<%= application %>" />
                 </c:when>

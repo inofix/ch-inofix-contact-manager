@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-present Inofix Gmbh, Luzern. All rights reserved.
+ * Copyright (c) 2000-present Inofix GmbH, Luzern. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -26,6 +26,7 @@ import java.util.Map;
 
 import com.liferay.asset.kernel.model.AssetEntry;
 import com.liferay.asset.kernel.model.AssetLinkConstants;
+import com.liferay.exportimport.kernel.controller.ExportController;
 import com.liferay.exportimport.kernel.controller.ExportImportControllerRegistryUtil;
 import com.liferay.exportimport.kernel.controller.ImportController;
 import com.liferay.exportimport.kernel.model.ExportImportConfiguration;
@@ -62,6 +63,8 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import aQute.bnd.annotation.ProviderType;
+
+import ch.inofix.contact.background.task.ContactExportBackgroundTaskExecutor;
 import ch.inofix.contact.background.task.ContactImportBackgroundTaskExecutor;
 import ch.inofix.contact.model.Contact;
 import ch.inofix.contact.service.base.ContactLocalServiceBaseImpl;
@@ -84,8 +87,8 @@ import ch.inofix.contact.social.ContactActivityKeys;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2017-06-20 17:19
- * @modified 2017-11-14 00:33
- * @version 1.0.7
+ * @modified 2017-11-17 18:37
+ * @version 1.0.8
  * @see ContactLocalServiceBaseImpl
  * @see ch.inofix.contact.service.ContactLocalServiceUtil
  */
@@ -199,6 +202,49 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
 
         return contact;
     }
+    
+    @Override
+    public File exportContactsAsFile(ExportImportConfiguration exportImportConfiguration) throws PortalException {
+
+        try {
+            ExportController contactExportController = ExportImportControllerRegistryUtil
+                    .getExportController(Contact.class.getName());
+
+            return contactExportController.export(exportImportConfiguration);
+
+        } catch (PortalException pe) {
+            _log.error(pe);
+            throw pe;
+        } catch (Exception e) {
+            _log.error(e);
+            throw new SystemException(e);
+        }
+    }
+
+    @Override
+    public long exportContactsAsFileInBackground(long userId, ExportImportConfiguration exportImportConfiguration)
+            throws PortalException {
+
+        // TODO: The export may have different file types / extensions:
+        // - .csv
+        // - .xml
+        // - .txt
+        // - .json
+        // if
+        // (!DLValidatorUtil.isValidName(exportImportConfiguration.getName())) {
+        // throw new LARFileNameException(exportImportConfiguration.getName());
+        // }
+
+        Map<String, Serializable> taskContextMap = new HashMap<>();
+
+        taskContextMap.put("exportImportConfigurationId", exportImportConfiguration.getExportImportConfigurationId());
+
+        BackgroundTask backgroundTask = BackgroundTaskManagerUtil.addBackgroundTask(userId,
+                exportImportConfiguration.getGroupId(), exportImportConfiguration.getName(),
+                ContactExportBackgroundTaskExecutor.class.getName(), taskContextMap, new ServiceContext());
+
+        return backgroundTask.getBackgroundTaskId();
+    }
 
     /**
      * @param groupId
@@ -278,7 +324,7 @@ public class ContactLocalServiceImpl extends ContactLocalServiceBaseImpl {
         Map<String, Serializable> taskContextMap = new HashMap<>();
 
         taskContextMap.put("exportImportConfigurationId", exportImportConfiguration.getExportImportConfigurationId());
-
+        
         BackgroundTask backgroundTask = BackgroundTaskManagerUtil.addBackgroundTask(userId,
                 exportImportConfiguration.getGroupId(), exportImportConfiguration.getName(),
                 ContactImportBackgroundTaskExecutor.class.getName(), taskContextMap, new ServiceContext());

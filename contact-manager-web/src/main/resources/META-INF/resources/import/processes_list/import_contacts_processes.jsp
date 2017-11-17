@@ -2,8 +2,8 @@
     import_contacts_processes.jsp: list of import processes
     
     Created:    2017-06-19 23:32 by Christian Berndt
-    Modified:   2017-11-14 16:53 by Christian Berndt
-    Version:    1.0.3
+    Modified:   2017-11-17 18:41 by Christian Berndt
+    Version:    1.0.4
 --%>
 
 <%@ include file="/init.jsp" %>
@@ -28,7 +28,9 @@
     OrderByComparator<BackgroundTask> orderByComparator = BackgroundTaskComparatorFactoryUtil.getBackgroundTaskOrderByComparator(orderByCol, orderByType);
 %>
 
-<portlet:actionURL name="importContacts" var="deleteBackgroundTasksURL"/>
+<portlet:actionURL name="importContacts" var="deleteBackgroundTasksURL">
+    <portlet:param name="redirect" value="<%= currentURL.toString() %>" />
+</portlet:actionURL>
 
 <aui:form action="<%= deleteBackgroundTasksURL %>" method="get" name="fm">
 
