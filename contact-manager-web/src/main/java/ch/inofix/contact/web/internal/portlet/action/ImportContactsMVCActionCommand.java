@@ -3,6 +3,7 @@ package ch.inofix.contact.web.internal.portlet.action;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -16,7 +17,6 @@ import org.osgi.service.component.annotations.Reference;
 import com.liferay.document.library.kernel.exception.FileSizeException;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
 import com.liferay.exportimport.kernel.configuration.ExportImportConfigurationConstants;
-import com.liferay.exportimport.kernel.configuration.ExportImportConfigurationSettingsMapFactory;
 import com.liferay.exportimport.kernel.exception.LARFileException;
 import com.liferay.exportimport.kernel.exception.LARFileSizeException;
 import com.liferay.exportimport.kernel.exception.LARTypeException;
@@ -51,17 +51,19 @@ import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.StreamUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import ch.inofix.contact.constants.PortletKeys;
+import ch.inofix.contact.internal.exportimport.configuration.ExportImportContactsConfigurationSettingsMapFactory;
 import ch.inofix.contact.service.ContactService;
 
 /**
  * 
  * @author Christian Berndt
  * @created 2017-11-14 00:12
- * @modified 2017-11-14 00:12
- * @version 1.0.0
+ * @modified 2017-11-17 16:58
+ * @version 1.0.1
  *
  */
 @Component(
@@ -142,8 +144,6 @@ public class ImportContactsMVCActionCommand extends BaseMVCActionCommand {
     }
     
     protected void deleteBackgroundTasks(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-        
-        _log.info("deleteBackgroundTasks()");
 
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
         long groupId = themeDisplay.getScopeGroupId();
@@ -167,12 +167,6 @@ public class ImportContactsMVCActionCommand extends BaseMVCActionCommand {
                 throw e;
             }
         }
-
-        String tabs1 = ParamUtil.getString(actionRequest, "tabs1");
-        String tabs2 = ParamUtil.getString(actionRequest, "tabs2");
-
-        actionResponse.setRenderParameter("tabs1", tabs1);
-        actionResponse.setRenderParameter("tabs2", tabs2);
 
         addSuccessMessage(actionRequest, actionResponse);
 
@@ -222,7 +216,9 @@ public class ImportContactsMVCActionCommand extends BaseMVCActionCommand {
         String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 
         _log.info("cmd = " + cmd);
-
+        
+        String redirect = ParamUtil.getString(actionRequest, "redirect");
+        
         try {
             if (cmd.equals(Constants.ADD_TEMP)) {
                 
@@ -230,10 +226,14 @@ public class ImportContactsMVCActionCommand extends BaseMVCActionCommand {
                 validateFile(actionRequest, actionResponse, ExportImportHelper.TEMP_FOLDER_NAME);
                 hideDefaultSuccessMessage(actionRequest);
                 
-            } else if (cmd.equals("deleteBackgroundTasks")) {
+            } else if (cmd.equals(Constants.DELETE)) {
                 
                 deleteBackgroundTasks(actionRequest, actionResponse);
                 hideDefaultSuccessMessage(actionRequest);
+                
+                if (Validator.isNotNull(redirect)) {
+                    sendRedirect(actionRequest, actionResponse, redirect);
+                }
                 
             } else if (cmd.equals(Constants.DELETE_TEMP)) {
                 
@@ -244,10 +244,7 @@ public class ImportContactsMVCActionCommand extends BaseMVCActionCommand {
                 
                 hideDefaultSuccessMessage(actionRequest);
                 importData(actionRequest, ExportImportHelper.TEMP_FOLDER_NAME);
-                String redirect = ParamUtil.getString(actionRequest, "redirect");
-                
-                _log.info("redirect = " + redirect);
-                
+                                
                 sendRedirect(actionRequest, actionResponse, redirect);
                 
             }
@@ -274,7 +271,43 @@ public class ImportContactsMVCActionCommand extends BaseMVCActionCommand {
                 }
             }
         }
+    }
+    
+    protected ExportImportConfiguration getExportImportConfiguration(ActionRequest actionRequest) throws Exception {
 
+        Map<String, Serializable> exportContactsSettingsMap = null;
+
+        long exportImportConfigurationId = ParamUtil.getLong(actionRequest, "exportImportConfigurationId");
+
+        if (exportImportConfigurationId > 0) {
+            ExportImportConfiguration exportImportConfiguration = _exportImportConfigurationLocalService
+                    .fetchExportImportConfiguration(exportImportConfigurationId);
+
+            if (exportImportConfiguration != null) {
+                exportContactsSettingsMap = exportImportConfiguration.getSettingsMap();
+            }
+        }
+
+        ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+        if (exportContactsSettingsMap == null) {
+
+            exportContactsSettingsMap = ExportImportContactsConfigurationSettingsMapFactory
+                    .buildExportContactsSettingsMap(themeDisplay.getCompanyId(), themeDisplay.getUserId(),
+                            themeDisplay.getPlid(), themeDisplay.getScopeGroupId(), PortletKeys.CONTACT_MANAGER,
+                            actionRequest.getParameterMap(), themeDisplay.getLocale(), TimeZone.getDefault(), null);
+        }
+
+        String taskName = ParamUtil.getString(actionRequest, "name");
+
+        if (Validator.isNull(taskName)) {
+
+            taskName = "contacts";
+
+        }
+
+        return _exportImportConfigurationLocalService.addDraftExportImportConfiguration(themeDisplay.getUserId(),
+                taskName, ExportImportConfigurationConstants.TYPE_EXPORT_LAYOUT, exportContactsSettingsMap);
     }
 
     protected void handleUploadException(ActionRequest actionRequest, ActionResponse actionResponse, String folderName,
@@ -328,33 +361,8 @@ public class ImportContactsMVCActionCommand extends BaseMVCActionCommand {
         String extension = FileUtil.getExtension(fileName); 
 
         _log.info("extension = " + extension);
-        
-        ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-
-        long groupId = ParamUtil.getLong(actionRequest, "groupId");
-        boolean privateLayout = ParamUtil.getBoolean(actionRequest, "privateLayout");
-        
-        // TODO: remove dependency from ExportImportConfigurationSettingsMapFactory (see below)
-
-        Map<String, Serializable> importLayoutSettingsMap = ExportImportConfigurationSettingsMapFactory
-                .buildImportLayoutSettingsMap(themeDisplay.getUserId(), groupId, privateLayout, null,
-                        actionRequest.getParameterMap(), themeDisplay.getLocale(), themeDisplay.getTimeZone());
-
-        ExportImportConfiguration exportImportConfiguration = _exportImportConfigurationLocalService
-                .addDraftExportImportConfiguration(themeDisplay.getUserId(),
-                        ExportImportConfigurationConstants.TYPE_IMPORT_LAYOUT, importLayoutSettingsMap);
-        
-//        ExportImportConfiguration exportImportConfiguration = getExportImportConfiguration(actionRequest);
-//
-//        exportImportConfiguration.setName("Contacts");
-//        exportImportConfiguration.setGroupId(groupId);
-//
-//        Map<String, Serializable> settingsMap = new HashMap<>();
-//        settingsMap.put("targetGroupId", groupId);
-//
-//        String settings = JSONFactoryUtil.serialize(settingsMap);
-//
-//        exportImportConfiguration.setSettings(settings);
+                
+        ExportImportConfiguration exportImportConfiguration = getExportImportConfiguration(actionRequest);
 
         _contactService.importContactsInBackground(exportImportConfiguration, inputStream, extension);
 
@@ -422,6 +430,8 @@ public class ImportContactsMVCActionCommand extends BaseMVCActionCommand {
 
     private DLFileEntryLocalService _dlFileEntryLocalService;
     private ExportImportConfigurationLocalService _exportImportConfigurationLocalService;
+    
+    // TODO: remove dependency from LayoutService
     private LayoutService _layoutService;
     private ContactService _contactService;
 

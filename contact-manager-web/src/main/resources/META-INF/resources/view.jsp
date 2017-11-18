@@ -2,8 +2,8 @@
     view.jsp: Default view of the contact manager portlet.
     
     Created:     2017-03-30 16:44 by Stefan Luebbers
-    Modified:    2017-10-28 18:30 by Christian Berndt
-    Version:     1.0.7
+    Modified:    2017-11-18 17:13 by Christian Berndt
+    Version:     1.0.8
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -83,14 +83,13 @@
                     exception="<%= PrincipalException.class %>"
                     message="you-dont-have-the-required-permissions" />
 
-                <portlet:actionURL var="editSetURL" />
+                <portlet:actionURL name="editContact" var="editSetURL" />
 
                 <aui:form action="<%=editSetURL%>" name="fm"
                     onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "editSet();" %>'>
 
                     <aui:input name="<%=Constants.CMD%>" type="hidden" />
-                    <aui:input name="redirect" type="hidden"
-                        value="<%=currentURL%>" />
+                    <aui:input name="redirect" type="hidden" value="<%=currentURL%>" />
                     <aui:input name="deleteContactIds" type="hidden" />
 
                     <liferay-util:include page="/view_contacts.jsp"

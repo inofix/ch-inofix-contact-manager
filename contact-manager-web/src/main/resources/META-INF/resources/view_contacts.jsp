@@ -2,8 +2,8 @@
     view_contacts.jsp: search-container of Inofix' contact-manager.
     
     Created:     2017-06-19 16:02 by Christian Berndt
-    Modified:    2017-11-14 15:34 by Christian Berndt
-    Version:     1.0.4
+    Modified:    2017-11-18 17:06 by Christian Berndt
+    Version:     1.0.5
 --%>
 
 <%@ include file="/init.jsp"%>
@@ -32,7 +32,6 @@
         <portlet:renderURL var="editURL">
             <portlet:param name="contactId" value="<%=String.valueOf(contact_.getContactId())%>" />
             <portlet:param name="mvcRenderCommandName" value="editContact" />
-<%--             <portlet:param name="mvcPath" value="/edit_contact.jsp" /> --%>
             <portlet:param name="redirect" value="<%=currentURL%>" />
         </portlet:renderURL>
 
