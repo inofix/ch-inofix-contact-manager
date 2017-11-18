@@ -36,8 +36,8 @@ import ch.inofix.contact.service.ContactService;
  * 
  * @author Christian Berndt
  * @created 2017-11-14 18:10
- * @modified 2017-11-14 18:10
- * @version 1.0.0
+ * @modified 2017-11-18 16:08
+ * @version 1.0.1
  *
  */
 @Component(
@@ -94,12 +94,6 @@ public class ExportContactsMVCActionCommand extends BaseMVCActionCommand {
             }
         }
 
-        String tabs1 = ParamUtil.getString(actionRequest, "tabs1");
-        String tabs2 = ParamUtil.getString(actionRequest, "tabs2");
-
-        actionResponse.setRenderParameter("tabs1", tabs1);
-        actionResponse.setRenderParameter("tabs2", tabs2);
-
         addSuccessMessage(actionRequest, actionResponse);
 
     }
@@ -131,7 +125,8 @@ public class ExportContactsMVCActionCommand extends BaseMVCActionCommand {
 
         } catch (Exception e) {
             SessionErrors.add(actionRequest, e.getClass());
-
+            
+            // TODO: remove LARFileNameException dependency
             if (!(e instanceof LARFileNameException)) {
                 _log.error(e, e);
             }

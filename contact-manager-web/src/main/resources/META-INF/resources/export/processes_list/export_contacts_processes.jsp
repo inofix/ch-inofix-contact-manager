@@ -2,8 +2,8 @@
     export_contacts_processes.jsp: list of export processes
     
     Created:    2017-06-21 16:47 by Christian Berndt
-    Modified:   2017-11-14 19:02 by Christian Berndt
-    Version:    1.0.1
+    Modified:   2017-11-18 16:07 by Christian Berndt
+    Version:    1.0.3
 --%>
 
 <%@ include file="/init.jsp" %>
@@ -31,15 +31,12 @@
 %>
 
 <portlet:actionURL name="exportContacts" var="deleteBackgroundTasksURL">
-<%--     <portlet:param name="redirect" value="<%= currentURL.toString() %>" /> --%>
+    <portlet:param name="redirect" value="<%= currentURL.toString() %>" />
 </portlet:actionURL>
 
 <aui:form action="<%= deleteBackgroundTasksURL %>" method="get" name="fm">
     <aui:input name="<%= Constants.CMD %>" type="hidden" />
-    <aui:input name="redirect" type="hidden" value="<%= currentURL.toString() %>" />
     <aui:input name="deleteBackgroundTaskIds" type="hidden" />
-    <aui:input name="tabs1" type="hidden" value="<%= tabs1 %>" />
-    <aui:input name="tabs2" type="hidden" value="<%= tabs2 %>" />
 
     <liferay-ui:search-container
         emptyResultsMessage="no-export-processes-were-found"
@@ -289,8 +286,8 @@
 
                         <liferay-ui:icon icon="reload" markupView="lexicon" message="relaunch" url="<%= relaunchURL %>" />
 
-                        <portlet:actionURL name="deleteBackgroundTasks" var="deleteBackgroundTaskURL">
-                            <portlet:param name="redirect" value="<%= portletURL.toString() %>" />
+                        <portlet:actionURL name="exportContacts" var="deleteBackgroundTaskURL">
+                            <portlet:param name="<%= Constants.CMD %>" value="<%= Constants.DELETE %>" />
                             <portlet:param name="deleteBackgroundTaskIds" value="<%= String.valueOf(backgroundTask.getBackgroundTaskId()) %>" />
                         </portlet:actionURL>
 

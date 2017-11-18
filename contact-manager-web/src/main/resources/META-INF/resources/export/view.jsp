@@ -2,8 +2,8 @@
     view.jsp: the export view of the contact-manager.
     
     Created:    2017-06-21 16:44 by Christian Berndt
-    Modified:   2017-11-14 18:37 by Christian Berndt
-    Version:    1.0.1
+    Modified:   2017-11-17 16:07 by Christian Berndt
+    Version:    1.0.2
 --%>
 
 <%@ include file="/init.jsp" %>
@@ -36,8 +36,6 @@
         </div>
     </c:when>
     <c:otherwise>
-<%--         <liferay-util:include page="/export/navigation.jsp" servletContext="<%= application %>" /> --%>
-
         <liferay-util:include page="/export/processes_list/view.jsp" servletContext="<%= application %>">
             <liferay-util:param name="displayStyle" value="<%= displayStyle %>" />
             <liferay-util:param name="navigation" value="<%= navigation %>" />
@@ -47,7 +45,6 @@
         </liferay-util:include>
 
         <liferay-util:include page="/export/add_button.jsp" servletContext="<%= application %>">
-<%--             <liferay-util:param name="groupId" value="<%= String.valueOf(groupId) %>" /> --%>
             <liferay-util:param name="displayStyle" value="<%= displayStyle %>" />
         </liferay-util:include>
     </c:otherwise>
@@ -58,7 +55,6 @@
     <liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" id="exportContacts" var="exportProcessesURL">
         <portlet:param name="<%= SearchContainer.DEFAULT_CUR_PARAM %>" value="<%= ParamUtil.getString(request, SearchContainer.DEFAULT_CUR_PARAM) %>" />
         <portlet:param name="<%= SearchContainer.DEFAULT_DELTA_PARAM %>" value="<%= ParamUtil.getString(request, SearchContainer.DEFAULT_DELTA_PARAM) %>" />
-<%--         <portlet:param name="groupId" value="<%= String.valueOf(liveGroupId) %>" /> --%>
         <portlet:param name="displayStyle" value="<%= displayStyle %>" />
         <portlet:param name="navigation" value="<%= navigation %>" />
         <portlet:param name="orderByCol" value="<%= orderByCol %>" />
