@@ -292,6 +292,7 @@ public class ImportContactsMVCActionCommand extends BaseMVCActionCommand {
 
         if (exportContactsSettingsMap == null) {
 
+            // TODO: use buildImportContactsSettingsMap
             exportContactsSettingsMap = ExportImportContactsConfigurationSettingsMapFactory
                     .buildExportContactsSettingsMap(themeDisplay.getCompanyId(), themeDisplay.getUserId(),
                             themeDisplay.getPlid(), themeDisplay.getScopeGroupId(), PortletKeys.CONTACT_MANAGER,

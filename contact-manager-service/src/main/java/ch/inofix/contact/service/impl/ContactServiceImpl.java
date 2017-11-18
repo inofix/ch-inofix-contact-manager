@@ -56,8 +56,8 @@ import ch.inofix.contact.service.permission.ContactPermission;
  * @author Christian Berndt
  * @author Stefan Luebbers
  * @created 2015-05-07 23:50
- * @modified 2017-11-14 22:20
- * @version 1.1.1
+ * @modified 2017-11-18 17:32
+ * @version 1.1.2
  * @see ContactServiceBaseImpl
  * @see ch.inofix.contact.service.ContactServiceUtil
  */
@@ -170,9 +170,11 @@ public class ContactServiceImpl extends ContactServiceBaseImpl {
 
         Map<String, Serializable> settingsMap = exportImportConfiguration.getSettingsMap();
 
-        long targetGroupId = MapUtil.getLong(settingsMap, "targetGroupId");
+        long sourceGroupId = MapUtil.getLong(settingsMap, "sourceGroupId");
+        // long targetGroupId = MapUtil.getLong(settingsMap, "targetGroupId");
 
-        ContactManagerPortletPermission.check(getPermissionChecker(), targetGroupId, ContactManagerActionKeys.IMPORT_CONTACTS);
+        ContactManagerPortletPermission.check(getPermissionChecker(), sourceGroupId,
+                ContactManagerActionKeys.IMPORT_CONTACTS);
 
         return contactLocalService.importContactsInBackground(getUserId(), exportImportConfiguration, inputStream,
                 extension);
