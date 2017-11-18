@@ -2,8 +2,8 @@
     import_contacts_processes.jsp: list of import processes
     
     Created:    2017-06-19 23:32 by Christian Berndt
-    Modified:   2017-11-17 18:41 by Christian Berndt
-    Version:    1.0.4
+    Modified:   2017-11-18 16:21 by Christian Berndt
+    Version:    1.0.5
 --%>
 
 <%@ include file="/init.jsp" %>
@@ -34,11 +34,11 @@
 
 <aui:form action="<%= deleteBackgroundTasksURL %>" method="get" name="fm">
 
-    <aui:input name="<%= Constants.CMD %>" type="hidden" value="deleteBackgroundTasks" />
+    <aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.DELETE %>" />
     <aui:input name="deleteBackgroundTaskIds" type="hidden" />
-    <aui:input name="redirect" type="hidden" value="<%= currentURL.toString() %>" />
-    <aui:input name="tabs1" type="hidden" value="<%= tabs1 %>"/>
-    <aui:input name="tabs2" type="hidden" value="<%= tabs2 %>"/>
+<%--     <aui:input name="redirect" type="hidden" value="<%= currentURL.toString() %>" /> --%>
+<%--     <aui:input name="tabs1" type="hidden" value="<%= tabs1 %>"/> --%>
+<%--     <aui:input name="tabs2" type="hidden" value="<%= tabs2 %>"/> --%>
    
     <liferay-ui:search-container
         emptyResultsMessage="no-import-processes-were-found"
@@ -286,10 +286,10 @@
 
                         <liferay-ui:icon icon="reload" markupView="<%= markupView %>" message="relaunch" url="<%= relaunchURL %>" />
 
-                        <portlet:actionURL var="deleteBackgroundTaskURL">
-                            <% // TODO: add cmd %>
-                            <portlet:param name="redirect" value="<%= portletURL.toString() %>" />
+                        <portlet:actionURL name="importContacts" var="deleteBackgroundTaskURL">
+                            <portlet:param name="<%= Constants.CMD %>" value="<%= Constants.DELETE %>" />
                             <portlet:param name="deleteBackgroundTaskIds" value="<%= String.valueOf(backgroundTask.getBackgroundTaskId()) %>" />
+                            <portlet:param name="redirect" value="<%= currentURL.toString() %>" />
                         </portlet:actionURL>
 
                         <%
