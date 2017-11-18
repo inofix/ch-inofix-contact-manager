@@ -2,8 +2,8 @@
     view.jsp: the import view of the contact-manager.
     
     Created:    2017-06-19 23:16 by Christian Berndt
-    Modified:   2017-11-17 18:57 by Christian Berndt
-    Version:    1.0.2
+    Modified:   2017-11-18 17:21 by Christian Berndt
+    Version:    1.0.3
 --%>
 
 <%@ include file="/init.jsp" %>
@@ -55,6 +55,8 @@
     <portlet:param name="orderByCol" value="<%= orderByCol %>" />
     <portlet:param name="orderByType" value="<%= orderByType %>" />
     <portlet:param name="searchContainerId" value="<%= searchContainerId %>" />
+    <portlet:param name="tabs1" value="<%= tabs1 %>" />
+    <portlet:param name="tabs2" value="<%= tabs2 %>" />
 </liferay-portlet:resourceURL>
 
 <aui:script use="liferay-export-import">
