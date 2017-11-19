@@ -2,7 +2,7 @@
     import_contacts_processes.jsp: list of import processes
     
     Created:    2017-06-19 23:32 by Christian Berndt
-    Modified:   2017-11-18 16:21 by Christian Berndt
+    Modified:   2017-11-19 22:05 by Christian Berndt
     Version:    1.0.5
 --%>
 
@@ -29,16 +29,13 @@
 %>
 
 <portlet:actionURL name="importContacts" var="deleteBackgroundTasksURL">
-    <portlet:param name="redirect" value="<%= currentURL.toString() %>" />
+    <portlet:param name="redirect" value="<%= currentURL %>" />
 </portlet:actionURL>
 
 <aui:form action="<%= deleteBackgroundTasksURL %>" method="get" name="fm">
 
     <aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.DELETE %>" />
     <aui:input name="deleteBackgroundTaskIds" type="hidden" />
-<%--     <aui:input name="redirect" type="hidden" value="<%= currentURL.toString() %>" /> --%>
-<%--     <aui:input name="tabs1" type="hidden" value="<%= tabs1 %>"/> --%>
-<%--     <aui:input name="tabs2" type="hidden" value="<%= tabs2 %>"/> --%>
    
     <liferay-ui:search-container
         emptyResultsMessage="no-import-processes-were-found"
@@ -284,16 +281,18 @@
                             <portlet:param name="backgroundTaskId" value="<%= String.valueOf(backgroundTask.getBackgroundTaskId()) %>" />
                         </portlet:actionURL>
 
+                        <%-- TODO: Method not yet implemented in MVCActionAcommand 
                         <liferay-ui:icon icon="reload" markupView="<%= markupView %>" message="relaunch" url="<%= relaunchURL %>" />
-
+                        --%>
+                        
                         <portlet:actionURL name="importContacts" var="deleteBackgroundTaskURL">
                             <portlet:param name="<%= Constants.CMD %>" value="<%= Constants.DELETE %>" />
                             <portlet:param name="deleteBackgroundTaskIds" value="<%= String.valueOf(backgroundTask.getBackgroundTaskId()) %>" />
-                            <portlet:param name="redirect" value="<%= currentURL.toString() %>" />
+                            <portlet:param name="redirect" value="<%= currentURL %>" />
                         </portlet:actionURL>
 
                         <%
-                        Date completionDate = backgroundTask.getCompletionDate();
+                            Date completionDate = backgroundTask.getCompletionDate();
                         %>
 
                         <liferay-ui:icon-delete
