@@ -141,9 +141,9 @@
 
             var exportImport = Liferay.component('<portlet:namespace />ExportImportComponent');
             
-            console.log(exportImport); 
+            // console.log(exportImport); 
 
-           submitForm(form, form.attr('action'), false);
+            submitForm(form, form.attr('action'), false);
 
         }
     );

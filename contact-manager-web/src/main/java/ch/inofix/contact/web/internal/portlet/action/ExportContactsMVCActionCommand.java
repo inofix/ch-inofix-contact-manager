@@ -66,7 +66,6 @@ public class ExportContactsMVCActionCommand extends BaseMVCActionCommand {
         if (Validator.isNotNull(redirect)) {
             sendRedirect(actionRequest, actionResponse, redirect);
         }
-
     }
 
     protected void deleteBackgroundTasks(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {

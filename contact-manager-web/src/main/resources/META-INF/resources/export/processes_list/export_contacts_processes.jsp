@@ -2,8 +2,8 @@
     export_contacts_processes.jsp: list of export processes
     
     Created:    2017-06-21 16:47 by Christian Berndt
-    Modified:   2017-11-18 16:07 by Christian Berndt
-    Version:    1.0.3
+    Modified:   2017-11-19 22:02 by Christian Berndt
+    Version:    1.0.4
 --%>
 
 <%@ include file="/init.jsp" %>
@@ -31,7 +31,7 @@
 %>
 
 <portlet:actionURL name="exportContacts" var="deleteBackgroundTasksURL">
-    <portlet:param name="redirect" value="<%= currentURL.toString() %>" />
+    <portlet:param name="redirect" value="<%= currentURL %>" />
 </portlet:actionURL>
 
 <aui:form action="<%= deleteBackgroundTasksURL %>" method="get" name="fm">
@@ -284,15 +284,18 @@
                             <portlet:param name="backgroundTaskId" value="<%= String.valueOf(backgroundTask.getBackgroundTaskId()) %>" />
                         </portlet:actionURL>
 
+                        <%-- TODO: Method not yet implemented in ActionCommand. 
                         <liferay-ui:icon icon="reload" markupView="lexicon" message="relaunch" url="<%= relaunchURL %>" />
-
+                        --%>
+                        
                         <portlet:actionURL name="exportContacts" var="deleteBackgroundTaskURL">
                             <portlet:param name="<%= Constants.CMD %>" value="<%= Constants.DELETE %>" />
                             <portlet:param name="deleteBackgroundTaskIds" value="<%= String.valueOf(backgroundTask.getBackgroundTaskId()) %>" />
+                            <portlet:param name="redirect" value="<%= currentURL %>" />
                         </portlet:actionURL>
 
                         <%
-                        Date completionDate = backgroundTask.getCompletionDate();
+                            Date completionDate = backgroundTask.getCompletionDate();
                         %>
 
                         <liferay-ui:icon-delete
